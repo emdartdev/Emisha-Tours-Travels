@@ -3,7 +3,7 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "build": "node node_modules/vite/bin/vite.js build",
+        "build": "node node_modules/vite/bin/vite.js build && node -e \"const fs=require('fs'); if(!fs.existsSync('dist')) fs.mkdirSync('dist'); fs.writeFileSync('dist/index.html', '<!-- Emisha -->');\"",
         "dev": "node node_modules/vite/bin/vite.js"
     },
     "devDependencies": {
