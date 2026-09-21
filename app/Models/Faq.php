@@ -6,15 +6,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Builder;
+use App\Traits\HasTranslations;
 
 class Faq extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTranslations;
 
     protected $fillable = [
         'category',
         'question',
+        'question_bn',
         'answer',
+        'answer_bn',
         'related_type',
         'related_id',
         'status',

@@ -11,6 +11,7 @@ use App\Support\ReferenceGenerator;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
@@ -352,251 +353,265 @@ class VisaOnboardingService
      */
     public function submitApplication(array $data, array $uploadedFiles = []): VisaApplication
     {
-        $countrySlug = $data['destination_slug'] ?? 'thailand';
-        $destConfig = $this->getDestinationConfig($countrySlug);
+        $submissionToken = $data['submission_token'] ?? null;
 
-        // Resolve or create VisaCountry & VisaType models
-        $country = VisaCountry::where('slug', $countrySlug)->first();
-        if (!$country) {
-            $country = VisaCountry::firstOrCreate(
-                ['slug' => $countrySlug],
-                [
-                    'country_name' => $destConfig['name'] ?? ucfirst($countrySlug),
-                    'flag' => $destConfig['flag'] ?? '🌐',
-                    'status' => 'active',
-                    'short_description' => $destConfig['summary'] ?? '',
-                ]
-            );
-        }
-
-        $visaType = $country->visaTypes()->first();
-        if (!$visaType) {
-            $visaType = VisaType::firstOrCreate(
-                ['visa_country_id' => $country->id, 'slug' => "{$countrySlug}-tourist"],
-                [
-                    'name' => $destConfig['visa_category'] ?? 'Tourist Visa',
-                    'starting_fee' => $destConfig['service_fee'] ?? 6000.00,
-                    'service_fee' => 0.00,
-                    'validity' => $destConfig['validity'] ?? '90 Days',
-                    'stay_period' => $destConfig['stay_period'] ?? '30 Days',
-                    'currency' => 'BDT',
-                    'status' => 'active',
-                ]
-            );
-        }
-
-        // Resolve ProfessionType
-        $professionSlug = Str::slug($data['employment_status'] ?? 'general');
-        $profession = ProfessionType::where('slug', $professionSlug)->first()
-            ?? ProfessionType::firstOrCreate(
-                ['slug' => $professionSlug ?: 'general'],
-                ['name' => ucwords(str_replace('_', ' ', $data['employment_status'] ?? 'General'))]
-            );
-
-        $refNumber = ReferenceGenerator::visa();
-        $serviceFee = (float) ($destConfig['service_fee'] ?? 6000.00);
-
-        // Structured JSON Payloads
-        $applicantProfile = [
-            'gender' => $data['gender'] ?? 'Not Specified',
-            'marital_status' => $data['marital_status'] ?? 'Single',
-            'living_in_bangladesh' => $data['living_in_bangladesh'] ?? 'yes',
-            'current_city' => $data['current_city'] ?? 'Dhaka',
-            'residence_country' => $data['residence_country'] ?? 'Bangladesh',
-            'residence_status' => $data['residence_status'] ?? 'Citizen',
-            'whatsapp' => $data['whatsapp'] ?? $data['phone'] ?? '',
-            'documents_drive_link' => $data['documents_drive_link'] ?? null,
-            'submission_channel' => $data['submission_channel'] ?? (!empty($data['documents_drive_link']) ? 'gdrive_link' : (!empty($uploadedFiles) ? 'file_upload' : 'whatsapp_direct')),
-        ];
-
-        $passportDetails = [
-            'passport_type' => $data['passport_type'] ?? 'Regular / Ordinary',
-            'passport_number' => strtoupper($data['passport_number'] ?? ''),
-            'issue_date' => $data['passport_issue_date'] ?? null,
-            'expiry_date' => $data['passport_expiry_date'] ?? null,
-            'issuing_country' => $data['passport_issuing_country'] ?? 'Bangladesh',
-            'place_of_birth' => $data['place_of_birth'] ?? 'Bangladesh',
-            'printed_name' => $data['passport_printed_name'] ?? $data['full_name'] ?? '',
-        ];
-
-        $travelDetails = [
-            'departure_date' => $data['travel_date'] ?? null,
-            'return_date' => $data['return_date'] ?? null,
-            'duration_days' => $data['stay_duration'] ?? '7-10 Days',
-            'cities_to_visit' => $data['cities_to_visit'] ?? '',
-            'travel_purpose' => $data['travel_purpose'] ?? 'Tourism',
-            'schengen_countries' => $data['schengen_countries'] ?? [],
-            'schengen_nights' => $data['schengen_nights'] ?? [],
-            'main_destination' => $data['main_destination'] ?? $country->country_name,
-            'first_entry_country' => $data['first_entry_country'] ?? null,
-        ];
-
-        $employmentDetails = [
-            'employment_status' => $data['employment_status'] ?? 'Employed',
-            'employer_name' => $data['employer_name'] ?? null,
-            'job_title' => $data['job_title'] ?? null,
-            'company_address' => $data['company_address'] ?? null,
-            'employment_start_date' => $data['employment_start_date'] ?? null,
-            'business_name' => $data['business_name'] ?? null,
-            'business_type' => $data['business_type'] ?? null,
-            'institution_name' => $data['institution_name'] ?? null,
-            'student_id' => $data['student_id'] ?? null,
-            'monthly_income_bdt' => $data['monthly_income'] ?? null,
-        ];
-
-        $financialDetails = [
-            'monthly_income' => $data['monthly_income'] ?? null,
-            'available_funds_bdt' => $data['available_funds'] ?? null,
-            'has_bank_statement' => $data['has_bank_statement'] ?? 'yes',
-            'funding_source' => $data['funding_source'] ?? 'Self-funded',
-            'sponsor_name' => $data['sponsor_name'] ?? null,
-            'sponsor_relationship' => $data['sponsor_relationship'] ?? null,
-            'sponsor_contact' => $data['sponsor_contact'] ?? null,
-        ];
-
-        $travelHistory = [
-            'has_travelled_internationally' => $data['has_travelled'] ?? 'no',
-            'countries_visited' => $data['countries_visited'] ?? '',
-            'previous_visas' => $data['previous_visas'] ?? [],
-            'has_visa_refusal' => $data['has_visa_refusal'] ?? 'no',
-            'refusal_country' => $data['refusal_country'] ?? null,
-            'refusal_year' => $data['refusal_year'] ?? null,
-            'refusal_reason' => $data['refusal_reason'] ?? null,
-        ];
-
-        $coTravelers = $data['co_travelers'] ?? [];
-
-        $accommodationDetails = [
-            'type' => $data['accommodation_type'] ?? 'Hotel',
-            'hotel_name' => $data['hotel_name'] ?? null,
-            'hotel_address' => $data['hotel_address'] ?? null,
-            'booking_reference' => $data['booking_reference'] ?? null,
-            'host_name' => $data['host_name'] ?? null,
-            'host_address' => $data['host_address'] ?? null,
-            'host_phone' => $data['host_phone'] ?? null,
-            'host_relationship' => $data['host_relationship'] ?? null,
-        ];
-
-        $flightDetails = [
-            'departure_city' => $data['departure_city'] ?? 'Dhaka (DAC)',
-            'arrival_city' => $data['arrival_city'] ?? '',
-            'flight_type' => $data['flight_type'] ?? 'Round-trip',
-            'transit_countries' => $data['transit_countries'] ?? null,
-        ];
-
-        $pricingBreakdown = [
-            'service_fee' => $serviceFee,
-            'service_fee_label' => $destConfig['service_fee_label'] ?? 'Our Service Fee',
-            'govt_fee_note' => $destConfig['govt_fee_note'] ?? 'Not included / calculated separately',
-            'total_payable_now' => $serviceFee,
-            'currency' => 'BDT',
-        ];
-
-        // Create VisaApplication Record
-        $application = VisaApplication::create([
-            'reference_number' => $refNumber,
-            'visa_country_id' => $country->id,
-            'visa_type_id' => $visaType->id,
-            'profession_type_id' => $profession->id,
-            'full_name' => trim($data['full_name'] ?? 'Applicant'),
-            'email' => strtolower(trim($data['email'] ?? '')),
-            'phone' => trim($data['phone'] ?? ''),
-            'date_of_birth' => !empty($data['date_of_birth']) ? $data['date_of_birth'] : null,
-            'nationality' => $data['nationality'] ?? 'Bangladeshi',
-            'passport_number' => strtoupper(trim($data['passport_number'] ?? '')),
-            'applicant_profile' => $applicantProfile,
-            'passport_details' => $passportDetails,
-            'travel_purpose' => $data['travel_purpose'] ?? 'Tourism',
-            'travel_date' => !empty($data['travel_date']) ? $data['travel_date'] : null,
-            'stay_duration' => $data['stay_duration'] ?? '7-10 Days',
-            'travelers_count' => count($coTravelers) + 1,
-            'travel_details' => $travelDetails,
-            'employment_details' => $employmentDetails,
-            'financial_details' => $financialDetails,
-            'travel_history' => $travelHistory,
-            'co_travelers' => $coTravelers,
-            'accommodation_details' => $accommodationDetails,
-            'flight_details' => $flightDetails,
-            'pricing_breakdown' => $pricingBreakdown,
-            'workflow_type' => $destConfig['workflow_type'] ?? 'evisa',
-            'payment_status' => $data['payment_method'] ?? 'pending',
-            'total_service_fee' => $serviceFee,
-            'currency' => 'BDT',
-            'status' => 'received',
-            'applicant_notes' => $data['applicant_notes'] ?? null,
-            'submitted_at' => now(),
-        ]);
-
-        // Process Attached Files and store securely in visa_private disk
-        $checklist = $this->evaluateDocumentChecklist($countrySlug, $data);
-
-        // Flatten any nested file arrays (e.g. ['documents' => [...]])
-        $flatFiles = [];
-        foreach ($uploadedFiles as $k => $item) {
-            if ($item instanceof UploadedFile) {
-                $flatFiles[$k] = $item;
-            } elseif (is_array($item)) {
-                foreach ($item as $subK => $subFile) {
-                    if ($subFile instanceof UploadedFile) {
-                        $flatFiles[$subK] = $subFile;
-                    }
-                }
+        // Backend Idempotency Check: if this submission token was already processed, return the existing application
+        if ($submissionToken) {
+            $existingApp = VisaApplication::where('submission_token', $submissionToken)->first();
+            if ($existingApp) {
+                return $existingApp;
             }
         }
 
-        foreach ($flatFiles as $docKey => $file) {
-            if ($file instanceof UploadedFile && $file->isValid()) {
-                $docMeta = $checklist[$docKey] ?? [
-                    'name' => ucwords(str_replace('_', ' ', $docKey)),
-                    'category' => 'Additional',
-                    'required' => false,
-                ];
+        return DB::transaction(function () use ($data, $uploadedFiles, $submissionToken) {
+            $countrySlug = $data['destination_slug'] ?? 'thailand';
+            $destConfig = $this->getDestinationConfig($countrySlug);
 
-                $originalName = $file->getClientOriginalName();
-                $extension = $file->getClientOriginalExtension();
-                $storedName = Str::random(32) . '.' . $extension;
-                $yearMonth = date('Y/m');
-                $relativePath = "{$yearMonth}/{$storedName}";
+            // Resolve or create VisaCountry & VisaType models
+            $country = VisaCountry::where('slug', $countrySlug)->first();
+            if (!$country) {
+                $country = VisaCountry::firstOrCreate(
+                    ['slug' => $countrySlug],
+                    [
+                        'country_name' => $destConfig['name'] ?? ucfirst($countrySlug),
+                        'flag' => $destConfig['flag'] ?? '🌐',
+                        'status' => 'active',
+                        'short_description' => $destConfig['summary'] ?? '',
+                    ]
+                );
+            }
 
-                // Save to private disk
-                Storage::disk('visa_private')->putFileAs($yearMonth, $file, $storedName);
+            $visaType = $country->visaTypes()->first();
+            if (!$visaType) {
+                $visaType = VisaType::firstOrCreate(
+                    ['visa_country_id' => $country->id, 'slug' => "{$countrySlug}-tourist"],
+                    [
+                        'name' => $destConfig['visa_category'] ?? 'Tourist Visa',
+                        'starting_fee' => $destConfig['service_fee'] ?? 6000.00,
+                        'service_fee' => 0.00,
+                        'validity' => $destConfig['validity'] ?? '90 Days',
+                        'stay_period' => $destConfig['stay_period'] ?? '30 Days',
+                        'currency' => 'BDT',
+                        'status' => 'active',
+                    ]
+                );
+            }
 
+            // Resolve ProfessionType
+            $professionSlug = Str::slug($data['employment_status'] ?? 'general');
+            $profession = ProfessionType::where('slug', $professionSlug)->first()
+                ?? ProfessionType::firstOrCreate(
+                    ['slug' => $professionSlug ?: 'general'],
+                    ['name' => ucwords(str_replace('_', ' ', $data['employment_status'] ?? 'General'))]
+                );
+
+            $refNumber = ReferenceGenerator::visa();
+            $serviceFee = (float) ($destConfig['service_fee'] ?? 6000.00);
+
+            // Structured JSON Payloads
+            $applicantProfile = [
+                'gender' => $data['gender'] ?? 'Not Specified',
+                'marital_status' => $data['marital_status'] ?? 'Single',
+                'living_in_bangladesh' => $data['living_in_bangladesh'] ?? 'yes',
+                'current_city' => $data['current_city'] ?? 'Dhaka',
+                'residence_country' => $data['residence_country'] ?? 'Bangladesh',
+                'residence_status' => $data['residence_status'] ?? 'Citizen',
+                'whatsapp' => $data['whatsapp'] ?? $data['phone'] ?? '',
+                'documents_drive_link' => $data['documents_drive_link'] ?? null,
+                'submission_channel' => $data['submission_channel'] ?? (!empty($data['documents_drive_link']) ? 'gdrive_link' : (!empty($uploadedFiles) ? 'file_upload' : 'whatsapp_direct')),
+            ];
+
+            $passportDetails = [
+                'passport_type' => $data['passport_type'] ?? 'Regular / Ordinary',
+                'passport_number' => strtoupper($data['passport_number'] ?? ''),
+                'issue_date' => $data['passport_issue_date'] ?? null,
+                'expiry_date' => $data['passport_expiry_date'] ?? null,
+                'issuing_country' => $data['passport_issuing_country'] ?? 'Bangladesh',
+                'place_of_birth' => $data['place_of_birth'] ?? 'Bangladesh',
+                'printed_name' => $data['passport_printed_name'] ?? $data['full_name'] ?? '',
+            ];
+
+            $travelDetails = [
+                'departure_date' => $data['travel_date'] ?? null,
+                'return_date' => $data['return_date'] ?? null,
+                'duration_days' => $data['stay_duration'] ?? '7-10 Days',
+                'cities_to_visit' => $data['cities_to_visit'] ?? '',
+                'travel_purpose' => $data['travel_purpose'] ?? 'Tourism',
+                'schengen_countries' => $data['schengen_countries'] ?? [],
+                'schengen_nights' => $data['schengen_nights'] ?? [],
+                'main_destination' => $data['main_destination'] ?? $country->country_name,
+                'first_entry_country' => $data['first_entry_country'] ?? null,
+            ];
+
+            $employmentDetails = [
+                'employment_status' => $data['employment_status'] ?? 'Employed',
+                'employer_name' => $data['employer_name'] ?? null,
+                'job_title' => $data['job_title'] ?? null,
+                'company_address' => $data['company_address'] ?? null,
+                'employment_start_date' => $data['employment_start_date'] ?? null,
+                'business_name' => $data['business_name'] ?? null,
+                'business_type' => $data['business_type'] ?? null,
+                'institution_name' => $data['institution_name'] ?? null,
+                'student_id' => $data['student_id'] ?? null,
+                'monthly_income_bdt' => $data['monthly_income'] ?? null,
+            ];
+
+            $financialDetails = [
+                'monthly_income' => $data['monthly_income'] ?? null,
+                'available_funds_bdt' => $data['available_funds'] ?? null,
+                'has_bank_statement' => $data['has_bank_statement'] ?? 'yes',
+                'funding_source' => $data['funding_source'] ?? 'Self-funded',
+                'sponsor_name' => $data['sponsor_name'] ?? null,
+                'sponsor_relationship' => $data['sponsor_relationship'] ?? null,
+                'sponsor_contact' => $data['sponsor_contact'] ?? null,
+            ];
+
+            $travelHistory = [
+                'has_travelled_internationally' => $data['has_travelled'] ?? 'no',
+                'countries_visited' => $data['countries_visited'] ?? '',
+                'previous_visas' => $data['previous_visas'] ?? [],
+                'has_visa_refusal' => $data['has_visa_refusal'] ?? 'no',
+                'refusal_country' => $data['refusal_country'] ?? null,
+                'refusal_year' => $data['refusal_year'] ?? null,
+                'refusal_reason' => $data['refusal_reason'] ?? null,
+            ];
+
+            $coTravelers = $data['co_travelers'] ?? [];
+
+            $accommodationDetails = [
+                'type' => $data['accommodation_type'] ?? 'Hotel',
+                'hotel_name' => $data['hotel_name'] ?? null,
+                'hotel_address' => $data['hotel_address'] ?? null,
+                'booking_reference' => $data['booking_reference'] ?? null,
+                'host_name' => $data['host_name'] ?? null,
+                'host_address' => $data['host_address'] ?? null,
+                'host_phone' => $data['host_phone'] ?? null,
+                'host_relationship' => $data['host_relationship'] ?? null,
+            ];
+
+            $flightDetails = [
+                'departure_city' => $data['departure_city'] ?? 'Dhaka (DAC)',
+                'arrival_city' => $data['arrival_city'] ?? '',
+                'flight_type' => $data['flight_type'] ?? 'Round-trip',
+                'transit_countries' => $data['transit_countries'] ?? null,
+            ];
+
+            $pricingBreakdown = [
+                'service_fee' => $serviceFee,
+                'service_fee_label' => $destConfig['service_fee_label'] ?? 'Our Service Fee',
+                'govt_fee_note' => $destConfig['govt_fee_note'] ?? 'Not included / calculated separately',
+                'total_payable_now' => $serviceFee,
+                'currency' => 'BDT',
+            ];
+
+            // Create VisaApplication Record
+            $application = VisaApplication::create([
+                'reference_number' => $refNumber,
+                'submission_token' => $submissionToken,
+                'idempotency_key' => $data['idempotency_key'] ?? $submissionToken,
+                'visa_country_id' => $country->id,
+                'visa_type_id' => $visaType->id,
+                'profession_type_id' => $profession->id,
+                'full_name' => trim($data['full_name'] ?? 'Applicant'),
+                'email' => strtolower(trim($data['email'] ?? '')),
+                'phone' => trim($data['phone'] ?? ''),
+                'date_of_birth' => !empty($data['date_of_birth']) ? $data['date_of_birth'] : null,
+                'nationality' => $data['nationality'] ?? 'Bangladeshi',
+                'passport_number' => strtoupper(trim($data['passport_number'] ?? '')),
+                'applicant_profile' => $applicantProfile,
+                'passport_details' => $passportDetails,
+                'travel_purpose' => $data['travel_purpose'] ?? 'Tourism',
+                'travel_date' => !empty($data['travel_date']) ? $data['travel_date'] : null,
+                'stay_duration' => $data['stay_duration'] ?? '7-10 Days',
+                'travelers_count' => count($coTravelers) + 1,
+                'travel_details' => $travelDetails,
+                'employment_details' => $employmentDetails,
+                'financial_details' => $financialDetails,
+                'travel_history' => $travelHistory,
+                'co_travelers' => $coTravelers,
+                'accommodation_details' => $accommodationDetails,
+                'flight_details' => $flightDetails,
+                'pricing_breakdown' => $pricingBreakdown,
+                'workflow_type' => $destConfig['workflow_type'] ?? 'evisa',
+                'payment_status' => $data['payment_method'] ?? 'pending',
+                'total_service_fee' => $serviceFee,
+                'currency' => 'BDT',
+                'status' => 'received',
+                'applicant_notes' => $data['applicant_notes'] ?? null,
+                'submitted_at' => now(),
+            ]);
+
+            // Process Attached Files and store securely in visa_private disk
+            $checklist = $this->evaluateDocumentChecklist($countrySlug, $data);
+
+            // Flatten any nested file arrays (e.g. ['documents' => [...]])
+            $flatFiles = [];
+            foreach ($uploadedFiles as $k => $item) {
+                if ($item instanceof UploadedFile) {
+                    $flatFiles[$k] = $item;
+                } elseif (is_array($item)) {
+                    foreach ($item as $subK => $subFile) {
+                        if ($subFile instanceof UploadedFile) {
+                            $flatFiles[$subK] = $subFile;
+                        }
+                    }
+                }
+            }
+
+            foreach ($flatFiles as $docKey => $file) {
+                if ($file instanceof UploadedFile && $file->isValid()) {
+                    $docMeta = $checklist[$docKey] ?? [
+                        'name' => ucwords(str_replace('_', ' ', $docKey)),
+                        'category' => 'Additional',
+                        'required' => false,
+                    ];
+
+                    $originalName = $file->getClientOriginalName();
+                    $extension = $file->getClientOriginalExtension();
+                    $storedName = Str::random(32) . '.' . $extension;
+                    $yearMonth = date('Y/m');
+                    $relativePath = "{$yearMonth}/{$storedName}";
+
+                    // Save to private disk
+                    Storage::disk('visa_private')->putFileAs($yearMonth, $file, $storedName);
+
+                    VisaDocument::create([
+                        'visa_application_id' => $application->id,
+                        'document_type' => $docKey,
+                        'document_code' => $docKey,
+                        'required' => $docMeta['required'] ?? false,
+                        'original_filename' => $originalName,
+                        'stored_filename' => $storedName,
+                        'mime_type' => $file->getClientMimeType() ?? 'application/octet-stream',
+                        'file_size' => $file->getSize() ?: 0,
+                        'storage_path' => $relativePath,
+                        'status' => 'uploaded',
+                        'review_status' => 'uploaded',
+                        'uploaded_at' => now(),
+                    ]);
+                }
+            }
+
+            // If Google Drive link was provided, register a specialized document record
+            if (!empty($data['documents_drive_link'])) {
                 VisaDocument::create([
                     'visa_application_id' => $application->id,
-                    'document_type' => $docKey,
-                    'document_code' => $docKey,
-                    'required' => $docMeta['required'] ?? false,
-                    'original_filename' => $originalName,
-                    'stored_filename' => $storedName,
-                    'mime_type' => $file->getClientMimeType() ?? 'application/octet-stream',
-                    'file_size' => $file->getSize() ?: 0,
-                    'storage_path' => $relativePath,
+                    'document_type' => 'gdrive_link',
+                    'document_code' => 'google_drive_folder',
+                    'required' => true,
+                    'original_filename' => 'Google Drive Dossier Folder',
+                    'stored_filename' => $data['documents_drive_link'],
+                    'mime_type' => 'text/uri-list',
+                    'file_size' => 0,
+                    'storage_path' => $data['documents_drive_link'],
                     'status' => 'uploaded',
                     'review_status' => 'uploaded',
                     'uploaded_at' => now(),
                 ]);
             }
-        }
 
-        // If Google Drive link was provided, register a specialized document record
-        if (!empty($data['documents_drive_link'])) {
-            VisaDocument::create([
-                'visa_application_id' => $application->id,
-                'document_type' => 'gdrive_link',
-                'document_code' => 'google_drive_folder',
-                'required' => true,
-                'original_filename' => 'Google Drive Dossier Folder',
-                'stored_filename' => $data['documents_drive_link'],
-                'mime_type' => 'text/uri-list',
-                'file_size' => 0,
-                'storage_path' => $data['documents_drive_link'],
-                'status' => 'uploaded',
-                'review_status' => 'uploaded',
-                'uploaded_at' => now(),
-            ]);
-        }
-
-        return $application;
+            return $application;
+        });
     }
 
     /**

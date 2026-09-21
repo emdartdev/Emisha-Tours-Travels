@@ -10,6 +10,9 @@
     <meta name="description" content="@yield('meta_description', 'Emisha Tours & Travels is a premier travel agency in Dhaka, Bangladesh offering international tour packages, certified visa processing, and air ticketing.')">
     <meta name="keywords" content="@yield('meta_keywords', 'travel agency dhaka, bangladesh tour packages, thailand visa bangladesh, air ticket booking dhaka, holiday packages')">
     <link rel="canonical" href="@yield('canonical_url', url()->current())">
+    <link rel="alternate" hreflang="en" href="{{ request()->fullUrlWithQuery(['lang' => 'en']) }}">
+    <link rel="alternate" hreflang="bn" href="{{ request()->fullUrlWithQuery(['lang' => 'bn']) }}">
+    <link rel="alternate" hreflang="x-default" href="{{ url()->current() }}">
     <meta name="robots" content="@yield('robots', 'index, follow')">
     <meta name="theme-color" content="#071A35">
 
@@ -22,10 +25,10 @@
     <meta property="og:type" content="@yield('og_type', 'website')">
     <meta property="og:title" content="@yield('title', 'Emisha Tours & Travels — Premium Travel Agency')">
     <meta property="og:description" content="@yield('meta_description', 'Discover premium international tour packages, certified visa consultancy, and global air ticketing.')">
-    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:url" content="@yield('canonical_url', url()->current())">
     <meta property="og:image" content="@yield('og_image', asset('images/logo.png'))">
     <meta property="og:site_name" content="Emisha Tours & Travels">
-    <meta property="og:locale" content="en_US">
+    <meta property="og:locale" content="{{ app()->getLocale() === 'bn' ? 'bn_BD' : 'en_US' }}">
 
     <!-- Twitter Card Meta -->
     <meta name="twitter:card" content="summary_large_image">
@@ -48,9 +51,15 @@
     @yield('schema')
     @stack('schema')
 
+    <!-- Marketing & Analytics Telemetry (Head) -->
+    @include('components.tracking-scripts', ['position' => 'head'])
+
     @stack('styles')
 </head>
-<body class="bg-white text-[#1E293B] min-h-full flex flex-col antialiased selection:bg-[#D4AF37] selection:text-[#0B1F3A]" style="font-family: 'Poppins', sans-serif;">
+<body class="bg-white text-[#1E293B] min-h-full flex flex-col antialiased selection:bg-[#D4AF37] selection:text-[#0B1F3A] {{ app()->getLocale() === 'bn' ? 'font-bengali' : 'font-sans' }}">
+    <!-- Marketing & Analytics GTM NoScript (Body Start) -->
+    @include('components.tracking-scripts', ['position' => 'body_start'])
+
     <div id="app" class="flex flex-col min-h-screen">
         <!-- Site Header Component -->
         @include('components.header')
@@ -66,6 +75,12 @@
         <!-- Site Footer Component -->
         @include('components.footer')
     </div>
+
+    <!-- GDPR / CCPA Cookie Consent Floating Banner -->
+    @include('components.cookie-consent')
+
+    <!-- Marketing & Analytics Footer Telemetry (Body End) -->
+    @include('components.tracking-scripts', ['position' => 'body_end'])
 
     @stack('scripts')
 </body>

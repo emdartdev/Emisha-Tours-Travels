@@ -12,12 +12,16 @@ use App\Http\Controllers\Public\FaqController;
 use App\Http\Controllers\Public\ContactController;
 use App\Http\Controllers\Public\PageController;
 use App\Http\Controllers\Public\SitemapController;
+use App\Http\Controllers\Public\LocaleController;
 
 /*
 |--------------------------------------------------------------------------
 | Public Routes
 |--------------------------------------------------------------------------
 */
+
+// Language Switcher
+Route::get('/lang/{locale}', [LocaleController::class, 'switch'])->name('lang.switch');
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [PageController::class, 'about'])->name('about');
@@ -137,5 +141,16 @@ Route::prefix('admin')->group(function () {
         // Settings
         Route::get('/settings', [SettingAdminController::class, 'index'])->name('admin.settings');
         Route::post('/settings', [SettingAdminController::class, 'update'])->name('admin.settings.update');
+
+        // Analytics & Marketing Tracking Settings
+        Route::get('/settings/analytics', [\App\Http\Controllers\Admin\AnalyticsTrackingAdminController::class, 'index'])->name('admin.settings.analytics');
+        Route::post('/settings/analytics', [\App\Http\Controllers\Admin\AnalyticsTrackingAdminController::class, 'update'])->name('admin.settings.analytics.update');
+        Route::post('/settings/analytics/verify', [\App\Http\Controllers\Admin\AnalyticsTrackingAdminController::class, 'verifyProvider'])->name('admin.settings.analytics.verify');
+        Route::post('/settings/analytics/test-event', [\App\Http\Controllers\Admin\AnalyticsTrackingAdminController::class, 'testEvent'])->name('admin.settings.analytics.test-event');
+        Route::delete('/settings/analytics/clear-events', [\App\Http\Controllers\Admin\AnalyticsTrackingAdminController::class, 'clearEvents'])->name('admin.settings.analytics.clear-events');
     });
 });
+
+// Public Telemetry & Client Event Endpoint
+Route::post('/api/tracking/event', [\App\Http\Controllers\Admin\AnalyticsTrackingAdminController::class, 'trackClientEvent'])->name('api.tracking.event');
+

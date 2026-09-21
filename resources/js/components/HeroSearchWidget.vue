@@ -2,8 +2,8 @@
   <div class="w-full bg-white/95 backdrop-blur-2xl rounded-2xl sm:rounded-[24px] md:rounded-[26px] p-3.5 sm:p-5 md:p-6 shadow-[0_20px_50px_-10px_rgba(7,21,39,0.25)] sm:shadow-[0_25px_60px_-15px_rgba(7,21,39,0.35)] border border-white/80 ring-1 ring-black/5 transition-all">
     
     <!-- Minimal Segmented Service Tabs -->
-    <div class="flex items-center justify-start mb-4 sm:mb-5 overflow-x-auto scrollbar-none pb-0.5 -mx-1 px-1">
-      <div class="inline-flex p-1 bg-slate-100/90 rounded-2xl gap-1 border border-slate-200/60 shadow-inner w-full sm:w-auto">
+    <div class="flex items-center justify-start mb-3.5 sm:mb-5 overflow-x-auto scrollbar-none pb-1 -mx-1 px-1">
+      <div class="inline-flex p-1 bg-slate-100/90 rounded-xl sm:rounded-2xl gap-1 border border-slate-200/60 shadow-inner w-full sm:w-auto">
         <!-- Tab 1: Holiday Packages -->
         <button 
           type="button"
@@ -11,7 +11,7 @@
           :class="activeTab === 'tours' 
             ? 'bg-[#0B1F3A] text-[#D4AF37] shadow-sm font-semibold' 
             : 'text-slate-600 hover:text-[#0B1F3A] hover:bg-white/70 font-medium'"
-          class="flex-1 sm:flex-initial flex items-center justify-center space-x-1.5 sm:space-x-2 px-2.5 sm:px-4 py-2 rounded-xl text-[11px] sm:text-xs uppercase tracking-wider transition-all duration-200 flex-shrink-0 cursor-pointer"
+          class="flex-1 sm:flex-initial flex items-center justify-center space-x-1 sm:space-x-2 px-2 sm:px-4 py-2 rounded-lg sm:rounded-xl text-[10px] xs:text-[11px] sm:text-xs uppercase tracking-wider transition-all duration-200 flex-shrink-0 cursor-pointer"
         >
           <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -26,7 +26,7 @@
           :class="activeTab === 'visa' 
             ? 'bg-[#0B1F3A] text-[#D4AF37] shadow-sm font-semibold' 
             : 'text-slate-600 hover:text-[#0B1F3A] hover:bg-white/70 font-medium'"
-          class="flex-1 sm:flex-initial flex items-center justify-center space-x-1.5 sm:space-x-2 px-2.5 sm:px-4 py-2 rounded-xl text-[11px] sm:text-xs uppercase tracking-wider transition-all duration-200 flex-shrink-0 cursor-pointer"
+          class="flex-1 sm:flex-initial flex items-center justify-center space-x-1 sm:space-x-2 px-2 sm:px-4 py-2 rounded-lg sm:rounded-xl text-[10px] xs:text-[11px] sm:text-xs uppercase tracking-wider transition-all duration-200 flex-shrink-0 cursor-pointer"
         >
           <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
@@ -41,7 +41,7 @@
           :class="activeTab === 'flights' 
             ? 'bg-[#0B1F3A] text-[#D4AF37] shadow-sm font-semibold' 
             : 'text-slate-600 hover:text-[#0B1F3A] hover:bg-white/70 font-medium'"
-          class="flex-1 sm:flex-initial flex items-center justify-center space-x-1.5 sm:space-x-2 px-2.5 sm:px-4 py-2 rounded-xl text-[11px] sm:text-xs uppercase tracking-wider transition-all duration-200 flex-shrink-0 cursor-pointer"
+          class="flex-1 sm:flex-initial flex items-center justify-center space-x-1 sm:space-x-2 px-2 sm:px-4 py-2 rounded-lg sm:rounded-xl text-[10px] xs:text-[11px] sm:text-xs uppercase tracking-wider transition-all duration-200 flex-shrink-0 cursor-pointer"
         >
           <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>

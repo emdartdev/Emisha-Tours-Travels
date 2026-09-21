@@ -8,18 +8,22 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Builder;
+use App\Traits\HasTranslations;
 
 class Destination extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTranslations;
 
     protected $fillable = [
         'name',
+        'name_bn',
         'slug',
         'country',
         'region',
         'short_description',
+        'short_description_bn',
         'description',
+        'description_bn',
         'hero_image',
         'thumbnail',
         'status',

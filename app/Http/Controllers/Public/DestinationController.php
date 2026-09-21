@@ -6,10 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Models\Destination;
 use App\Models\Tour;
 use App\Models\VisaCountry;
+use App\Services\SeoService;
 use Illuminate\View\View;
 
 class DestinationController extends Controller
 {
+    public function __construct(
+        protected SeoService $seoService
+    ) {}
+
     public function index(): View
     {
         $destinations = Destination::active()
@@ -19,7 +24,15 @@ class DestinationController extends Controller
             ->orderBy('sort_order', 'asc')
             ->paginate(12);
 
-        return view('public.destinations.index', compact('destinations'));
+        $breadcrumbs = [
+            'Home' => route('home'),
+            'Destinations & Travel Guides' => route('destinations.index'),
+        ];
+        $breadcrumbSchema = $this->seoService->generateBreadcrumbSchema($breadcrumbs);
+        $itemListSchema = $this->seoService->generateItemListSchema('World Travel Destinations & Guides', $destinations->getCollection(), 'TouristDestination');
+        $schema = $breadcrumbSchema . "\n" . $itemListSchema;
+
+        return view('public.destinations.index', compact('destinations', 'schema'));
     }
 
     public function show(string $slug): View
@@ -38,6 +51,15 @@ class DestinationController extends Controller
             ->orWhere('slug', $destination->slug)
             ->first();
 
-        return view('public.destinations.show', compact('destination', 'tours', 'visaCountry'));
+        $breadcrumbs = [
+            'Home' => route('home'),
+            'Destinations' => route('destinations.index'),
+            $destination->name => route('destinations.show', $destination->slug),
+        ];
+        $breadcrumbSchema = $this->seoService->generateBreadcrumbSchema($breadcrumbs);
+        $destinationSchema = $this->seoService->generateDestinationSchema($destination);
+        $schema = $destinationSchema . "\n" . $breadcrumbSchema;
+
+        return view('public.destinations.show', compact('destination', 'tours', 'visaCountry', 'schema'));
     }
 }

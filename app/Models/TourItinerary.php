@@ -5,18 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Traits\HasTranslations;
 
 class TourItinerary extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTranslations;
 
     protected $fillable = [
         'tour_id',
         'day_number',
         'title',
+        'title_bn',
         'description',
+        'description_bn',
         'meals',
+        'meals_bn',
         'stay',
+        'stay_bn',
         'sort_order',
     ];
 

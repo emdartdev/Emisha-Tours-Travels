@@ -37,10 +37,13 @@ class BlogAdminController extends Controller
     {
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
+            'title_bn' => ['nullable', 'string', 'max:255'],
             'blog_category_id' => ['required', 'exists:blog_categories,id'],
             'featured_image' => ['nullable', 'string', 'max:500'],
             'excerpt' => ['nullable', 'string', 'max:500'],
+            'excerpt_bn' => ['nullable', 'string', 'max:500'],
             'content' => ['required', 'string'],
+            'content_bn' => ['nullable', 'string'],
             'reading_time' => ['nullable', 'integer', 'min:1'],
             'status' => ['required', 'in:published,draft,archived'],
         ]);
@@ -73,10 +76,13 @@ class BlogAdminController extends Controller
 
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
+            'title_bn' => ['nullable', 'string', 'max:255'],
             'blog_category_id' => ['required', 'exists:blog_categories,id'],
             'featured_image' => ['nullable', 'string', 'max:500'],
             'excerpt' => ['nullable', 'string', 'max:500'],
+            'excerpt_bn' => ['nullable', 'string', 'max:500'],
             'content' => ['required', 'string'],
+            'content_bn' => ['nullable', 'string'],
             'reading_time' => ['nullable', 'integer', 'min:1'],
             'status' => ['required', 'in:published,draft,archived'],
         ]);

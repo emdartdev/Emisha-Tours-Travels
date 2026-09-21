@@ -52,9 +52,16 @@
                                     <img src="{{ $tour->featured_image ?: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=120' }}" 
                                          alt="{{ $tour->title }}" class="w-12 h-12 rounded-xl object-cover bg-slate-900 border border-[var(--admin-card-border)] flex-shrink-0 shadow-sm">
                                     <div>
-                                        <span class="font-extrabold text-[var(--admin-text-main)] block text-sm">{{ $tour->title }}</span>
-                                        <span class="text-[var(--admin-text-muted)] text-[11px] font-mono">{{ $tour->slug }}</span>
-                                    </div>
+                                         <span class="font-extrabold text-[var(--admin-text-main)] block text-sm">{{ $tour->title }}</span>
+                                         <div class="flex items-center gap-2 mt-0.5">
+                                             <span class="text-[var(--admin-text-muted)] text-[11px] font-mono">{{ $tour->slug }}</span>
+                                             <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold {{ $tour->title_bn ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20' : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20' }}">
+                                                 <span>EN ✓</span>
+                                                 <span>|</span>
+                                                 <span>{{ $tour->title_bn ? 'BN ✓' : 'BN ⚠' }}</span>
+                                             </span>
+                                         </div>
+                                     </div>
                                 </div>
                             </td>
                             <td class="py-4 px-6">

@@ -30,7 +30,10 @@ class HomeController extends Controller
         $testimonials = Testimonial::published()->featured()->orderBy('sort_order', 'asc')->limit(3)->get();
         $recentBlogs = BlogPost::published()->with(['category', 'author'])->latest('published_at')->limit(3)->get();
         $faqs = Faq::active()->orderBy('sort_order', 'asc')->limit(5)->get();
-        $schema = $this->seoService->generateTravelAgencySchema();
+        $websiteSchema = $this->seoService->generateWebSiteSchema();
+        $agencySchema = $this->seoService->generateTravelAgencySchema();
+        $faqSchema = $this->seoService->generateFaqSchema($faqs);
+        $schema = $websiteSchema . "\n" . $agencySchema . "\n" . $faqSchema;
 
         return view('public.home', compact(
             'featuredTours',

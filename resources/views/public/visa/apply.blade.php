@@ -2,6 +2,11 @@
 
 @section('title', 'Online Tourist Visa Application Onboarding — Emisha Tours & Travels')
 @section('meta_description', 'Apply for your tourist visa online with expert document checking, transparent service pricing, and private secure document handling.')
+@section('canonical_url', route('visa.apply', $selectedSlug ?? null))
+
+@section('schema')
+    {!! $schema ?? '' !!}
+@endsection
 
 @section('content')
 <!-- Hero Header -->
@@ -33,11 +38,11 @@
 </div>
 
 <!-- Main Onboarding Wizard Section -->
-<section class="section-padding bg-[#F8FAFC]" x-data="visaOnboardingWizard(@js($destinations), @js($schengenCountries), '{{ $selectedSlug }}', @js($draftData), @js($uploadQuota ?? []))">
+<section class="section-padding bg-[#F8FAFC]" x-data="visaOnboardingWizard(@js($destinations), @js($schengenCountries), '{{ $selectedSlug }}', @js($draftData), @js($uploadQuota ?? []), '{{ $submissionToken ?? '' }}', @js($isAlreadySubmitted ?? false), @js($submittedApplicationData ?? null))">
     <div class="container-custom max-w-5xl">
         
         <!-- Top Step Tracker (10 Steps with Clear Typography & Responsive UX) -->
-        <div class="mb-8 bg-white p-4 md:p-6 rounded-[24px] border border-slate-200/90 shadow-sm">
+        <div class="mb-6 sm:mb-8 bg-white p-3.5 sm:p-4 md:p-6 rounded-2xl sm:rounded-[24px] border border-slate-200/90 shadow-sm">
             <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
                 <template x-for="(s, index) in steps" :key="s.id">
                     <button 
@@ -82,11 +87,119 @@
         </div>
 
         <!-- Onboarding Wizard Card Container -->
-        <div class="card-base p-6 sm:p-8 md:p-12 shadow-xl bg-white border border-slate-200/90 rounded-[28px] relative">
-            <form action="{{ route('visa.apply.store') }}" method="POST" enctype="multipart/form-data" id="visaOnboardingForm" @submit.prevent="submitVisaForm">
+        <div class="card-base p-4 sm:p-8 md:p-12 shadow-xl bg-white border border-slate-200/90 rounded-2xl sm:rounded-[28px] relative">
+            
+            <!-- SUBMITTED APPLICATION LOCKED STATE OVERVIEW CARD -->
+            <div x-show="applicationStatus === 'SUBMITTED' || isSubmittedSuccessfully" x-cloak class="space-y-6 py-2 sm:py-4">
+                <div class="text-center pb-6 border-b border-slate-100">
+                    <div class="relative w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 flex items-center justify-center">
+                        <div class="absolute inset-0 bg-emerald-400 rounded-full animate-ping opacity-25"></div>
+                        <div class="relative w-16 h-16 sm:w-20 sm:h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center shadow-inner ring-8 ring-emerald-50">
+                            <svg class="w-8 h-8 sm:w-10 sm:h-10 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                        </div>
+                    </div>
+                    <span class="px-3.5 py-1 bg-emerald-50 border border-emerald-300 text-emerald-800 font-bold text-xs uppercase tracking-wider rounded-full inline-block mb-2">
+                        Application Registered & Locked
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-[#0B1F3A] font-heading">
+                        Visa Application Dossier Created
+                    </h2>
+                    <p class="text-sm text-slate-500 mt-1 max-w-lg mx-auto leading-relaxed">
+                        Your application is securely registered and locked for document review by our visa team. Submitting again is disabled for this record.
+                    </p>
+                </div>
+
+                <!-- Official Reference ID Box -->
+                <div class="p-5 sm:p-6 rounded-2xl bg-[#0B1F3A] text-white flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-lg">
+                    <div>
+                        <span class="text-xs text-[#D4AF37] uppercase font-bold tracking-wider block">Official Tracking Code</span>
+                        <strong class="text-xl sm:text-3xl font-extrabold font-mono tracking-wide text-white truncate block mt-0.5" x-text="submittedApp.reference_number"></strong>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button 
+                            type="button" 
+                            @click="copyReference(submittedApp.reference_number)"
+                            class="px-4 py-2.5 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-xs font-bold text-white transition flex items-center gap-2 flex-shrink-0"
+                        >
+                            <svg class="w-4 h-4 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+                            <span x-text="copiedRef ? 'Copied!' : 'Copy Tracking Code'"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Summary Details Grid -->
+                <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-xs sm:text-sm">
+                    <div>
+                        <span class="text-slate-500 font-medium block">Destination:</span>
+                        <strong class="text-[#0B1F3A] font-bold block mt-0.5">
+                            <span x-text="submittedApp.flag"></span>
+                            <span x-text="submittedApp.country_name"></span>
+                        </strong>
+                    </div>
+                    <div>
+                        <span class="text-slate-500 font-medium block">Applicant Name:</span>
+                        <strong class="text-[#0B1F3A] font-bold block mt-0.5" x-text="submittedApp.applicant_name"></strong>
+                    </div>
+                    <div>
+                        <span class="text-slate-500 font-medium block">Current Status:</span>
+                        <span class="inline-block mt-0.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-300">
+                            Under Specialist Review
+                        </span>
+                    </div>
+                    <div>
+                        <span class="text-slate-500 font-medium block">Service Fee:</span>
+                        <strong class="text-emerald-700 font-extrabold text-base block mt-0.5">৳ <span x-text="submittedApp.total_service_fee"></span> BDT</strong>
+                    </div>
+                </div>
+
+                <!-- Next Steps Milestone -->
+                <div class="p-4 rounded-xl bg-blue-50 border border-blue-200 text-xs text-blue-950 space-y-1">
+                    <strong class="font-bold flex items-center gap-1.5 text-[#0B1F3A]">
+                        <svg class="w-4 h-4 text-blue-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span>What to do next?</span>
+                    </strong>
+                    <p class="text-slate-700">1. Track live consular submission progress on our tracker dashboard anytime using your Reference ID.</p>
+                    <p class="text-slate-700">2. Our visa processing specialist will contact you on WhatsApp / Phone within 30-60 minutes.</p>
+                </div>
+
+                <!-- Actions CTA -->
+                <div class="pt-4 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-100">
+                    <a 
+                        :href="submittedApp.tracking_url" 
+                        class="btn btn-primary py-3.5 px-6 text-sm font-bold shadow-md flex items-center justify-center gap-2 w-full sm:w-auto flex-1"
+                    >
+                        <svg class="w-4 h-4 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        <span>Track Application Live</span>
+                    </a>
+
+                    <a 
+                        :href="submittedApp.whatsapp_url" 
+                        target="_blank"
+                        class="btn btn-gold py-3.5 px-6 text-sm font-bold shadow-md flex items-center justify-center gap-2 w-full sm:w-auto flex-1"
+                    >
+                        <svg class="w-4 h-4 fill-current flex-shrink-0" viewBox="0 0 24 24">
+                            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>
+                        </svg>
+                        <span>WhatsApp Specialist</span>
+                    </a>
+
+                    <button 
+                        type="button" 
+                        @click="startNewApplication()"
+                        class="btn btn-outline py-3.5 px-6 text-sm font-bold shadow-xs flex items-center justify-center gap-2 w-full sm:w-auto border-slate-300 hover:bg-slate-50 text-slate-700"
+                    >
+                        <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                        <span>Apply For Another Visa</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Active Form Wizard (visible only when NOT submitted/locked) -->
+            <form x-show="applicationStatus !== 'SUBMITTED' && !isSubmittedSuccessfully" action="{{ route('visa.apply.store') }}" method="POST" enctype="multipart/form-data" id="visaOnboardingForm" @submit.prevent="submitVisaForm">
                 @csrf
 
                 <!-- Hidden Selected Destination & Dynamic Fields -->
+                <input type="hidden" name="submission_token" :value="submissionToken">
                 <input type="hidden" name="destination_slug" :value="form.destination_slug">
                 <input type="hidden" name="visa_country_id" :value="selectedCountryId">
                 <input type="hidden" name="visa_type_id" :value="selectedTypeId">
@@ -1370,13 +1483,13 @@
             style="display: none;"
         >
             <div 
-                @click.away="showStatusModal = false"
+                @click.away="closeStatusModal()"
                 class="bg-white rounded-2xl sm:rounded-[28px] md:rounded-[32px] w-full max-w-lg md:max-w-2xl max-h-[92vh] sm:max-h-[88vh] flex flex-col p-4 sm:p-6 md:p-8 shadow-2xl border border-slate-100 relative overflow-hidden transform transition-all my-auto"
             >
                 <!-- Close Button -->
                 <button 
                     type="button" 
-                    @click="showStatusModal = false" 
+                    @click="closeStatusModal()" 
                     class="absolute top-3 right-3 sm:top-4 sm:right-4 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center transition-colors z-20 shadow-2xs"
                     aria-label="Close"
                 >
@@ -1472,6 +1585,15 @@
                                     <span>View Live Tracking</span>
                                 </a>
 
+                                <button 
+                                    type="button" 
+                                    @click="startNewApplication()"
+                                    class="btn btn-outline py-3 sm:py-3.5 px-4 text-xs sm:text-sm font-bold shadow-sm flex items-center justify-center gap-2 flex-1 w-full border-slate-300 hover:bg-slate-50 text-slate-700"
+                                >
+                                    <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                                    <span>Apply For Another Visa</span>
+                                </button>
+
                                 <a 
                                     :href="submittedApp.whatsapp_url" 
                                     target="_blank"
@@ -1555,9 +1677,16 @@
                     </template>
 
                     <div class="mt-3 text-center pb-1">
-                        <button type="button" @click="showStatusModal = false" class="text-xs text-slate-400 hover:text-slate-600 font-semibold underline">
-                            Close Dialog
-                        </button>
+                        <template x-if="modalState === 'success'">
+                            <button type="button" @click="closeStatusModal()" class="text-xs text-slate-400 hover:text-slate-600 font-semibold underline">
+                                Go to Live Tracking &rarr;
+                            </button>
+                        </template>
+                        <template x-if="modalState === 'failed'">
+                            <button type="button" @click="closeModalAndFix()" class="text-xs text-slate-400 hover:text-slate-600 font-semibold underline">
+                                Dismiss & Fix Information
+                            </button>
+                        </template>
                     </div>
                 </div>
             </div>
@@ -1567,9 +1696,11 @@
 
 @push('scripts')
 <script>
-function visaOnboardingWizard(destinations, schengenCountries, initialSlug, draftData, uploadQuota) {
+function visaOnboardingWizard(destinations, schengenCountries, initialSlug, draftData, uploadQuota, submissionToken, isAlreadySubmitted, submittedApplicationData) {
     return {
         currentStep: 1,
+        submissionToken: submissionToken || '{{ $submissionToken ?? '' }}',
+        applicationStatus: isAlreadySubmitted ? 'SUBMITTED' : 'DRAFT', // 'DRAFT' | 'SUBMITTING' | 'SUBMITTED' | 'FAILED' | 'RESUBMITTING'
         docSubmissionMode: 'gdrive', // 'gdrive' | 'files'
         destinations: destinations,
         schengenCountriesList: schengenCountries,
@@ -1598,12 +1729,13 @@ function visaOnboardingWizard(destinations, schengenCountries, initialSlug, draf
         autoSaveTimer: null,
         errors: {},
         isSubmitting: false,
+        isSubmittedSuccessfully: isAlreadySubmitted ? true : false,
         showStatusModal: false,
         modalState: 'success', // 'success' | 'failed'
         modalErrorTitle: 'Please check the following errors:',
         modalErrorList: [],
         copiedRef: false,
-        submittedApp: {
+        submittedApp: submittedApplicationData || {
             reference_number: '',
             country_name: '',
             flag: '',
@@ -1709,6 +1841,7 @@ function visaOnboardingWizard(destinations, schengenCountries, initialSlug, draf
                 this.modalErrorList = [@js(session('error'))];
                 this.showStatusModal = true;
             @elseif(session('success') && session('show_status_modal'))
+                this.isSubmittedSuccessfully = true;
                 this.modalState = 'success';
                 this.showStatusModal = true;
             @endif
@@ -2080,7 +2213,16 @@ function visaOnboardingWizard(destinations, schengenCountries, initialSlug, draf
 
         submitVisaForm() {
             if (this.isSubmitting) return;
+            if (this.applicationStatus === 'SUBMITTED' || this.isSubmittedSuccessfully) {
+                if (this.submittedApp && this.submittedApp.tracking_url && this.submittedApp.tracking_url !== '#') {
+                    window.location.href = this.submittedApp.tracking_url;
+                } else {
+                    window.location.href = '{{ route('visa.track') }}';
+                }
+                return;
+            }
             this.isSubmitting = true;
+            this.applicationStatus = 'SUBMITTING';
 
             const formEl = document.getElementById('visaOnboardingForm');
             const formData = new FormData(formEl);
@@ -2099,6 +2241,8 @@ function visaOnboardingWizard(destinations, schengenCountries, initialSlug, draf
                 this.isSubmitting = false;
 
                 if (res.ok && data.status === 'success') {
+                    this.applicationStatus = 'SUBMITTED';
+                    this.isSubmittedSuccessfully = true;
                     this.modalState = 'success';
                     this.submittedApp = {
                         reference_number: data.reference_number,
@@ -2113,7 +2257,9 @@ function visaOnboardingWizard(destinations, schengenCountries, initialSlug, draf
                     return;
                 }
 
-                // Handle validation error (422) or server error
+                // Handle validation error (422) or server error - Form data & inputs remain completely preserved!
+                this.isSubmittedSuccessfully = false;
+                this.applicationStatus = 'FAILED';
                 this.modalState = 'failed';
                 this.modalErrorTitle = data.message || 'Please check the following errors:';
                 
@@ -2139,11 +2285,45 @@ function visaOnboardingWizard(destinations, schengenCountries, initialSlug, draf
             })
             .catch(err => {
                 this.isSubmitting = false;
+                this.isSubmittedSuccessfully = false;
+                this.applicationStatus = 'FAILED';
                 this.modalState = 'failed';
                 this.modalErrorTitle = 'Connection / Submission Error';
                 this.modalErrorList = ['Unable to complete your request at this moment. Please check your internet connection or reach out directly to our WhatsApp Visa Desk.'];
                 this.showStatusModal = true;
             });
+        },
+
+        closeStatusModal() {
+            this.showStatusModal = false;
+            if (this.modalState === 'success' || this.isSubmittedSuccessfully) {
+                // When visa apply was successful, closing the modal keeps the application locked into the SUBMITTED overview
+                this.applicationStatus = 'SUBMITTED';
+                this.isSubmittedSuccessfully = true;
+                window.scrollTo({ top: 120, behavior: 'smooth' });
+            } else {
+                // When visa apply failed, keep all filled data and navigate to the step to fix
+                this.applicationStatus = 'RESUBMITTING';
+                this.closeModalAndFix();
+            }
+        },
+
+        startNewApplication() {
+            this.isSubmitting = false;
+            this.isSubmittedSuccessfully = false;
+            this.applicationStatus = 'DRAFT';
+            this.showStatusModal = false;
+            // Clear server session draft
+            fetch('{{ route('visa.onboarding.draft') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({})
+            }).catch(() => {});
+            // Redirect to clean application page with new token
+            window.location.href = '{{ route('visa.apply') }}?new=1';
         },
 
         closeModalAndFix() {

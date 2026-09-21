@@ -18,7 +18,8 @@ class TourController extends Controller
     public function __construct(
         protected TourService $tourService,
         protected InquiryService $inquiryService,
-        protected SeoService $seoService
+        protected SeoService $seoService,
+        protected \App\Services\TrackingService $trackingService
     ) {}
 
     public function index(Request $request): View
@@ -28,14 +29,30 @@ class TourController extends Controller
         $destinations = Destination::active()->orderBy('name', 'asc')->get();
         $categories = TourCategory::active()->orderBy('sort_order', 'asc')->get();
 
-        return view('public.tours.index', compact('tours', 'destinations', 'categories', 'filters'));
+        $breadcrumbs = [
+            'Home' => route('home'),
+            'Holiday Tour Packages' => route('tours.index'),
+        ];
+        $breadcrumbSchema = $this->seoService->generateBreadcrumbSchema($breadcrumbs);
+        $itemListSchema = $this->seoService->generateItemListSchema('Holiday & Vacation Tour Packages', $tours->getCollection());
+        $schema = $breadcrumbSchema . "\n" . $itemListSchema;
+
+        return view('public.tours.index', compact('tours', 'destinations', 'categories', 'filters', 'schema'));
     }
 
     public function show(string $slug): View
     {
         $tour = $this->tourService->getTourBySlug($slug);
         $relatedTours = $this->tourService->getRelatedTours($tour, 3);
-        $schema = $this->seoService->generateTourSchema($tour);
+        
+        $breadcrumbs = [
+            'Home' => route('home'),
+            'Holiday Tour Packages' => route('tours.index'),
+            $tour->title => route('tours.show', $tour->slug),
+        ];
+        $breadcrumbSchema = $this->seoService->generateBreadcrumbSchema($breadcrumbs);
+        $tourSchema = $this->seoService->generateTourSchema($tour);
+        $schema = $tourSchema . "\n" . $breadcrumbSchema;
 
         return view('public.tours.show', compact('tour', 'relatedTours', 'schema'));
     }
@@ -48,6 +65,20 @@ class TourController extends Controller
         $data['tour_title'] = $tour->title;
 
         $inquiry = $this->inquiryService->createTourInquiry($data);
+
+        // Record telemetry conversion
+        $this->trackingService->recordEvent('tour_inquiry', [
+            'category' => 'conversion',
+            'value' => (float) ($tour->discount_price ?: $tour->price),
+            'currency' => $tour->currency ?: 'BDT',
+            'page_title' => $tour->title,
+            'metadata' => [
+                'tour_id' => $tour->id,
+                'tour_title' => $tour->title,
+                'reference' => $inquiry->reference_number,
+                'lead_name' => $inquiry->full_name,
+            ]
+        ], $request);
 
         return redirect()
             ->back()

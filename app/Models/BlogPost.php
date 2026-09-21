@@ -8,19 +8,23 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Builder;
+use App\Traits\HasTranslations;
 
 class BlogPost extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, HasTranslations;
 
     protected $fillable = [
         'blog_category_id',
         'author_id',
         'destination_id',
         'title',
+        'title_bn',
         'slug',
         'excerpt',
+        'excerpt_bn',
         'content',
+        'content_bn',
         'featured_image',
         'reading_time',
         'status',

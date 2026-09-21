@@ -43,6 +43,8 @@ class VisaApplication extends Model
         'total_service_fee',
         'currency',
         'draft_session_id',
+        'submission_token',
+        'idempotency_key',
         'status',
         'admin_notes',
         'applicant_notes',

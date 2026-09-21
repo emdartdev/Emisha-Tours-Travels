@@ -40,7 +40,15 @@ class BlogController extends Controller
         $posts = $query->paginate(9)->withQueryString();
         $categories = BlogCategory::where('status', 'active')->get();
 
-        return view('public.blog.index', compact('posts', 'categories'));
+        $breadcrumbs = [
+            'Home' => route('home'),
+            'Travel Blog, Guides & News' => route('blog.index'),
+        ];
+        $breadcrumbSchema = $this->seoService->generateBreadcrumbSchema($breadcrumbs);
+        $itemListSchema = $this->seoService->generateItemListSchema('Travel Guides & Tourism Articles', $posts->getCollection(), 'Article');
+        $schema = $breadcrumbSchema . "\n" . $itemListSchema;
+
+        return view('public.blog.index', compact('posts', 'categories', 'schema'));
     }
 
     public function show(string $slug): View
@@ -56,7 +64,14 @@ class BlogController extends Controller
             ->limit(4)
             ->get();
 
-        $schema = $this->seoService->generateArticleSchema($post);
+        $breadcrumbs = [
+            'Home' => route('home'),
+            'Travel Blog' => route('blog.index'),
+            $post->title => route('blog.show', $post->slug),
+        ];
+        $breadcrumbSchema = $this->seoService->generateBreadcrumbSchema($breadcrumbs);
+        $articleSchema = $this->seoService->generateArticleSchema($post);
+        $schema = $articleSchema . "\n" . $breadcrumbSchema;
 
         return view('public.blog.show', compact('post', 'recentPosts', 'schema'));
     }

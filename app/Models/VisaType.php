@@ -7,21 +7,29 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Builder;
+use App\Traits\HasTranslations;
 
 class VisaType extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTranslations;
 
     protected $fillable = [
         'visa_country_id',
         'name',
+        'name_bn',
         'slug',
         'description',
+        'description_bn',
         'validity',
+        'validity_bn',
         'stay_period',
+        'stay_period_bn',
         'entry_type',
+        'entry_type_bn',
         'processing_time',
+        'processing_time_bn',
         'processing_time_unit',
+        'processing_time_unit_bn',
         'starting_fee',
         'service_fee',
         'currency',

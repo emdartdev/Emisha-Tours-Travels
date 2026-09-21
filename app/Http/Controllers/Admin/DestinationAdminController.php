@@ -32,12 +32,15 @@ class DestinationAdminController extends Controller
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:150'],
+            'name_bn' => ['nullable', 'string', 'max:150'],
             'country' => ['required', 'string', 'max:100'],
             'region' => ['nullable', 'string', 'max:100'],
             'hero_image' => ['nullable', 'string', 'max:500'],
             'thumbnail' => ['nullable', 'string', 'max:500'],
             'short_description' => ['nullable', 'string', 'max:500'],
+            'short_description_bn' => ['nullable', 'string', 'max:500'],
             'description' => ['nullable', 'string'],
+            'description_bn' => ['nullable', 'string'],
             'status' => ['required', 'in:active,inactive'],
             'featured' => ['boolean'],
             'sort_order' => ['nullable', 'integer'],
@@ -68,12 +71,15 @@ class DestinationAdminController extends Controller
 
         $data = $request->validate([
             'name' => ['required', 'string', 'max:150'],
+            'name_bn' => ['nullable', 'string', 'max:150'],
             'country' => ['required', 'string', 'max:100'],
             'region' => ['nullable', 'string', 'max:100'],
             'hero_image' => ['nullable', 'string', 'max:500'],
             'thumbnail' => ['nullable', 'string', 'max:500'],
             'short_description' => ['nullable', 'string', 'max:500'],
+            'short_description_bn' => ['nullable', 'string', 'max:500'],
             'description' => ['nullable', 'string'],
+            'description_bn' => ['nullable', 'string'],
             'status' => ['required', 'in:active,inactive'],
             'featured' => ['boolean'],
             'sort_order' => ['nullable', 'integer'],

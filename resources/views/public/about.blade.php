@@ -1,7 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'About Us | Emisha Tours & Travels')
-@section('meta_description', 'Learn about Emisha Tours & Travels, Bangladesh premier travel management agency dedicated to premium holiday packages, visa processing, and air ticketing.')
+@section('title', __('about.title'))
+@section('meta_description', __('about.meta_description'))
+@section('canonical_url', route('about'))
+
+@section('schema')
+    {!! $schema ?? '' !!}
+@endsection
 
 @section('content')
 <!-- Hero Section -->
@@ -9,12 +14,12 @@
     <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#D4AF37_1px,transparent_1px)] [background-size:20px_20px]"></div>
     <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-gold/10 rounded-full blur-3xl pointer-events-none"></div>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-        <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-semibold bg-[#D4AF37]/15 text-[#D4AF37] uppercase tracking-widest mb-3 border border-[#D4AF37]/30">Our Legacy & Mission</span>
+        <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-semibold bg-[#D4AF37]/15 text-[#D4AF37] uppercase tracking-widest mb-3 border border-[#D4AF37]/30">{{ __('about.legacy_badge') }}</span>
         <h1 class="text-3xl md:text-6xl font-extrabold mb-6 text-white tracking-tight">
-            <span class="text-white">Crafting Unforgettable Journeys</span>
+            <span class="text-white">{{ __('about.hero_title') }}</span>
         </h1>
         <p class="text-slate-200 max-w-3xl mx-auto text-base md:text-xl leading-relaxed font-normal">
-            Emisha Tours & Travels is committed to making international and domestic travel effortless, transparent, and memorable for travelers across Bangladesh.
+            {{ __('about.hero_subtitle') }}
         </p>
     </div>
 </div>
@@ -32,21 +37,21 @@
             <!-- Section Pill Badge -->
             <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#D4AF37]/15 text-[#0B1F3A] uppercase tracking-widest border border-[#D4AF37]/30 backdrop-blur-md">
                 <span class="w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse"></span>
-                <span>Who We Are • Established Excellence</span>
+                <span>{{ __('about.who_badge') }}</span>
             </div>
             
             <!-- Headline -->
             <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold font-serif text-[#0B1F3A] leading-tight tracking-tight">
-                Your Trusted Travel Partner in Bangladesh
+                {{ __('about.who_title') }}
             </h2>
 
             <!-- Editorial Narrative -->
             <div class="space-y-4 text-slate-600 text-sm sm:text-base leading-relaxed font-normal">
                 <p>
-                    Founded with a passion for world exploration and excellence in hospitality, <strong class="text-[#0B1F3A] font-semibold">Emisha Tours & Travels</strong> has grown into one of Dhaka’s most reliable and comprehensive full-service travel management agencies.
+                    {{ __('about.who_p1') }}
                 </p>
                 <p>
-                    From hand-crafted leisure vacations across Southeast Asia, Europe, and the Middle East, to complex multi-destination business visas and group flight bookings, our certified team handles every nuance with unmatched precision.
+                    {{ __('about.who_p2') }}
                 </p>
             </div>
 
@@ -56,32 +61,32 @@
                     <div class="flex items-center gap-1.5 mb-1">
                         <span class="text-xl sm:text-2xl md:text-3xl font-black font-serif text-[#0B1F3A] tracking-tight group-hover:text-[#D4AF37] transition-colors">10,000+</span>
                     </div>
-                    <span class="text-[11px] sm:text-xs text-slate-500 font-bold uppercase tracking-wider block">Happy Travelers</span>
+                    <span class="text-[11px] sm:text-xs text-slate-500 font-bold uppercase tracking-wider block">{{ __('about.stat_travelers') }}</span>
                 </div>
 
                 <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-[0_8px_25px_rgba(11,31,58,0.03)] hover:shadow-md hover:border-emerald-300 transition-all duration-300 group">
                     <div class="flex items-center gap-1.5 mb-1">
                         <span class="text-xl sm:text-2xl md:text-3xl font-black font-serif text-emerald-600 tracking-tight">98.5%</span>
                     </div>
-                    <span class="text-[11px] sm:text-xs text-slate-500 font-bold uppercase tracking-wider block">Visa Success Rate</span>
+                    <span class="text-[11px] sm:text-xs text-slate-500 font-bold uppercase tracking-wider block">{{ __('about.stat_visa_rate') }}</span>
                 </div>
 
                 <div class="col-span-2 sm:col-span-1 bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-[0_8px_25px_rgba(11,31,58,0.03)] hover:shadow-md hover:border-[#D4AF37]/40 transition-all duration-300 group">
                     <div class="flex items-center gap-1.5 mb-1">
                         <span class="text-xl sm:text-2xl md:text-3xl font-black font-serif text-[#0B1F3A] tracking-tight group-hover:text-[#D4AF37] transition-colors">24/7</span>
                     </div>
-                    <span class="text-[11px] sm:text-xs text-slate-500 font-bold uppercase tracking-wider block">Dedicated Care</span>
+                    <span class="text-[11px] sm:text-xs text-slate-500 font-bold uppercase tracking-wider block">{{ __('about.stat_care') }}</span>
                 </div>
             </div>
 
             <!-- Interactive Action Row -->
             <div class="flex flex-wrap items-center gap-3.5 pt-2">
                 <a href="{{ route('tours.index') }}" class="btn btn-gold px-6 py-3.5 text-xs uppercase tracking-wider font-bold rounded-xl shadow-md flex items-center gap-2">
-                    <span>Explore Tour Packages</span>
+                    <span>{{ __('about.btn_explore_tours') }}</span>
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 </a>
                 <a href="{{ route('visa.index') }}" class="btn btn-outline px-6 py-3.5 text-xs uppercase tracking-wider font-bold rounded-xl flex items-center gap-2">
-                    <span>Visa Consultancy</span>
+                    <span>{{ __('about.btn_visa_consultancy') }}</span>
                 </a>
             </div>
         </div>
@@ -104,7 +109,7 @@
                         >
                         <div class="absolute inset-0 bg-gradient-to-t from-[#0B1F3A]/90 via-[#0B1F3A]/30 to-transparent"></div>
                         <div class="absolute bottom-3.5 left-3.5 right-3.5">
-                            <span class="text-[10px] uppercase tracking-wider font-bold bg-[#D4AF37] text-[#0B1F3A] px-2 py-0.5 rounded-md inline-block mb-1">Leisure Escape</span>
+                            <span class="text-[10px] uppercase tracking-wider font-bold bg-[#D4AF37] text-[#0B1F3A] px-2 py-0.5 rounded-md inline-block mb-1">{{ __('about.tag_beach') }}</span>
                             <h4 class="text-white font-bold text-xs sm:text-sm">Exotic Beach</h4>
                         </div>
                     </div>
@@ -119,7 +124,7 @@
                         >
                         <div class="absolute inset-0 bg-gradient-to-t from-[#0B1F3A]/90 via-[#0B1F3A]/30 to-transparent"></div>
                         <div class="absolute bottom-3.5 left-3.5 right-3.5">
-                            <span class="text-[10px] uppercase tracking-wider font-bold bg-white/20 backdrop-blur-md text-white px-2 py-0.5 rounded-md inline-block mb-1">Cultural Discovery</span>
+                            <span class="text-[10px] uppercase tracking-wider font-bold bg-white/20 backdrop-blur-md text-white px-2 py-0.5 rounded-md inline-block mb-1">{{ __('about.tag_temple') }}</span>
                             <h4 class="text-white font-bold text-xs sm:text-sm">Bangkok Temples</h4>
                         </div>
                     </div>
@@ -137,7 +142,7 @@
                         >
                         <div class="absolute inset-0 bg-gradient-to-t from-[#0B1F3A]/90 via-[#0B1F3A]/30 to-transparent"></div>
                         <div class="absolute bottom-3.5 left-3.5 right-3.5">
-                            <span class="text-[10px] uppercase tracking-wider font-bold bg-white/20 backdrop-blur-md text-white px-2 py-0.5 rounded-md inline-block mb-1">Modern Wonder</span>
+                            <span class="text-[10px] uppercase tracking-wider font-bold bg-white/20 backdrop-blur-md text-white px-2 py-0.5 rounded-md inline-block mb-1">{{ __('about.tag_dubai') }}</span>
                             <h4 class="text-white font-bold text-xs sm:text-sm">Dubai City</h4>
                         </div>
                     </div>
@@ -152,7 +157,7 @@
                         >
                         <div class="absolute inset-0 bg-gradient-to-t from-[#0B1F3A]/90 via-[#0B1F3A]/30 to-transparent"></div>
                         <div class="absolute bottom-3.5 left-3.5 right-3.5">
-                            <span class="text-[10px] uppercase tracking-wider font-bold bg-[#D4AF37] text-[#0B1F3A] px-2 py-0.5 rounded-md inline-block mb-1">Tropical Serenity</span>
+                            <span class="text-[10px] uppercase tracking-wider font-bold bg-[#D4AF37] text-[#0B1F3A] px-2 py-0.5 rounded-md inline-block mb-1">{{ __('about.tag_bali') }}</span>
                             <h4 class="text-white font-bold text-xs sm:text-sm">Bali Retreat</h4>
                         </div>
                     </div>
@@ -161,13 +166,13 @@
             </div>
 
             <!-- Floating Verified Agency Badge -->
-            <div class="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-xl px-4 sm:px-5 py-2.5 sm:py-3 rounded-2xl border border-slate-200/90 shadow-[0_10px_30px_rgba(11,31,58,0.12)] flex items-center gap-3 z-20 whitespace-nowrap">
-                <div class="w-8 h-8 rounded-xl bg-[#D4AF37]/15 text-[#0B1F3A] flex items-center justify-center border border-[#D4AF37]/30">
+            <div class="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-xl px-3 sm:px-5 py-2.5 sm:py-3 rounded-2xl border border-slate-200/90 shadow-[0_10px_30px_rgba(11,31,58,0.12)] flex items-center gap-2.5 sm:gap-3 z-20 w-[92%] sm:w-auto max-w-sm justify-center">
+                <div class="w-8 h-8 rounded-xl bg-[#D4AF37]/15 text-[#0B1F3A] flex items-center justify-center border border-[#D4AF37]/30 flex-shrink-0">
                     <svg class="w-4 h-4 text-[#D4AF37]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
                 </div>
-                <div>
-                    <span class="text-xs font-bold text-[#0B1F3A] block">100% Verified Agency</span>
-                    <span class="text-[10px] text-slate-500 font-medium">IATA & Govt. Authorized Facilitator</span>
+                <div class="min-w-0">
+                    <span class="text-xs font-bold text-[#0B1F3A] block truncate">{{ __('about.verified_badge_title') }}</span>
+                    <span class="text-[10px] text-slate-500 font-medium block truncate">{{ __('about.verified_badge_sub') }}</span>
                 </div>
             </div>
 
@@ -187,13 +192,13 @@
         <div class="text-center max-w-3xl mx-auto mb-16">
             <span class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-semibold bg-[#D4AF37]/15 text-[#0B1F3A] uppercase tracking-widest mb-3 border border-[#D4AF37]/30">
                 <span class="w-1.5 h-1.5 rounded-full bg-[#D4AF37] animate-pulse"></span>
-                <span>The Emisha Standard • Our Core Values</span>
+                <span>{{ __('about.values_badge') }}</span>
             </span>
             <h2 class="text-3xl md:text-5xl font-extrabold font-serif text-[#0B1F3A] tracking-tight leading-tight">
-                Why Discerning Travelers Choose Us
+                {{ __('about.values_title') }}
             </h2>
             <p class="text-slate-600 text-sm md:text-base mt-3 leading-relaxed font-normal">
-                Built upon absolute transparency, meticulous travel curation, and an uncompromising commitment to your peace of mind.
+                {{ __('about.values_subtitle') }}
             </p>
         </div>
 
@@ -216,10 +221,10 @@
 
                     <!-- Title & Summary -->
                     <h3 class="text-xl sm:text-2xl font-bold font-serif text-[#0B1F3A] mb-3">
-                        Complete Transparency
+                        {{ __('about.val1_title') }}
                     </h3>
                     <p class="text-slate-600 text-sm leading-relaxed mb-6 font-normal">
-                        Zero hidden charges. Itemized quotes for visa fees, embassy submissions, hotel taxes, and flight luggage allowances upfront.
+                        {{ __('about.val1_desc') }}
                     </p>
                 </div>
 
@@ -227,15 +232,15 @@
                 <div class="pt-5 border-t border-slate-100 space-y-2 text-xs font-semibold text-slate-700">
                     <div class="flex items-center gap-2">
                         <svg class="w-4 h-4 text-[#D4AF37] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                        <span>100% Itemized Official Quotations</span>
+                        <span>{{ __('about.val1_f1') }}</span>
                     </div>
                     <div class="flex items-center gap-2">
                         <svg class="w-4 h-4 text-[#D4AF37] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                        <span>No Surprise Taxes or Embassy Markups</span>
+                        <span>{{ __('about.val1_f2') }}</span>
                     </div>
                     <div class="flex items-center gap-2">
                         <svg class="w-4 h-4 text-[#D4AF37] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                        <span>Clear Refund & Cancellation Policies</span>
+                        <span>{{ __('about.val1_f3') }}</span>
                     </div>
                 </div>
 
@@ -259,10 +264,10 @@
 
                     <!-- Title & Summary -->
                     <h3 class="text-xl sm:text-2xl font-bold font-serif text-[#0B1F3A] mb-3">
-                        Tailored Itineraries
+                        {{ __('about.val2_title') }}
                     </h3>
                     <p class="text-slate-600 text-sm leading-relaxed mb-6 font-normal">
-                        No cookie-cutter trips. Every family vacation, honeymoon package, or executive trip is customized to your pace and interests.
+                        {{ __('about.val2_desc') }}
                     </p>
                 </div>
 
@@ -270,15 +275,15 @@
                 <div class="pt-5 border-t border-slate-100 space-y-2 text-xs font-semibold text-slate-700">
                     <div class="flex items-center gap-2">
                         <svg class="w-4 h-4 text-[#D4AF37] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                        <span>Customized Daily Pace & Flight Routing</span>
+                        <span>{{ __('about.val2_f1') }}</span>
                     </div>
                     <div class="flex items-center gap-2">
                         <svg class="w-4 h-4 text-[#D4AF37] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                        <span>Handpicked 4-Star & 5-Star Hotel Stays</span>
+                        <span>{{ __('about.val2_f2') }}</span>
                     </div>
                     <div class="flex items-center gap-2">
                         <svg class="w-4 h-4 text-[#D4AF37] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                        <span>Private AC Transfers & Certified Guides</span>
+                        <span>{{ __('about.val2_f3') }}</span>
                     </div>
                 </div>
 
@@ -302,10 +307,10 @@
 
                     <!-- Title & Summary -->
                     <h3 class="text-xl sm:text-2xl font-bold font-serif text-[#0B1F3A] mb-3">
-                        24/7 Dedicated Support
+                        {{ __('about.val3_title') }}
                     </h3>
                     <p class="text-slate-600 text-sm leading-relaxed mb-6 font-normal">
-                        From your initial passport document check until you land safely back in Dhaka, our emergency helpline is always active.
+                        {{ __('about.val3_desc') }}
                     </p>
                 </div>
 
@@ -313,15 +318,15 @@
                 <div class="pt-5 border-t border-slate-100 space-y-2 text-xs font-semibold text-slate-700">
                     <div class="flex items-center gap-2">
                         <svg class="w-4 h-4 text-[#D4AF37] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                        <span>Direct WhatsApp Concierge & Support</span>
+                        <span>{{ __('about.val3_f1') }}</span>
                     </div>
                     <div class="flex items-center gap-2">
                         <svg class="w-4 h-4 text-[#D4AF37] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                        <span>Emergency Ticket Changes & Airport Assistance</span>
+                        <span>{{ __('about.val3_f2') }}</span>
                     </div>
                     <div class="flex items-center gap-2">
                         <svg class="w-4 h-4 text-[#D4AF37] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                        <span>Active Monitoring Across Flight Schedules</span>
+                        <span>{{ __('about.val3_f3') }}</span>
                     </div>
                 </div>
 
@@ -338,8 +343,8 @@
                     <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                 </div>
                 <div>
-                    <h4 class="text-xs font-bold uppercase tracking-wider text-[#0B1F3A]">Govt. Certified Travel Facilitator</h4>
-                    <p class="text-[11px] text-slate-500 mt-0.5">Licensed agency adhering to civil aviation & immigration standards.</p>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-[#0B1F3A]">{{ __('about.trust_govt_title') }}</h4>
+                    <p class="text-[11px] text-slate-500 mt-0.5">{{ __('about.trust_govt_desc') }}</p>
                 </div>
             </div>
 
@@ -350,8 +355,8 @@
                     <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
                 </div>
                 <div>
-                    <h4 class="text-xs font-bold uppercase tracking-wider text-[#0B1F3A]">Best Value Price Match</h4>
-                    <p class="text-[11px] text-slate-500 mt-0.5">Competitive holiday packages without compromising luxury.</p>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-[#0B1F3A]">{{ __('about.trust_price_title') }}</h4>
+                    <p class="text-[11px] text-slate-500 mt-0.5">{{ __('about.trust_price_desc') }}</p>
                 </div>
             </div>
 
@@ -362,8 +367,8 @@
                     <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                 </div>
                 <div>
-                    <h4 class="text-xs font-bold uppercase tracking-wider text-[#0B1F3A]">Dedicated Trip Concierge</h4>
-                    <p class="text-[11px] text-slate-500 mt-0.5">Assigned personal travel consultant for your journey.</p>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-[#0B1F3A]">{{ __('about.trust_concierge_title') }}</h4>
+                    <p class="text-[11px] text-slate-500 mt-0.5">{{ __('about.trust_concierge_desc') }}</p>
                 </div>
             </div>
         </div>
@@ -386,13 +391,13 @@
             <div class="max-w-2xl">
                 <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-semibold bg-[#D4AF37]/15 text-[#0B1F3A] uppercase tracking-widest mb-3 border border-[#D4AF37]/30">
                     <svg class="w-3.5 h-3.5 text-[#D4AF37] fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                    <span>Client Trust & Stories</span>
+                    <span>{{ __('about.testi_badge') }}</span>
                 </div>
                 <h2 class="text-3xl md:text-5xl font-extrabold font-serif text-[#0B1F3A] tracking-tight leading-tight">
-                    Loved By Over 10,000+ Explorers
+                    {{ __('about.testi_title') }}
                 </h2>
                 <p class="text-slate-600 text-sm md:text-base mt-2.5 font-normal leading-relaxed">
-                    Authentic feedback from families, couples, and corporate travelers who trusted Emisha Tours & Travels for their international journeys, visa processing, and air ticketing.
+                    {{ __('about.testi_subtitle') }}
                 </p>
             </div>
 
@@ -415,7 +420,7 @@
                         </div>
                         <span class="text-xs font-extrabold text-[#0B1F3A]">4.9 / 5.0</span>
                     </div>
-                    <span class="text-[11px] text-slate-500 font-medium">Google Verified Client Reviews</span>
+                    <span class="text-[11px] text-slate-500 font-medium">{{ __('about.google_rating_sub') }}</span>
                 </div>
             </div>
         </div>
@@ -485,7 +490,7 @@
 
                         <!-- Review Quote Text -->
                         <p class="text-slate-700 text-sm sm:text-[14px] leading-relaxed mb-6 font-normal relative z-10">
-                            "{{ $testimonial->review ?? $testimonial->content ?? 'Great travel booking experience with Emisha Tours & Travels. Highly professional and seamless services.' }}"
+                            "{{ $testimonial->localized_content ?? $testimonial->review ?? $testimonial->content ?? 'Great travel booking experience with Emisha Tours & Travels.' }}"
                         </p>
                     </div>
 
@@ -495,23 +500,23 @@
                             @if(!empty($testimonial->photo))
                                 <img 
                                     src="{{ $testimonial->photo }}" 
-                                    alt="{{ $testimonial->customer_name ?? $testimonial->name ?? 'Customer' }}" 
+                                    alt="{{ $testimonial->localized_customer_name ?? $testimonial->customer_name ?? 'Customer' }}" 
                                     class="w-11 h-11 rounded-full object-cover border-2 border-[#D4AF37]/60 shadow-sm"
                                     loading="lazy"
                                 >
                             @else
                                 <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-[#0B1F3A] to-[#163761] text-[#D4AF37] border-2 border-[#D4AF37]/50 flex items-center justify-center font-bold text-sm shadow-sm">
-                                    {{ substr($testimonial->customer_name ?? $testimonial->name ?? 'T', 0, 1) }}
+                                    {{ substr($testimonial->localized_customer_name ?? $testimonial->customer_name ?? 'T', 0, 1) }}
                                 </div>
                             @endif
 
                             <div>
                                 <h4 class="font-bold font-heading text-[#0B1F3A] text-sm leading-tight">
-                                    {{ $testimonial->customer_name ?? $testimonial->name ?? 'Verified Client' }}
+                                    {{ $testimonial->localized_customer_name ?? $testimonial->customer_name ?? $testimonial->name ?? 'Verified Client' }}
                                 </h4>
                                 <div class="flex items-center gap-1.5 mt-0.5">
                                     <svg class="w-3.5 h-3.5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                                    <span class="text-[11px] text-slate-500 font-medium">Verified Traveler</span>
+                                    <span class="text-[11px] text-slate-500 font-medium">{{ __('about.verified_traveler') }}</span>
                                 </div>
                             </div>
                         </div>
@@ -529,19 +534,19 @@
         <div class="mt-14 p-6 rounded-[22px] bg-white border border-slate-200/80 shadow-[0_8px_30px_rgba(11,31,58,0.03)] grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             <div class="border-r border-slate-100 last:border-0">
                 <div class="text-2xl sm:text-3xl font-black font-heading text-[#0B1F3A]">10,000+</div>
-                <div class="text-xs text-slate-500 mt-0.5 font-medium">Happy Travelers</div>
+                <div class="text-xs text-slate-500 mt-0.5 font-medium">{{ __('about.stat_travelers') }}</div>
             </div>
             <div class="border-r border-slate-100 last:border-0">
                 <div class="text-2xl sm:text-3xl font-black font-heading text-[#0B1F3A]">98.5%</div>
-                <div class="text-xs text-slate-500 mt-0.5 font-medium">Visa Approval Rate</div>
+                <div class="text-xs text-slate-500 mt-0.5 font-medium">{{ __('about.stat_visa_rate') }}</div>
             </div>
             <div class="border-r border-slate-100 last:border-0">
                 <div class="text-2xl sm:text-3xl font-black font-heading text-[#0B1F3A]">4.9 / 5.0</div>
-                <div class="text-xs text-slate-500 mt-0.5 font-medium">Client Satisfaction</div>
+                <div class="text-xs text-slate-500 mt-0.5 font-medium">{{ __('about.google_rating_sub') }}</div>
             </div>
             <div>
                 <div class="text-2xl sm:text-3xl font-black font-heading text-[#0B1F3A]">24/7</div>
-                <div class="text-xs text-slate-500 mt-0.5 font-medium">Emergency Assistance</div>
+                <div class="text-xs text-slate-500 mt-0.5 font-medium">{{ __('about.stat_care') }}</div>
             </div>
         </div>
 
@@ -553,16 +558,16 @@
     <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#D4AF37_1px,transparent_1px)] [background-size:20px_20px]"></div>
     <div class="absolute -left-20 -bottom-20 w-80 h-80 bg-gold/10 rounded-full blur-3xl pointer-events-none"></div>
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <h2 class="text-2xl md:text-4xl font-bold font-heading mb-4 text-white">Ready to Start Planning Your Next Adventure?</h2>
+        <h2 class="text-2xl md:text-4xl font-bold font-heading mb-4 text-white">{{ __('about.cta_title') }}</h2>
         <p class="text-slate-300 text-sm md:text-base max-w-xl mx-auto mb-8 font-normal leading-relaxed">
-            Contact our travel desk today for customized holiday packages, group airfares, and expert visa solutions.
+            {{ __('about.cta_desc') }}
         </p>
         <div class="flex flex-wrap items-center justify-center gap-4">
             <a href="{{ route('tours.index') }}" class="btn btn-gold px-8 py-3.5 shadow-lg text-xs uppercase tracking-wider font-bold rounded-xl">
-                <span>Explore Packages</span>
+                <span>{{ __('about.btn_explore_packages') }}</span>
             </a>
             <a href="{{ route('contact') }}" class="btn btn-outline-white px-8 py-3.5 text-xs uppercase tracking-wider font-bold rounded-xl">
-                <span>Contact Office</span>
+                <span>{{ __('about.btn_contact_office') }}</span>
             </a>
         </div>
     </div>

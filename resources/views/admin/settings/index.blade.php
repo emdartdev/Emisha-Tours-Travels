@@ -90,7 +90,7 @@
             </div>
 
             <div class="pt-6 border-t border-[var(--admin-card-border)] flex items-center justify-end">
-                <button type="submit" class="px-8 py-3.5 bg-gradient-to-r from-[#D4AF37] to-[#B38F26] text-[#050D1A] font-extrabold rounded-xl text-xs uppercase tracking-wider hover:brightness-110 shadow-lg shadow-[#D4AF37]/20 transition">
+                <button type="submit" class="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-[#D4AF37] to-[#B38F26] text-[#050D1A] font-extrabold rounded-xl text-xs uppercase tracking-wider hover:brightness-110 shadow-lg shadow-[#D4AF37]/20 transition text-center">
                     Save & Update Platform Settings
                 </button>
             </div>

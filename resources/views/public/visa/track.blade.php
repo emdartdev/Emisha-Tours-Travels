@@ -2,6 +2,7 @@
 
 @section('title', $application ? "Tracking {$application->reference_number} — Visa Flight Radar Status" : "Live Visa Status Radar & Tracking — Emisha Tours & Travels")
 @section('meta_description', 'Track your visa application with real-time flight radar tracking, embassy milestone timeline, consular processing updates, and instant WhatsApp support.')
+@section('robots', 'noindex, nofollow')
 
 @section('content')
 <style>

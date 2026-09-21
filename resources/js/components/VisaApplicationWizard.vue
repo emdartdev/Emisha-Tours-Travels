@@ -1,7 +1,7 @@
 <template>
-  <div class="card-base p-6 md:p-10 shadow-xl bg-white border border-slate-100 rounded-[24px]">
+  <div class="card-base p-4 sm:p-6 md:p-10 shadow-xl bg-white border border-slate-100 rounded-2xl sm:rounded-[24px]">
     <!-- Progress Indicator -->
-    <div class="mb-10">
+    <div class="mb-6 sm:mb-10">
       <div class="flex items-center justify-between relative">
         <div class="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-slate-100 w-full z-0"></div>
         <div 
@@ -16,14 +16,18 @@
         >
           <div 
             :class="step >= s ? 'bg-[#0B1F3A] text-[#D4AF37] border-2 border-[#D4AF37] shadow-lg shadow-[#0B1F3A]/20' : 'bg-white text-slate-400 border border-slate-200'"
-            class="w-10 h-10 rounded-full flex items-center justify-center font-extrabold text-sm transition-all"
+            class="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-extrabold text-xs sm:text-sm transition-all"
           >
             {{ s }}
           </div>
-          <span class="text-[11px] font-bold mt-2 text-[#0B1F3A]">
+          <span class="hidden sm:block text-[11px] font-bold mt-2 text-[#0B1F3A] text-center">
             {{ stepNames[s - 1] }}
           </span>
         </div>
+      </div>
+      <!-- Mobile Step Title Display -->
+      <div class="block sm:hidden text-center mt-3">
+        <span class="text-xs font-bold text-[#0B1F3A]">Step {{ step }}: {{ stepNames[step - 1] }}</span>
       </div>
     </div>
 

@@ -32,10 +32,13 @@ class VisaCountryAdminController extends Controller
     {
         $data = $request->validate([
             'country_name' => ['required', 'string', 'max:100'],
+            'country_name_bn' => ['nullable', 'string', 'max:100'],
             'flag' => ['nullable', 'string', 'max:50'],
             'hero_image' => ['nullable', 'string', 'max:500'],
             'short_description' => ['nullable', 'string', 'max:500'],
+            'short_description_bn' => ['nullable', 'string', 'max:500'],
             'description' => ['nullable', 'string'],
+            'description_bn' => ['nullable', 'string'],
             'status' => ['required', 'in:active,inactive'],
             'featured' => ['boolean'],
             'sort_order' => ['nullable', 'integer'],
@@ -67,10 +70,13 @@ class VisaCountryAdminController extends Controller
 
         $data = $request->validate([
             'country_name' => ['required', 'string', 'max:100'],
+            'country_name_bn' => ['nullable', 'string', 'max:100'],
             'flag' => ['nullable', 'string', 'max:50'],
             'hero_image' => ['nullable', 'string', 'max:500'],
             'short_description' => ['nullable', 'string', 'max:500'],
+            'short_description_bn' => ['nullable', 'string', 'max:500'],
             'description' => ['nullable', 'string'],
+            'description_bn' => ['nullable', 'string'],
             'status' => ['required', 'in:active,inactive'],
             'featured' => ['boolean'],
             'sort_order' => ['nullable', 'integer'],

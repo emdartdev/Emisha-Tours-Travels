@@ -12,21 +12,91 @@
         </a>
     </div>
 
-    <div class="admin-card rounded-3xl border shadow-xl p-6 sm:p-8 max-w-4xl">
+    <div class="admin-card rounded-3xl border shadow-xl p-6 sm:p-8 max-w-4xl" x-data="{ langTab: 'en' }">
+        <div class="flex items-center justify-between pb-6 border-b border-[var(--admin-card-border)] mb-6">
+            <div>
+                <h3 class="text-sm font-bold text-[var(--admin-text-main)]">Language & Content Localization</h3>
+                <p class="text-xs text-[var(--admin-text-muted)]">Switch between English and Bengali content to publish localized travel guides.</p>
+            </div>
+            <div class="flex items-center gap-1.5 p-1 bg-slate-100 dark:bg-slate-800/80 rounded-xl border border-[var(--admin-card-border)]">
+                <button type="button" @click="langTab = 'en'" :class="langTab === 'en' ? 'bg-[#D4AF37] text-slate-950 font-bold shadow-xs' : 'text-[var(--admin-text-muted)] hover:text-[var(--admin-text-main)]'" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition">
+                    <span>🇬🇧</span>
+                    <span>English</span>
+                </button>
+                <button type="button" @click="langTab = 'bn'" :class="langTab === 'bn' ? 'bg-[#D4AF37] text-slate-950 font-bold shadow-xs' : 'text-[var(--admin-text-muted)] hover:text-[var(--admin-text-main)]'" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition">
+                    <span>🇧🇩</span>
+                    <span>বাংলা</span>
+                    @if(!empty($post->title_bn))
+                        <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    @endif
+                </button>
+            </div>
+        </div>
+
         <form action="{{ $isEdit ? route('admin.blog.update', $post->id) : route('admin.blog.store') }}" method="POST" class="space-y-6">
             @csrf
             @if($isEdit)
                 @method('PUT')
             @endif
 
-            <div class="space-y-6">
+            <!-- ENGLISH TRANSLATABLE FIELDS -->
+            <div x-show="langTab === 'en'" class="space-y-6">
+                <div class="bg-blue-50/50 dark:bg-blue-950/20 border border-blue-200/50 dark:border-blue-800/30 rounded-2xl p-4 text-xs text-blue-700 dark:text-blue-300 flex items-center gap-2">
+                    <span class="text-base">🇬🇧</span>
+                    <span>Editing <strong>English</strong> article guide.</span>
+                </div>
+
                 <div>
-                    <label class="block text-[11px] font-bold uppercase tracking-wider text-[var(--admin-text-muted)] mb-1.5">Article Title *</label>
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-[var(--admin-text-muted)] mb-1.5">Article Title (EN) *</label>
                     <input type="text" name="title" value="{{ old('title', $post->title) }}" required placeholder="e.g. Complete Thailand Tourist Visa Checklist for Bangladeshi Travelers (2026)"
                         class="admin-input w-full px-4 py-3 rounded-xl border focus:outline-none focus:border-[#D4AF37] text-sm transition">
                     @error('title') <p class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
 
+                <div>
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-[var(--admin-text-muted)] mb-1.5">Excerpt / Meta Summary (EN)</label>
+                    <textarea name="excerpt" rows="2" placeholder="Short preview summary displayed on blog catalog cards and social shares..."
+                        class="admin-input w-full px-4 py-3 rounded-xl border focus:outline-none focus:border-[#D4AF37] text-sm transition">{{ old('excerpt', $post->excerpt) }}</textarea>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-[var(--admin-text-muted)] mb-1.5">Article Body Content (EN) *</label>
+                    <textarea name="content" rows="12" required placeholder="Write the complete article guide here..."
+                        class="admin-input w-full px-4 py-3 rounded-xl border focus:outline-none focus:border-[#D4AF37] text-sm leading-relaxed transition">{{ old('content', $post->content) }}</textarea>
+                    @error('content') <p class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
+                </div>
+            </div>
+
+            <!-- BANGLA TRANSLATABLE FIELDS -->
+            <div x-show="langTab === 'bn'" class="space-y-6" style="display: none;">
+                <div class="bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200/50 dark:border-emerald-800/30 rounded-2xl p-4 text-xs text-emerald-700 dark:text-emerald-300 flex items-center gap-2">
+                    <span class="text-base">🇧🇩</span>
+                    <span>Editing <strong>বাংলা (Bengali)</strong> localized article content.</span>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-[var(--admin-text-muted)] mb-1.5">নিবন্ধের শিরোনাম (বাংলা)</label>
+                    <input type="text" name="title_bn" value="{{ old('title_bn', $post->title_bn) }}" placeholder="যেমন: বাংলাদেশী পর্যটকদের জন্য সম্পূর্ণ থাইল্যান্ড ট্যুরিস্ট ভিসা গাইড (২০২৬)"
+                        class="admin-input w-full px-4 py-3 rounded-xl border focus:outline-none focus:border-[#D4AF37] text-sm transition font-['Hind_Siliguri',sans-serif]">
+                    @error('title_bn') <p class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-[var(--admin-text-muted)] mb-1.5">সংক্ষিপ্ত সারসংক্ষেপ (বাংলা)</label>
+                    <textarea name="excerpt_bn" rows="2" placeholder="ব্লগ কার্ড ও সোশ্যাল মিডিয়ার জন্য সংক্ষিপ্ত প্রিভিউ..."
+                        class="admin-input w-full px-4 py-3 rounded-xl border focus:outline-none focus:border-[#D4AF37] text-sm transition font-['Hind_Siliguri',sans-serif]">{{ old('excerpt_bn', $post->excerpt_bn) }}</textarea>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-[var(--admin-text-muted)] mb-1.5">নিবন্ধের মূল বিষয়বস্তু (বাংলা)</label>
+                    <textarea name="content_bn" rows="12" placeholder="বাংলায় সম্পূর্ণ ট্রাভেল গাইড ও ভ্রমণ নির্দেশিকা লিখুন..."
+                        class="admin-input w-full px-4 py-3 rounded-xl border focus:outline-none focus:border-[#D4AF37] text-sm leading-relaxed transition font-['Hind_Siliguri',sans-serif]">{{ old('content_bn', $post->content_bn) }}</textarea>
+                    @error('content_bn') <p class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
+                </div>
+            </div>
+
+            <div class="pt-6 border-t border-[var(--admin-card-border)] space-y-6">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-[var(--admin-text-muted)]">Article Configuration</h4>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
                         <label class="block text-[11px] font-bold uppercase tracking-wider text-[var(--admin-text-muted)] mb-1.5">Category *</label>
@@ -60,19 +130,6 @@
                     <label class="block text-[11px] font-bold uppercase tracking-wider text-[var(--admin-text-muted)] mb-1.5">Featured Cover Image URL</label>
                     <input type="url" name="featured_image" value="{{ old('featured_image', $post->featured_image) }}" placeholder="https://images.unsplash.com/..."
                         class="admin-input w-full px-4 py-3 rounded-xl border focus:outline-none focus:border-[#D4AF37] text-sm transition">
-                </div>
-
-                <div>
-                    <label class="block text-[11px] font-bold uppercase tracking-wider text-[var(--admin-text-muted)] mb-1.5">Excerpt / Meta Summary</label>
-                    <textarea name="excerpt" rows="2" placeholder="Short preview summary displayed on blog catalog cards and social shares..."
-                        class="admin-input w-full px-4 py-3 rounded-xl border focus:outline-none focus:border-[#D4AF37] text-sm transition">{{ old('excerpt', $post->excerpt) }}</textarea>
-                </div>
-
-                <div>
-                    <label class="block text-[11px] font-bold uppercase tracking-wider text-[var(--admin-text-muted)] mb-1.5">Article Body Content *</label>
-                    <textarea name="content" rows="12" required placeholder="Write the complete article guide here..."
-                        class="admin-input w-full px-4 py-3 rounded-xl border focus:outline-none focus:border-[#D4AF37] text-sm leading-relaxed transition">{{ old('content', $post->content) }}</textarea>
-                    @error('content') <p class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
             </div>
 

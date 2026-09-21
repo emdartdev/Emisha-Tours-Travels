@@ -16,7 +16,13 @@ class FaqController extends Controller
     public function index(): View
     {
         $faqs = Faq::active()->orderBy('sort_order', 'asc')->get();
-        $schema = $this->seoService->generateFaqSchema($faqs);
+        $breadcrumbs = [
+            'Home' => route('home'),
+            'Frequently Asked Questions' => route('faq.index'),
+        ];
+        $breadcrumbSchema = $this->seoService->generateBreadcrumbSchema($breadcrumbs);
+        $faqSchema = $this->seoService->generateFaqSchema($faqs);
+        $schema = $faqSchema . "\n" . $breadcrumbSchema;
 
         return view('public.faq.index', compact('faqs', 'schema'));
     }

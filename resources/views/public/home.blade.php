@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Emisha Tours & Travels — Premium Travel Agency, Visa Assistance & Air Ticketing')
-@section('meta_description', 'Discover curated international tour packages, certified visa consultancy for Thailand, Malaysia, Dubai, Singapore, and worldwide flight booking.')
+@section('title', app()->getLocale() === 'bn' ? 'এমিসা ট্যুরস অ্যান্ড ট্রাভেলস — প্রিমিয়াম ট্রাভেল এজেন্সি, ভিসা ও এয়ার টিকেটিং' : 'Emisha Tours & Travels — Premium Travel Agency, Visa Assistance & Air Ticketing')
+@section('meta_description', app()->getLocale() === 'bn' ? 'আন্তর্জাতিক ট্যুর প্যাকেজ, থাইল্যান্ড, মালয়েশিয়া, দুবাই, সিঙ্গাপুরের সার্টিফাইড ভিসা কনসালটেন্সি এবং এয়ার টিকিট বুকিং।' : 'Discover curated international tour packages, certified visa consultancy for Thailand, Malaysia, Dubai, Singapore, and worldwide flight booking.')
 
 @section('schema')
     {!! $schema !!}
@@ -28,17 +28,23 @@
             <!-- Greeting & Eyebrow Pill (Mobile-Optimized + Dynamic Client Time) -->
             <div 
                 x-data="{ 
-                    greeting: 'Welcome',
+                    greetingEn: 'Welcome',
+                    greetingBn: 'স্বাগতম',
+                    isBn: {{ app()->getLocale() === 'bn' ? 'true' : 'false' }},
                     init() {
                         const hour = new Date().getHours();
                         if (hour >= 5 && hour < 12) {
-                            this.greeting = 'Good Morning';
+                            this.greetingEn = 'Good Morning';
+                            this.greetingBn = 'শুভ সকাল';
                         } else if (hour >= 12 && hour < 17) {
-                            this.greeting = 'Good Afternoon';
+                            this.greetingEn = 'Good Afternoon';
+                            this.greetingBn = 'শুভ দুপুর';
                         } else if (hour >= 17 && hour < 21) {
-                            this.greeting = 'Good Evening';
+                            this.greetingEn = 'Good Evening';
+                            this.greetingBn = 'শুভ সন্ধ্যা';
                         } else {
-                            this.greeting = 'Welcome';
+                            this.greetingEn = 'Welcome';
+                            this.greetingBn = 'স্বাগতম';
                         }
                     }
                 }"
@@ -46,38 +52,37 @@
             >
                 <span class="w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse flex-shrink-0"></span>
                 <span class="whitespace-nowrap flex items-center gap-1">
-                    <span x-text="greeting">Good Morning</span>! 
-                    <span class="hidden xs:inline">Welcome to</span>
-                    <span class="font-bold">Emisha Tours & Travels</span>
+                    <span x-text="isBn ? greetingBn : greetingEn">Good Morning</span>! 
+                    <span class="hidden xs:inline">{{ app()->getLocale() === 'bn' ? 'এমিসা ট্যুরস অ্যান্ড ট্রাভেলস-এ' : 'Welcome to' }}</span>
+                    <span class="font-bold">{{ app()->getLocale() === 'bn' ? 'স্বাগতম' : 'Emisha Tours & Travels' }}</span>
                 </span>
             </div>
 
-            <h1 class="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.2] sm:leading-[1.15] mb-3 sm:mb-5">
-                <span class="text-white block">Explore the World.</span>
+            <h1 class="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.2] sm:leading-[1.15] mb-3 sm:mb-5 font-heading">
+                <span class="text-white block">{{ app()->getLocale() === 'bn' ? 'বিশ্বকে ঘুরে দেখুন।' : 'Explore the World.' }}</span>
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#F3E5AB] to-[#D4AF37]">
-                    Travel With Confidence.
+                    {{ app()->getLocale() === 'bn' ? 'ভ্রমণ করুন নির্ভরতার সাথে।' : 'Travel With Confidence.' }}
                 </span>
             </h1>
 
             <p class="text-xs sm:text-sm md:text-base text-white/90 max-w-2xl mx-auto leading-relaxed mb-6 sm:mb-8 font-normal">
-                Curated international tour packages, certified visa consultancy, and global air ticketing solutions tailored for Bangladeshi travelers.
+                {{ app()->getLocale() === 'bn' ? 'আন্তর্জাতিক ছুটির প্যাকেজ, সার্টিফাইড ভিসা কনসালটেন্সি এবং সেরা এয়ার টিকেটিং সেবা।' : 'Curated international tour packages, certified visa consultancy, and global air ticketing solutions tailored for Bangladeshi travelers.' }}
             </p>
 
-            <!-- Interactive Vue 3 Hero Search Widget Mount -->
-            <div id="vue-hero-search" class="w-full max-w-4xl mx-auto text-left">
-                <!-- Fallback Blade SSR Glass Box if Vue loads asynchronously -->
+            <!-- Interactive Search Box -->
+            <div class="w-full max-w-4xl mx-auto text-left">
                 <div class="w-full bg-white/95 backdrop-blur-2xl rounded-2xl sm:rounded-[24px] md:rounded-[26px] p-3.5 sm:p-5 md:p-6 shadow-[0_20px_50px_-10px_rgba(7,21,39,0.25)] sm:shadow-[0_25px_60px_-15px_rgba(7,21,39,0.35)] border border-white/80 ring-1 ring-black/5">
                     <form action="{{ route('tours.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-12 gap-2.5 sm:gap-3.5 items-end">
                         <div class="md:col-span-6 relative">
                             <label class="block text-[10px] sm:text-[10.5px] font-bold uppercase tracking-wider text-slate-400 mb-1 flex items-center gap-1">
                                 <svg class="w-3.5 h-3.5 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                                <span>Where to?</span>
+                                <span>{{ app()->getLocale() === 'bn' ? 'কোথায় যেতে চান?' : 'Where to?' }}</span>
                             </label>
                             <div class="bg-slate-50/90 border border-slate-200/80 rounded-xl">
                                 <input 
                                     type="text" 
                                     name="search" 
-                                    placeholder="Where do you want to go? (e.g. Thailand, Maldives, Dubai)" 
+                                    placeholder="{{ app()->getLocale() === 'bn' ? 'গন্তব্যের নাম লিখুন (যেমন: থাইল্যান্ড, মালদ্বীপ, দুবাই)' : 'Where do you want to go? (e.g. Thailand, Maldives, Dubai)' }}" 
                                     class="w-full pl-3.5 pr-4 py-2.5 h-[42px] sm:h-[44px] bg-transparent border-0 focus:outline-none text-xs sm:text-sm font-semibold text-[#0B1F3A] placeholder-slate-400"
                                 >
                             </div>
@@ -85,36 +90,36 @@
                         <div class="md:col-span-3">
                             <label class="block text-[10px] sm:text-[10.5px] font-bold uppercase tracking-wider text-slate-400 mb-1 flex items-center gap-1">
                                 <svg class="w-3.5 h-3.5 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
-                                <span>Tour Style</span>
+                                <span>{{ app()->getLocale() === 'bn' ? 'ট্যুর ক্যাটাগরি' : 'Tour Style' }}</span>
                             </label>
                             <div class="bg-slate-50/90 border border-slate-200/80 rounded-xl">
                                 <select name="category" class="w-full pl-3.5 pr-4 py-2.5 h-[42px] sm:h-[44px] bg-transparent border-0 focus:outline-none text-xs sm:text-sm font-semibold text-[#0B1F3A] cursor-pointer">
-                                    <option value="">All Categories</option>
-                                    <option value="international-packages">International Tours</option>
-                                    <option value="domestic-holidays">Domestic Holidays</option>
-                                    <option value="honeymoon-specials">Honeymoon Specials</option>
+                                    <option value="">{{ app()->getLocale() === 'bn' ? 'সকল ক্যাটাগরি' : 'All Categories' }}</option>
+                                    <option value="international-packages">{{ app()->getLocale() === 'bn' ? 'আন্তর্জাতিক ট্যুর' : 'International Tours' }}</option>
+                                    <option value="domestic-holidays">{{ app()->getLocale() === 'bn' ? 'অভ্যন্তরীণ ভ্রমণ' : 'Domestic Holidays' }}</option>
+                                    <option value="honeymoon-specials">{{ app()->getLocale() === 'bn' ? 'হানিমুন স্পেশাল' : 'Honeymoon Specials' }}</option>
                                 </select>
                             </div>
                         </div>
                         <div class="md:col-span-3">
                             <button type="submit" class="w-full btn btn-gold btn-md h-[42px] sm:h-[44px] rounded-xl font-bold shadow-md flex items-center justify-center gap-2 text-xs sm:text-sm">
-                                <span>Search Packages</span>
+                                <span>{{ app()->getLocale() === 'bn' ? 'প্যাকেজ খুঁজুন' : 'Search Packages' }}</span>
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                             </button>
                         </div>
                     </form>
                     <div class="mt-3.5 pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-1.5 sm:gap-2 text-[10.5px] sm:text-[11px] text-slate-500">
                         <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap">
-                            <span class="font-bold text-[#0B1F3A]">Popular:</span>
-                            <a href="{{ route('tours.index', ['destination' => 'thailand']) }}" class="text-slate-600 hover:text-[#D4AF37] font-medium">Thailand</a>
+                            <span class="font-bold text-[#0B1F3A]">{{ app()->getLocale() === 'bn' ? 'জনপ্রিয়:' : 'Popular:' }}</span>
+                            <a href="{{ route('tours.index', ['destination' => 'thailand']) }}" class="text-slate-600 hover:text-[#D4AF37] font-medium">{{ app()->getLocale() === 'bn' ? 'থাইল্যান্ড' : 'Thailand' }}</a>
                             <span class="text-slate-300">•</span>
-                            <a href="{{ route('tours.index', ['destination' => 'maldives']) }}" class="text-slate-600 hover:text-[#D4AF37] font-medium">Maldives</a>
+                            <a href="{{ route('tours.index', ['destination' => 'maldives']) }}" class="text-slate-600 hover:text-[#D4AF37] font-medium">{{ app()->getLocale() === 'bn' ? 'মালদ্বীপ' : 'Maldives' }}</a>
                             <span class="text-slate-300">•</span>
-                            <a href="{{ route('tours.index', ['destination' => 'dubai']) }}" class="text-slate-600 hover:text-[#D4AF37] font-medium">Dubai</a>
+                            <a href="{{ route('tours.index', ['destination' => 'dubai']) }}" class="text-slate-600 hover:text-[#D4AF37] font-medium">{{ app()->getLocale() === 'bn' ? 'দুবাই' : 'Dubai' }}</a>
                             <span class="text-slate-300">•</span>
-                            <a href="{{ route('tours.index', ['destination' => 'malaysia']) }}" class="text-slate-600 hover:text-[#D4AF37] font-medium">Malaysia</a>
+                            <a href="{{ route('tours.index', ['destination' => 'malaysia']) }}" class="text-slate-600 hover:text-[#D4AF37] font-medium">{{ app()->getLocale() === 'bn' ? 'মালয়েশিয়া' : 'Malaysia' }}</a>
                             <span class="text-slate-300">•</span>
-                            <a href="{{ route('tours.index', ['destination' => 'coxs-bazar']) }}" class="text-slate-600 hover:text-[#D4AF37] font-medium">Cox's Bazar</a>
+                            <a href="{{ route('tours.index', ['destination' => 'coxs-bazar']) }}" class="text-slate-600 hover:text-[#D4AF37] font-medium">{{ app()->getLocale() === 'bn' ? 'কক্সবাজার' : "Cox's Bazar" }}</a>
                         </div>
                     </div>
                 </div>
@@ -126,19 +131,19 @@
                     <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#D4AF37]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                     </svg>
-                    <span>Verified Hotel Rates</span>
+                    <span>{{ app()->getLocale() === 'bn' ? 'যাচাইকৃত হোটেল রেট' : 'Verified Hotel Rates' }}</span>
                 </div>
                 <div class="flex items-center gap-1.5 sm:gap-2">
                     <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#D4AF37]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                     </svg>
-                    <span>Certified Visa Desk</span>
+                    <span>{{ app()->getLocale() === 'bn' ? 'সার্টিফাইড ভিসা ডেস্ক' : 'Certified Visa Desk' }}</span>
                 </div>
                 <div class="flex items-center gap-1.5 sm:gap-2">
                     <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#D4AF37]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
-                    <span>24/7 Helpline Support</span>
+                    <span>{{ app()->getLocale() === 'bn' ? '২৪/৭ সাপোর্ট হেল্পলাইন' : '24/7 Helpline Support' }}</span>
                 </div>
             </div>
         </div>
@@ -146,7 +151,7 @@
 </section>
 
 <!-- =========================================================================
-     02. PROMOTIONAL HIGHLIGHT BANNERS (3 Luxury Deal Cards as in Reference)
+     02. PROMOTIONAL HIGHLIGHT BANNERS (3 Luxury Deal Cards)
      ========================================================================= -->
 <section class="py-8 bg-white border-b border-slate-100">
     <div class="container-custom">
@@ -156,19 +161,19 @@
                 <div class="absolute -right-6 -bottom-6 w-28 h-28 bg-[#D4AF37]/10 rounded-full blur-xl group-hover:scale-150 transition-transform"></div>
                 <div>
                     <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#D4AF37] text-[#0B1F3A] text-[10px] font-extrabold uppercase tracking-wider mb-3">
-                        <span>Limited Offer</span>
+                        <span>{{ app()->getLocale() === 'bn' ? 'সীমিত অফার' : 'Limited Offer' }}</span>
                     </div>
                     <h3 class="text-lg font-bold text-white mb-1">
-                        Holiday Special Deals
+                        {{ app()->getLocale() === 'bn' ? 'হলিডে স্পেশাল ডিল' : 'Holiday Special Deals' }}
                     </h3>
                     <p class="text-xs text-slate-200 leading-relaxed mb-4">
-                        Save up to 15% on curated Bangkok, Phuket & Maldives holiday packages.
+                        {{ app()->getLocale() === 'bn' ? 'ব্যাংকক, ফুকেট ও মালদ্বীপে ১৫% পর্যন্ত বিশেষ ছাড় উপভোগ করুন।' : 'Save up to 15% on curated Bangkok, Phuket & Maldives holiday packages.' }}
                     </p>
                 </div>
                 <div class="flex items-center justify-between pt-2">
-                    <span class="text-xs font-bold text-[#D4AF37]">From ৳ 32,500</span>
+                    <span class="text-xs font-bold text-[#D4AF37]">{{ app()->getLocale() === 'bn' ? 'শুরু ৳ ৩২,৫০০ থেকে' : 'From ৳ 32,500' }}</span>
                     <a href="{{ route('tours.index') }}" class="btn btn-outline-white btn-xs rounded-full">
-                        <span>View Deals</span>
+                        <span>{{ app()->getLocale() === 'bn' ? 'অফার দেখুন' : 'View Deals' }}</span>
                         <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                     </a>
                 </div>
@@ -179,19 +184,19 @@
                 <div class="absolute -right-6 -bottom-6 w-28 h-28 bg-emerald-400/10 rounded-full blur-xl group-hover:scale-150 transition-transform"></div>
                 <div>
                     <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-400 text-[#073B3A] text-[10px] font-extrabold uppercase tracking-wider mb-3">
-                        <span>High Approval</span>
+                        <span>{{ app()->getLocale() === 'bn' ? 'উচ্চ সফলতা' : 'High Approval' }}</span>
                     </div>
                     <h3 class="text-lg font-bold text-white mb-1">
-                        Fast-Track Visa Assistance
+                        {{ app()->getLocale() === 'bn' ? 'ফাস্ট-ট্র্যাক ভিসা সহায়তা' : 'Fast-Track Visa Assistance' }}
                     </h3>
                     <p class="text-xs text-slate-200 leading-relaxed mb-4">
-                        Expert documentation & bank solvency review for Thailand, UAE, & Schengen.
+                        {{ app()->getLocale() === 'bn' ? 'থাইল্যান্ড, ইউএই ও শেঞ্জেনের জন্য নির্ভুল ফাইল ও ব্যাংক সলভেন্সি যাচাই।' : 'Expert documentation & bank solvency review for Thailand, UAE, & Schengen.' }}
                     </p>
                 </div>
                 <div class="flex items-center justify-between pt-2">
-                    <span class="text-xs font-bold text-emerald-300">5-7 Days Turnaround</span>
+                    <span class="text-xs font-bold text-emerald-300">{{ app()->getLocale() === 'bn' ? '৫-৭ কার্যদিবস' : '5-7 Days Turnaround' }}</span>
                     <a href="{{ route('visa.index') }}" class="btn btn-outline-white btn-xs rounded-full">
-                        <span>Apply Visa</span>
+                        <span>{{ app()->getLocale() === 'bn' ? 'ভিসা আবেদন' : 'Apply Visa' }}</span>
                         <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                     </a>
                 </div>
@@ -202,19 +207,19 @@
                 <div class="absolute -right-6 -bottom-6 w-28 h-28 bg-[#D4AF37]/10 rounded-full blur-xl group-hover:scale-150 transition-transform"></div>
                 <div>
                     <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#D4AF37] text-[#0B1F3A] text-[10px] font-extrabold uppercase tracking-wider mb-3">
-                        <span>GDS Airfares</span>
+                        <span>{{ app()->getLocale() === 'bn' ? 'জিডিএস এয়ারফেয়ার' : 'GDS Airfares' }}</span>
                     </div>
                     <h3 class="text-lg font-bold text-white mb-1">
-                        Best Air Ticket Quotations
+                        {{ app()->getLocale() === 'bn' ? 'সেরা ফ্লাইট কোটেশন' : 'Best Air Ticket Quotations' }}
                     </h3>
                     <p class="text-xs text-slate-200 leading-relaxed mb-4">
-                        Direct airline booking with 24/7 date changes & flexible reissue assistance.
+                        {{ app()->getLocale() === 'bn' ? 'সরাসরি এয়ারলাইন বুকিং, ২৪/৭ তারিখ পরিবর্তন ও রি-ইস্যু সাপোর্ট।' : 'Direct airline booking with 24/7 date changes & flexible reissue assistance.' }}
                     </p>
                 </div>
                 <div class="flex items-center justify-between pt-2">
-                    <span class="text-xs font-bold text-[#D4AF37]">Instant Quotes</span>
+                    <span class="text-xs font-bold text-[#D4AF37]">{{ app()->getLocale() === 'bn' ? 'তাৎক্ষণিক কোটেশন' : 'Instant Quotes' }}</span>
                     <a href="{{ route('ticketing') }}" class="btn btn-outline-white btn-xs rounded-full">
-                        <span>Request Quote</span>
+                        <span>{{ app()->getLocale() === 'bn' ? 'কোটেশন চান' : 'Request Quote' }}</span>
                         <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                     </a>
                 </div>
@@ -233,17 +238,17 @@
             <div>
                 <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#D4AF37] mb-2">
                     <span class="w-2 h-2 rounded-full bg-[#D4AF37]"></span>
-                    <span>Best Tour Deals</span>
+                    <span>{{ app()->getLocale() === 'bn' ? 'সেরা ট্যুর অফার' : 'Best Tour Deals' }}</span>
                 </div>
                 <h2 class="text-2xl sm:text-3xl font-extrabold font-serif text-[#0B1F3A] mb-1">
-                    Featured Holiday Packages
+                    {{ app()->getLocale() === 'bn' ? 'জনপ্রিয় ছুটির প্যাকেজ' : 'Featured Holiday Packages' }}
                 </h2>
                 <p class="text-xs sm:text-sm text-slate-500">
-                    Handpicked international and domestic itineraries with certified hotels & guided transfers.
+                    {{ app()->getLocale() === 'bn' ? 'হোটেল ও গাইডেড ট্রান্সফার সহ বাছাইকৃত আন্তর্জাতিক ও অভ্যন্তরীণ ভ্রমণ প্যাকেজ।' : 'Handpicked international and domestic itineraries with certified hotels & guided transfers.' }}
                 </p>
             </div>
             <a href="{{ route('tours.index') }}" class="mt-4 md:mt-0 btn btn-outline btn-sm rounded-full">
-                <span>View All Packages</span>
+                <span>{{ app()->getLocale() === 'bn' ? 'সকল প্যাকেজ দেখুন' : 'View All Packages' }}</span>
                 <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             </a>
         </div>
@@ -254,7 +259,7 @@
                 <x-tour-card :tour="$tour" />
             @empty
                 <div class="col-span-3 text-center py-12 text-slate-500 card-base p-10 bg-white">
-                    No tour packages available at this moment.
+                    {{ app()->getLocale() === 'bn' ? 'এই মুহূর্তে কোনো প্যাকেজ পাওয়া যায়নি।' : 'No tour packages available at this moment.' }}
                 </div>
             @endforelse
         </div>
@@ -269,13 +274,13 @@
         <div class="text-center max-w-2xl mx-auto mb-10">
             <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#D4AF37] mb-2">
                 <span class="w-2 h-2 rounded-full bg-[#D4AF37]"></span>
-                <span>Your Trips</span>
+                <span>{{ app()->getLocale() === 'bn' ? 'আপনার ভ্রমণ' : 'Your Trips' }}</span>
             </div>
             <h2 class="text-2xl sm:text-3xl font-extrabold font-serif text-[#0B1F3A] mb-2">
-                Popular Tourist Destinations
+                {{ app()->getLocale() === 'bn' ? 'জনপ্রিয় পর্যটন গন্তব্যসমূহ' : 'Popular Tourist Destinations' }}
             </h2>
             <p class="text-xs sm:text-sm text-slate-500 leading-relaxed">
-                Discover iconic world landmarks, tropical escapes, and cultural hubs loved by Bangladeshi travelers.
+                {{ app()->getLocale() === 'bn' ? 'বিশ্বের দর্শনীয় স্থান, ট্রপিক্যাল সমুদ্র সৈকত ও মনকাড়া পর্যটন কেন্দ্র।' : 'Discover iconic world landmarks, tropical escapes, and cultural hubs loved by Bangladeshi travelers.' }}
             </p>
         </div>
 
@@ -288,7 +293,7 @@
 
         <div class="text-center mt-10">
             <a href="{{ route('destinations.index') }}" class="btn btn-outline btn-sm rounded-full py-2.5 px-6 text-xs font-bold">
-                <span>Explore All Destinations</span>
+                <span>{{ app()->getLocale() === 'bn' ? 'সকল গন্তব্য দেখুন' : 'Explore All Destinations' }}</span>
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
             </a>
         </div>
@@ -306,17 +311,17 @@
                     <svg class="w-4 h-4 text-[#D4AF37]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                     </svg>
-                    <span>Visa Processing & Consultancy</span>
+                    <span>{{ app()->getLocale() === 'bn' ? 'ভিসা প্রসেসিং ও কনসালটেন্সি' : 'Visa Processing & Consultancy' }}</span>
                 </div>
                 <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold font-serif text-[#0B1F3A] mb-1.5">
-                    Hassle-Free Visa Assistance
+                    {{ app()->getLocale() === 'bn' ? 'ঝামেলামুক্ত ভিসা প্রসেসিং' : 'Hassle-Free Visa Assistance' }}
                 </h2>
                 <p class="text-xs sm:text-sm text-slate-500 max-w-xl">
-                    Official embassy checklist inspection, document review, and online e-visa application support with verified high success rates.
+                    {{ app()->getLocale() === 'bn' ? 'অফিসিয়াল দূতাবাস চেকলিস্ট যাচাই, নির্ভুল ফাইল প্রস্তুত এবং সর্বোচ্চ সাফল্যের অনলাইন ই-ভিসা সাপোর্ট।' : 'Official embassy checklist inspection, document review, and online e-visa application support with verified high success rates.' }}
                 </p>
             </div>
             <a href="{{ route('visa.index') }}" class="mt-4 md:mt-0 btn btn-outline btn-sm rounded-full self-start md:self-auto shadow-2xs">
-                <span>View All Countries</span>
+                <span>{{ app()->getLocale() === 'bn' ? 'সকল দেশ দেখুন' : 'View All Countries' }}</span>
                 <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             </a>
         </div>
@@ -330,26 +335,20 @@
 </section>
 
 <!-- =========================================================================
-     06. TRAVEL SPECIALIST CONSULTATION & INSTANT ASSISTANCE (Creative Minimal Luxury UI)
+     06. TRAVEL SPECIALIST CONSULTATION & INSTANT ASSISTANCE
      ========================================================================= -->
 <section class="py-16 sm:py-24 bg-gradient-to-b from-white via-slate-50/50 to-white relative overflow-hidden">
-    <!-- Ambient Subtle Radial Glows -->
     <div class="absolute top-1/4 -left-20 w-80 h-80 bg-[#D4AF37]/5 rounded-full blur-3xl pointer-events-none"></div>
     <div class="absolute bottom-1/4 -right-20 w-96 h-96 bg-[#0B1F3A]/5 rounded-full blur-3xl pointer-events-none"></div>
 
     <div class="container-custom relative z-10">
-        
-        <!-- Main Unified Consultation Card -->
         <div class="rounded-[32px] bg-[#0B1F3A] text-white shadow-[0_25px_60px_rgba(11,31,58,0.25)] border border-white/10 overflow-hidden relative">
-            <!-- Decorative Subtle Accent Lines -->
             <div class="absolute top-0 right-0 w-96 h-96 bg-radial from-[#D4AF37]/15 to-transparent blur-3xl pointer-events-none"></div>
             <div class="absolute -bottom-10 -left-10 w-80 h-80 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center p-7 sm:p-10 lg:p-14 relative z-10">
-                
-                <!-- Left Column: Visual Showcase & Dedicated Trip Planner (lg:col-span-5) -->
+                <!-- Left Column -->
                 <div class="lg:col-span-5 space-y-6">
-                    <!-- Image Card with Glassmorphic Badge -->
                     <div class="relative rounded-[24px] overflow-hidden border border-white/15 shadow-xl group bg-slate-900">
                         <img 
                             src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=900&q=80" 
@@ -359,226 +358,190 @@
                         >
                         <div class="absolute inset-0 bg-gradient-to-t from-[#0B1F3A] via-[#0B1F3A]/30 to-transparent"></div>
                         
-                        <!-- Top Floating Pill -->
                         <div class="absolute top-4 left-4">
                             <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-[#D4AF37] text-[11px] font-bold uppercase tracking-wider">
                                 <span class="w-1.5 h-1.5 rounded-full bg-[#D4AF37] animate-ping"></span>
-                                <span>Travel Specialist Consultation</span>
+                                <span>{{ app()->getLocale() === 'bn' ? 'বিশেষজ্ঞ ট্রাভেল কনসালটেন্সি' : 'Travel Specialist Consultation' }}</span>
                             </span>
                         </div>
 
-                        <!-- Bottom Glass Card -->
                         <div class="absolute bottom-4 left-4 right-4 bg-white/10 backdrop-blur-xl border border-white/20 p-4 rounded-2xl">
                             <div class="flex items-center gap-3">
                                 <div class="w-10 h-10 rounded-xl bg-[#D4AF37]/20 border border-[#D4AF37]/40 text-[#D4AF37] flex items-center justify-center flex-shrink-0">
                                     <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
                                 </div>
                                 <div>
-                                    <h4 class="font-bold text-sm text-white tracking-tight">Dedicated Trip Planner</h4>
-                                    <p class="text-[11px] text-white/80 mt-0.5 leading-snug">Expert ground assistance & personalized support for your family.</p>
+                                    <h4 class="font-bold text-sm text-white tracking-tight">{{ app()->getLocale() === 'bn' ? 'নিবেদিত ট্রিপ প্ল্যানার' : 'Dedicated Trip Planner' }}</h4>
+                                    <p class="text-[11px] text-white/80 mt-0.5 leading-snug">{{ app()->getLocale() === 'bn' ? 'আপনার পরিবারের জন্য নির্ভরযোগ্য গ্রাউন্ড সাপোর্ট ও কাস্টমাইজড সেবা।' : 'Expert ground assistance & personalized support for your family.' }}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Fast Contact Quick Bar -->
                     <div class="p-4 rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-md flex items-center justify-between gap-4">
                         <div class="flex items-center gap-3">
                             <div class="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center flex-shrink-0">
                                 <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
                             </div>
                             <div>
-                                <span class="text-[10px] text-white/50 uppercase font-bold tracking-wider block">Direct Desk</span>
+                                <span class="text-[10px] text-white/50 uppercase font-bold tracking-wider block">{{ app()->getLocale() === 'bn' ? 'সরাসরি ডেস্ক' : 'Direct Desk' }}</span>
                                 <span class="text-xs font-bold text-white">{{ App\Models\Setting::get('contact_phone', '+880 1805-464291') }}</span>
                             </div>
                         </div>
-                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', App\Models\Setting::get('contact_whatsapp', '+8801805464291')) }}?text=Hello%20Emisha%20Tours,%20I%20need%20assistance%20with%20tour%20and%20visa." target="_blank" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-[#D4AF37] hover:text-[#0B1F3A] text-white text-[11px] font-bold transition-all border border-white/15">
-                            WhatsApp 24/7
+                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', App\Models\Setting::get('contact_whatsapp', '+8801805464291')) }}?text={{ urlencode(app()->getLocale() === 'bn' ? 'হ্যালো এমিসা ট্যুরস, আমার ট্যুর ও ভিসা পরামর্শ প্রয়োজন।' : 'Hello Emisha Tours, I need assistance with tour and visa.') }}" target="_blank" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-[#D4AF37] hover:text-[#0B1F3A] text-white text-[11px] font-bold transition-all border border-white/15">
+                            {{ app()->getLocale() === 'bn' ? 'হোয়াটসঅ্যাপ ২৪/৭' : 'WhatsApp 24/7' }}
                         </a>
                     </div>
                 </div>
 
-                <!-- Right Column: Interactive Minimal Consultation Form (lg:col-span-7) -->
+                <!-- Right Column: Interactive Consultation Form -->
                 <div class="lg:col-span-7">
                     <div class="max-w-xl lg:pl-2">
-                        
-                        <!-- Header Pill -->
                         <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#D4AF37]/15 border border-[#D4AF37]/30 text-[#D4AF37] text-xs font-bold uppercase tracking-widest mb-3.5 backdrop-blur-md">
                             <span class="w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse"></span>
-                            <span>Instant Assistance</span>
+                            <span>{{ app()->getLocale() === 'bn' ? 'তাৎক্ষণিক সহায়তা' : 'Instant Assistance' }}</span>
                         </div>
 
-                        <!-- Main Headline -->
                         <h3 class="text-2xl sm:text-3xl md:text-4xl font-extrabold font-serif text-white tracking-tight leading-tight mb-2.5">
-                            Need any support for tour and visa?
+                            {{ app()->getLocale() === 'bn' ? 'ট্যুর বা ভিসা সংক্রান্ত যেকোনো তথ্যের প্রয়োজন?' : 'Need any support for tour and visa?' }}
                         </h3>
                         
-                        <!-- Subtitle -->
                         <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal mb-7">
-                            Send us your travel request. Our specialists will call you back within 30 minutes with customized itineraries and visa guidelines.
+                            {{ app()->getLocale() === 'bn' ? 'আপনার ভ্রমণের বিবরণ জমা দিন। আমাদের কনসালটেন্ট দ্রুত আপনার সাথে যোগাযোগ করবেন।' : 'Send us your travel request. Our specialists will call you back within 30 minutes with customized itineraries and visa guidelines.' }}
                         </p>
 
-                        <!-- Consultation Form -->
                         <form action="{{ route('contact.store') }}" method="POST" class="space-y-4">
                             @csrf
                             <input type="hidden" name="subject" value="Quick Travel & Visa Consultation Request">
                             
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                                <!-- Full Name -->
                                 <div>
-                                    <label class="block text-[10.5px] uppercase tracking-wider font-bold text-white/60 mb-1.5">Your Full Name *</label>
-                                    <div class="relative">
-                                        <input 
-                                            type="text" 
-                                            name="name" 
-                                            required 
-                                            placeholder="e.g. Tanvir Ahmed" 
-                                            class="w-full bg-white/[0.07] hover:bg-white/[0.10] text-white placeholder-white/40 border border-white/15 rounded-xl px-4 py-3 text-xs focus:outline-none focus:border-[#D4AF37] focus:bg-white/[0.12] focus:ring-1 focus:ring-[#D4AF37] transition-all"
-                                        >
-                                    </div>
+                                    <label class="block text-[10.5px] uppercase tracking-wider font-bold text-white/60 mb-1.5">{{ app()->getLocale() === 'bn' ? 'আপনার পূর্ণ নাম *' : 'Your Full Name *' }}</label>
+                                    <input 
+                                        type="text" 
+                                        name="name" 
+                                        required 
+                                        placeholder="{{ app()->getLocale() === 'bn' ? 'যেমন: তানভীর আহমেদ' : 'e.g. Tanvir Ahmed' }}" 
+                                        class="w-full bg-white/[0.07] hover:bg-white/[0.10] text-white placeholder-white/40 border border-white/15 rounded-xl px-4 py-3 text-xs focus:outline-none focus:border-[#D4AF37] focus:bg-white/[0.12] focus:ring-1 focus:ring-[#D4AF37] transition-all"
+                                    >
                                 </div>
 
-                                <!-- Mobile / WhatsApp -->
                                 <div>
-                                    <label class="block text-[10.5px] uppercase tracking-wider font-bold text-white/60 mb-1.5">Mobile / WhatsApp Number *</label>
-                                    <div class="relative">
-                                        <input 
-                                            type="tel" 
-                                            name="phone" 
-                                            required 
-                                            placeholder="+880 1700-000000" 
-                                            class="w-full bg-white/[0.07] hover:bg-white/[0.10] text-white placeholder-white/40 border border-white/15 rounded-xl px-4 py-3 text-xs focus:outline-none focus:border-[#D4AF37] focus:bg-white/[0.12] focus:ring-1 focus:ring-[#D4AF37] transition-all"
-                                        >
-                                    </div>
+                                    <label class="block text-[10.5px] uppercase tracking-wider font-bold text-white/60 mb-1.5">{{ app()->getLocale() === 'bn' ? 'মোবাইল / হোয়াটসঅ্যাপ নম্বর *' : 'Mobile / WhatsApp Number *' }}</label>
+                                    <input 
+                                        type="tel" 
+                                        name="phone" 
+                                        required 
+                                        placeholder="+880 1700-000000" 
+                                        class="w-full bg-white/[0.07] hover:bg-white/[0.10] text-white placeholder-white/40 border border-white/15 rounded-xl px-4 py-3 text-xs focus:outline-none focus:border-[#D4AF37] focus:bg-white/[0.12] focus:ring-1 focus:ring-[#D4AF37] transition-all"
+                                    >
                                 </div>
 
-                                <!-- Email -->
                                 <div>
-                                    <label class="block text-[10.5px] uppercase tracking-wider font-bold text-white/60 mb-1.5">Email Address (Optional)</label>
-                                    <div class="relative">
-                                        <input 
-                                            type="email" 
-                                            name="email" 
-                                            placeholder="tanvir@example.com" 
-                                            class="w-full bg-white/[0.07] hover:bg-white/[0.10] text-white placeholder-white/40 border border-white/15 rounded-xl px-4 py-3 text-xs focus:outline-none focus:border-[#D4AF37] focus:bg-white/[0.12] focus:ring-1 focus:ring-[#D4AF37] transition-all"
-                                        >
-                                    </div>
+                                    <label class="block text-[10.5px] uppercase tracking-wider font-bold text-white/60 mb-1.5">{{ app()->getLocale() === 'bn' ? 'ইমেইল অ্যাড্রেস (ঐচ্ছিক)' : 'Email Address (Optional)' }}</label>
+                                    <input 
+                                        type="email" 
+                                        name="email" 
+                                        placeholder="tanvir@example.com" 
+                                        class="w-full bg-white/[0.07] hover:bg-white/[0.10] text-white placeholder-white/40 border border-white/15 rounded-xl px-4 py-3 text-xs focus:outline-none focus:border-[#D4AF37] focus:bg-white/[0.12] focus:ring-1 focus:ring-[#D4AF37] transition-all"
+                                    >
                                 </div>
 
-                                <!-- Destination & Date -->
                                 <div>
-                                    <label class="block text-[10.5px] uppercase tracking-wider font-bold text-white/60 mb-1.5">Destination & Preferred Date *</label>
-                                    <div class="relative">
-                                        <input 
-                                            type="text" 
-                                            name="message" 
-                                            required 
-                                            placeholder="e.g. Thailand in October (3 Persons)" 
-                                            class="w-full bg-white/[0.07] hover:bg-white/[0.10] text-white placeholder-white/40 border border-white/15 rounded-xl px-4 py-3 text-xs focus:outline-none focus:border-[#D4AF37] focus:bg-white/[0.12] focus:ring-1 focus:ring-[#D4AF37] transition-all"
-                                        >
-                                    </div>
+                                    <label class="block text-[10.5px] uppercase tracking-wider font-bold text-white/60 mb-1.5">{{ app()->getLocale() === 'bn' ? 'গন্তব্য ও সম্ভাব্য তারিখ *' : 'Destination & Preferred Date *' }}</label>
+                                    <input 
+                                        type="text" 
+                                        name="message" 
+                                        required 
+                                        placeholder="{{ app()->getLocale() === 'bn' ? 'যেমন: অক্টোবরে থাইল্যান্ড ৩ জন' : 'e.g. Thailand in October (3 Persons)' }}" 
+                                        class="w-full bg-white/[0.07] hover:bg-white/[0.10] text-white placeholder-white/40 border border-white/15 rounded-xl px-4 py-3 text-xs focus:outline-none focus:border-[#D4AF37] focus:bg-white/[0.12] focus:ring-1 focus:ring-[#D4AF37] transition-all"
+                                    >
                                 </div>
                             </div>
 
-                            <!-- Form Action Buttons -->
                             <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-3">
                                 <button type="submit" class="btn btn-gold px-7 py-3.5 text-xs uppercase tracking-wider font-bold rounded-xl shadow-lg flex items-center justify-center gap-2 group">
-                                    <span>Send Inquiry Request</span>
+                                    <span>{{ app()->getLocale() === 'bn' ? 'অনুরোধ জমা দিন' : 'Send Inquiry Request' }}</span>
                                     <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                                 </button>
                                 
-                                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', App\Models\Setting::get('contact_whatsapp', '+8801805464291')) }}?text=Hello%20Emisha%20Tours,%20I%20need%20assistance%20with%20tour%20and%20visa." target="_blank" class="px-6 py-3.5 rounded-xl bg-emerald-600/90 hover:bg-emerald-600 text-white text-xs uppercase tracking-wider font-bold transition-all shadow-md flex items-center justify-center gap-2 border border-emerald-500/30">
+                                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', App\Models\Setting::get('contact_whatsapp', '+8801805464291')) }}?text={{ urlencode(app()->getLocale() === 'bn' ? 'হ্যালো এমিসা ট্যুরস, আমার ট্যুর ও ভিসা পরামর্শ প্রয়োজন।' : 'Hello Emisha Tours, I need assistance with tour and visa.') }}" target="_blank" class="px-6 py-3.5 rounded-xl bg-emerald-600/90 hover:bg-emerald-600 text-white text-xs uppercase tracking-wider font-bold transition-all shadow-md flex items-center justify-center gap-2 border border-emerald-500/30">
                                     <svg class="w-4 h-4 fill-current text-white" viewBox="0 0 24 24">
                                         <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>
                                     </svg>
-                                    <span>Chat on WhatsApp</span>
+                                    <span>{{ app()->getLocale() === 'bn' ? 'হোয়াটসঅ্যাপে চ্যাট' : 'Chat on WhatsApp' }}</span>
                                 </a>
                             </div>
                         </form>
                     </div>
                 </div>
-
             </div>
         </div>
 
         <!-- 3 Minimal Luxury Trust Cards -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-            
-            <!-- Trust Card 1 -->
             <div class="bg-white rounded-[24px] p-6 sm:p-7 border border-slate-200/80 shadow-[0_8px_25px_rgba(11,31,58,0.03)] hover:shadow-[0_15px_35px_rgba(11,31,58,0.08)] hover:-translate-y-1 transition-all duration-300 relative group overflow-hidden">
                 <div class="flex items-start gap-4">
                     <div class="w-12 h-12 rounded-2xl bg-[#0B1F3A] text-[#D4AF37] flex items-center justify-center flex-shrink-0 shadow-md group-hover:scale-105 transition-transform">
                         <svg class="w-6 h-6 text-[#D4AF37]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                     </div>
                     <div>
-                        <h4 class="font-bold font-serif text-base text-[#0B1F3A] mb-1 group-hover:text-[#D4AF37] transition-colors">24/7 Helpline Support</h4>
-                        <p class="text-xs text-slate-500 leading-relaxed font-normal">Dedicated trip manager on WhatsApp & direct phone throughout your journey.</p>
+                        <h4 class="font-bold font-serif text-base text-[#0B1F3A] mb-1 group-hover:text-[#D4AF37] transition-colors">{{ app()->getLocale() === 'bn' ? '২৪/৭ সাপোর্ট হেল্পলাইন' : '24/7 Helpline Support' }}</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed font-normal">{{ app()->getLocale() === 'bn' ? 'পুরো ভ্রমণ জুড়ে আপনার সাথে সার্বক্ষণিক ট্রিপ ম্যানেজার।' : 'Dedicated trip manager on WhatsApp & direct phone throughout your journey.' }}</p>
                     </div>
                 </div>
                 <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#D4AF37] to-amber-300 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             </div>
 
-            <!-- Trust Card 2 -->
             <div class="bg-white rounded-[24px] p-6 sm:p-7 border border-slate-200/80 shadow-[0_8px_25px_rgba(11,31,58,0.03)] hover:shadow-[0_15px_35px_rgba(11,31,58,0.08)] hover:-translate-y-1 transition-all duration-300 relative group overflow-hidden">
                 <div class="flex items-start gap-4">
                     <div class="w-12 h-12 rounded-2xl bg-[#0B1F3A] text-[#D4AF37] flex items-center justify-center flex-shrink-0 shadow-md group-hover:scale-105 transition-transform">
                         <svg class="w-6 h-6 text-[#D4AF37]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                     </div>
                     <div>
-                        <h4 class="font-bold font-serif text-base text-[#0B1F3A] mb-1 group-hover:text-[#D4AF37] transition-colors">Certified Visa Desk</h4>
-                        <p class="text-xs text-slate-500 leading-relaxed font-normal">100% Embassy compliant paperwork, trade license & bank solvency inspection.</p>
+                        <h4 class="font-bold font-serif text-base text-[#0B1F3A] mb-1 group-hover:text-[#D4AF37] transition-colors">{{ app()->getLocale() === 'bn' ? 'সার্টিফাইড ভিসা ডেস্ক' : 'Certified Visa Desk' }}</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed font-normal">{{ app()->getLocale() === 'bn' ? 'শতভাগ দূতাবাস স্ট্যান্ডার্ড পেপারওয়ার্ক ও সলভেন্সি অডিট।' : '100% Embassy compliant paperwork, trade license & bank solvency inspection.' }}</p>
                     </div>
                 </div>
                 <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#D4AF37] to-amber-300 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             </div>
 
-            <!-- Trust Card 3 -->
             <div class="bg-white rounded-[24px] p-6 sm:p-7 border border-slate-200/80 shadow-[0_8px_25px_rgba(11,31,58,0.03)] hover:shadow-[0_15px_35px_rgba(11,31,58,0.08)] hover:-translate-y-1 transition-all duration-300 relative group overflow-hidden">
                 <div class="flex items-start gap-4">
                     <div class="w-12 h-12 rounded-2xl bg-[#0B1F3A] text-[#D4AF37] flex items-center justify-center flex-shrink-0 shadow-md group-hover:scale-105 transition-transform">
                         <svg class="w-6 h-6 text-[#D4AF37]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     </div>
                     <div>
-                        <h4 class="font-bold font-serif text-base text-[#0B1F3A] mb-1 group-hover:text-[#D4AF37] transition-colors">Best Price Guarantee</h4>
-                        <p class="text-xs text-slate-500 leading-relaxed font-normal">Direct hotel & airline partner contracts with no hidden markups or surcharges.</p>
+                        <h4 class="font-bold font-serif text-base text-[#0B1F3A] mb-1 group-hover:text-[#D4AF37] transition-colors">{{ app()->getLocale() === 'bn' ? 'সেরা মূল্যের নিশ্চয়তা' : 'Best Price Guarantee' }}</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed font-normal">{{ app()->getLocale() === 'bn' ? 'সরাসরি এয়ারলাইন ও হোটেল পার্টনার চুক্তি, কোনো গোপন খরচ নেই।' : 'Direct hotel & airline partner contracts with no hidden markups or surcharges.' }}</p>
                     </div>
                 </div>
                 <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#D4AF37] to-amber-300 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             </div>
-
         </div>
-
     </div>
 </section>
 
 <!-- =========================================================================
-     07. WHY CHOOSE US (Creative & Minimal Luxury Trust Matrix)
+     07. WHY CHOOSE US
      ========================================================================= -->
 <section class="py-20 lg:py-28 bg-gradient-to-b from-white via-slate-50/70 to-slate-100/50 relative overflow-hidden">
-    <!-- Subtle Background Ambient Accents -->
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[350px] bg-gradient-to-r from-amber-200/15 via-blue-200/10 to-emerald-200/15 rounded-full blur-3xl pointer-events-none -z-10"></div>
-    <div class="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
-    <div class="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
-
     <div class="container-custom relative z-10">
-        <!-- Section Header -->
         <div class="text-center max-w-2xl mx-auto mb-14 lg:mb-16">
             <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#D4AF37]/30 shadow-xs text-xs font-bold uppercase tracking-widest text-[#B89628] mb-4">
                 <span class="w-1.5 h-1.5 rounded-full bg-[#D4AF37] animate-pulse"></span>
-                <span>Why Emisha Tours</span>
+                <span>{{ app()->getLocale() === 'bn' ? 'কেন এমিসা ট্যুরস' : 'Why Emisha Tours' }}</span>
             </div>
             <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-serif text-[#0B1F3A] tracking-tight mb-3">
-                Built on Trust, Transparency & Excellence
+                {{ app()->getLocale() === 'bn' ? 'আস্থা, স্বচ্ছতা এবং আভিজাত্যের নিশ্চয়তা' : 'Built on Trust, Transparency & Excellence' }}
             </h2>
             <p class="text-sm sm:text-base text-slate-500 leading-relaxed max-w-xl mx-auto font-normal">
-                We take away the friction of travel planning, ensuring your visa, flights, and tours are handled with meticulous detail.
+                {{ app()->getLocale() === 'bn' ? 'ভিসা, ফ্লাইট ও ট্যুর প্ল্যানিংয়ের প্রতিটি ধাপে নিখুঁত ব্যবস্থাপনার মাধ্যমে আপনার ভ্রমণকে করি নির্বিঘ্ন।' : 'We take away the friction of travel planning, ensuring your visa, flights, and tours are handled with meticulous detail.' }}
             </p>
         </div>
 
-        <!-- 4 Minimal Luxury Cards Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            
-            <!-- Pillar 01: High Visa Success -->
+            <!-- 01 -->
             <div class="group relative bg-white/90 backdrop-blur-xs rounded-2xl p-7 border border-slate-200/80 hover:border-[#D4AF37]/50 shadow-[0_4px_20px_-4px_rgba(11,31,58,0.04)] hover:shadow-[0_20px_35px_-10px_rgba(212,175,55,0.15)] transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between">
                 <div>
                     <div class="flex items-center justify-between mb-6">
@@ -591,10 +554,10 @@
                     </div>
 
                     <h3 class="font-bold text-base sm:text-lg text-[#0B1F3A] mb-2 group-hover:text-[#0B1F3A] transition-colors">
-                        High Visa Success
+                        {{ app()->getLocale() === 'bn' ? 'সর্বোচ্চ ভিসা সফলতা' : 'High Visa Success' }}
                     </h3>
                     <p class="text-xs sm:text-sm text-slate-500 leading-relaxed mb-6">
-                        Rigorous pre-submission inspection of bank statements, employment NOCs, and invites.
+                        {{ app()->getLocale() === 'bn' ? 'দূতাবাসে জমা দেওয়ার আগে ব্যাংক স্টেটমেন্ট ও এনওসি-র নির্ভুল অডিট।' : 'Rigorous pre-submission inspection of bank statements, employment NOCs, and invites.' }}
                     </p>
                 </div>
 
@@ -602,11 +565,11 @@
                     <svg class="w-3.5 h-3.5 text-amber-500 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
                     </svg>
-                    <span>Meticulous Pre-Audit Check</span>
+                    <span>{{ app()->getLocale() === 'bn' ? 'যাচাইকৃত প্রি-অডিট চেক' : 'Meticulous Pre-Audit Check' }}</span>
                 </div>
             </div>
 
-            <!-- Pillar 02: Verified 4/5-Star Hotels -->
+            <!-- 02 -->
             <div class="group relative bg-white/90 backdrop-blur-xs rounded-2xl p-7 border border-slate-200/80 hover:border-blue-500/40 shadow-[0_4px_20px_-4px_rgba(11,31,58,0.04)] hover:shadow-[0_20px_35px_-10px_rgba(59,130,246,0.15)] transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between">
                 <div>
                     <div class="flex items-center justify-between mb-6">
@@ -619,10 +582,10 @@
                     </div>
 
                     <h3 class="font-bold text-base sm:text-lg text-[#0B1F3A] mb-2 group-hover:text-[#0B1F3A] transition-colors">
-                        Verified 4/5-Star Hotels
+                        {{ app()->getLocale() === 'bn' ? '৪/৫-স্টার হোটেল নিশ্চয়তা' : 'Verified 4/5-Star Hotels' }}
                     </h3>
                     <p class="text-xs sm:text-sm text-slate-500 leading-relaxed mb-6">
-                        Direct partner hotel contracts ensuring central locations, safety, and halal meal options.
+                        {{ app()->getLocale() === 'bn' ? 'সেন্ট্রাল লোকেশন, নিরাপত্তা ও হালাল খাবার নিশ্চিতকরণ।' : 'Direct partner hotel contracts ensuring central locations, safety, and halal meal options.' }}
                     </p>
                 </div>
 
@@ -630,11 +593,11 @@
                     <svg class="w-3.5 h-3.5 text-blue-500 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
                     </svg>
-                    <span>Central & Halal Assured Stays</span>
+                    <span>{{ app()->getLocale() === 'bn' ? 'নিরাপদ ও হালাল আবাসন' : 'Central & Halal Assured Stays' }}</span>
                 </div>
             </div>
 
-            <!-- Pillar 03: Transparent Inclusions -->
+            <!-- 03 -->
             <div class="group relative bg-white/90 backdrop-blur-xs rounded-2xl p-7 border border-slate-200/80 hover:border-emerald-500/40 shadow-[0_4px_20px_-4px_rgba(11,31,58,0.04)] hover:shadow-[0_20px_35px_-10px_rgba(16,185,129,0.15)] transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between">
                 <div>
                     <div class="flex items-center justify-between mb-6">
@@ -647,10 +610,10 @@
                     </div>
 
                     <h3 class="font-bold text-base sm:text-lg text-[#0B1F3A] mb-2 group-hover:text-[#0B1F3A] transition-colors">
-                        Transparent Inclusions
+                        {{ app()->getLocale() === 'bn' ? 'স্বচ্ছ প্যাকেজ বিবরণ' : 'Transparent Inclusions' }}
                     </h3>
                     <p class="text-xs sm:text-sm text-slate-500 leading-relaxed mb-6">
-                        All airport transfers, taxes, entry tickets, and guides are clearly stated with zero hidden fees.
+                        {{ app()->getLocale() === 'bn' ? 'সকল ট্রান্সফার, ট্যাক্স ও এন্ট্রি টিকিট পূর্বে সুস্পষ্টভাবে উল্লেখ থাকে।' : 'All airport transfers, taxes, entry tickets, and guides are clearly stated with zero hidden fees.' }}
                     </p>
                 </div>
 
@@ -658,11 +621,11 @@
                     <svg class="w-3.5 h-3.5 text-emerald-500 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
                     </svg>
-                    <span>Zero Hidden Fees Guarantee</span>
+                    <span>{{ app()->getLocale() === 'bn' ? 'গোপন খরচহীন নিশ্চয়তা' : 'Zero Hidden Fees Guarantee' }}</span>
                 </div>
             </div>
 
-            <!-- Pillar 04: Custom Trip Planning -->
+            <!-- 04 -->
             <div class="group relative bg-white/90 backdrop-blur-xs rounded-2xl p-7 border border-slate-200/80 hover:border-purple-500/40 shadow-[0_4px_20px_-4px_rgba(11,31,58,0.04)] hover:shadow-[0_20px_35px_-10px_rgba(168,85,247,0.15)] transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between">
                 <div>
                     <div class="flex items-center justify-between mb-6">
@@ -675,10 +638,10 @@
                     </div>
 
                     <h3 class="font-bold text-base sm:text-lg text-[#0B1F3A] mb-2 group-hover:text-[#0B1F3A] transition-colors">
-                        Custom Trip Planning
+                        {{ app()->getLocale() === 'bn' ? 'কাস্টম ট্রিপ প্ল্যানিং' : 'Custom Trip Planning' }}
                     </h3>
                     <p class="text-xs sm:text-sm text-slate-500 leading-relaxed mb-6">
-                        Tailored private vacations for honeymoon couples, families, and corporate executive retreats.
+                        {{ app()->getLocale() === 'bn' ? 'হানিমুন কাপল, পরিবার ও কর্পোরেট গ্রুপের জন্য বিশেষায়িত পরিকল্পনা।' : 'Tailored private vacations for honeymoon couples, families, and corporate executive retreats.' }}
                     </p>
                 </div>
 
@@ -686,56 +649,52 @@
                     <svg class="w-3.5 h-3.5 text-purple-500 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
                     </svg>
-                    <span>1-on-1 Dedicated Specialist</span>
+                    <span>{{ app()->getLocale() === 'bn' ? '১-অন-১ নিবেদিত ট্রাভেল বিশেষজ্ঞ' : '1-on-1 Dedicated Specialist' }}</span>
                 </div>
             </div>
-
         </div>
 
-        <!-- Reassurance Footer Strip -->
         <div class="mt-12 pt-8 border-t border-slate-200/70 flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-xs font-semibold text-slate-400">
             <div class="flex items-center gap-2">
                 <span class="w-1.5 h-1.5 rounded-full bg-[#D4AF37]"></span>
-                <span class="text-slate-600">Government Approved Tour Operator</span>
+                <span class="text-slate-600">{{ app()->getLocale() === 'bn' ? 'সরকারি অনুমোদিত ট্যুর অপারেটর' : 'Government Approved Tour Operator' }}</span>
             </div>
             <div class="flex items-center gap-2">
                 <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
-                <span class="text-slate-600">IATA Standard Global Flight Access</span>
+                <span class="text-slate-600">{{ app()->getLocale() === 'bn' ? 'আইএটিএ স্ট্যান্ডার্ড ফ্লাইট বুকিং' : 'IATA Standard Global Flight Access' }}</span>
             </div>
             <div class="flex items-center gap-2">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                <span class="text-slate-600">24/7 Dedicated Concierge Support</span>
+                <span class="text-slate-600">{{ app()->getLocale() === 'bn' ? '২৪/৭ সার্বক্ষণিক সহায়তা ডেস্ক' : '24/7 Dedicated Concierge Support' }}</span>
             </div>
         </div>
     </div>
 </section>
 
 <!-- =========================================================================
-     08. CLIENT TESTIMONIALS (Luxury Trust Suite with Real Verified Clients)
+     08. CLIENT TESTIMONIALS
      ========================================================================= -->
 <section class="section-padding bg-[#0B1F3A] text-white relative overflow-hidden">
-    <!-- Ambient Background Lighting -->
     <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#D4AF37_1px,transparent_1px)] [background-size:24px_24px]"></div>
     <div class="absolute top-0 right-1/4 w-96 h-96 bg-[#D4AF37]/10 rounded-full blur-3xl pointer-events-none"></div>
     <div class="absolute bottom-0 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
     <div class="container-custom relative z-10">
-        <!-- Section Header -->
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
             <div>
                 <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-[#D4AF37]/30 text-[#D4AF37] text-xs font-bold uppercase tracking-widest mb-3.5 backdrop-blur-md shadow-xs">
                     <span class="w-1.5 h-1.5 rounded-full bg-[#D4AF37] animate-pulse"></span>
-                    <span>Client Trust & Stories</span>
+                    <span>{{ app()->getLocale() === 'bn' ? 'গ্রাহকদের গল্প ও অভিজ্ঞতা' : 'Client Trust & Stories' }}</span>
                 </div>
                 <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-serif text-white tracking-tight mb-3">
-                    Loved By Over 10,000+ Explorers
+                    {{ app()->getLocale() === 'bn' ? '১০,০০০+ সম্মানিত ভ্রমণপিপাসুর আস্থা' : 'Loved By Over 10,000+ Explorers' }}
                 </h2>
                 <p class="text-xs sm:text-sm text-slate-300 max-w-xl leading-relaxed font-light">
-                    Authentic feedback from families, couples, and corporate travelers who trusted Emisha Tours & Travels for their international journeys, visa processing, and air ticketing.
+                    {{ app()->getLocale() === 'bn' ? 'পরিবার, দম্পতি ও কর্পোরেট ক্লায়েন্টদের বাস্তব প্রতিক্রিয়া যারা এমিসা ট্যুরস অ্যান্ড ট্রাভেলসের মাধ্যমে সুন্দর ভ্রমণ সম্পন্ন করেছেন।' : 'Authentic feedback from families, couples, and corporate travelers who trusted Emisha Tours & Travels for their international journeys, visa processing, and air ticketing.' }}
                 </p>
             </div>
 
-            <!-- Google Verified Client Reviews Badge -->
+            <!-- Google Verified Reviews -->
             <div class="inline-flex items-center gap-3.5 bg-white/10 backdrop-blur-md border border-white/20 px-5 py-3 rounded-2xl shadow-md shrink-0">
                 <div class="w-9 h-9 rounded-full bg-white flex items-center justify-center font-extrabold text-sm text-[#0B1F3A] shadow-xs">
                     G
@@ -747,18 +706,16 @@
                         @endfor
                         <span class="font-bold text-xs text-white ml-1 font-mono">4.9 / 5.0</span>
                     </div>
-                    <span class="text-[11px] text-slate-300 font-medium block mt-0.5">Google Verified Client Reviews</span>
+                    <span class="text-[11px] text-slate-300 font-medium block mt-0.5">{{ app()->getLocale() === 'bn' ? 'গুগল ভেরিফাইড রিভিউ' : 'Google Verified Client Reviews' }}</span>
                 </div>
             </div>
         </div>
 
-        <!-- 3 Luxury Testimonial Cards Grid -->
+        <!-- Testimonial Cards Grid -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mb-14">
-            
-            <!-- Card 1: Tanvir Ahmed (Thailand Escape) -->
+            <!-- 1 -->
             <div class="bg-white rounded-[28px] p-7 sm:p-8 text-[#0B1F3A] shadow-xl flex flex-col justify-between h-full relative group border border-slate-100 hover:border-[#D4AF37]/50 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5">
                 <div>
-                    <!-- Top Rating & Destination Tag -->
                     <div class="flex items-center justify-between mb-5">
                         <div class="flex items-center gap-1 text-[#D4AF37]">
                             @for($i = 0; $i < 5; $i++)
@@ -767,17 +724,13 @@
                             <span class="text-xs font-bold text-[#0B1F3A] ml-1 font-mono">5.0</span>
                         </div>
                         <span class="px-3 py-1 rounded-full bg-amber-50 border border-amber-200/80 text-[#B89628] text-[11px] font-bold">
-                            Thailand Escape
+                            {{ app()->getLocale() === 'bn' ? 'থাইল্যান্ড ভ্রমণ' : 'Thailand Escape' }}
                         </span>
                     </div>
-
-                    <!-- Review Text -->
                     <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-6 font-normal">
-                        "Our 5-day Bangkok and Pattaya tour was flawlessly organized by Emisha Tours. From hotel transfers to dinner cruise tickets, everything was on time and stress-free. Highly recommended!"
+                        {{ app()->getLocale() === 'bn' ? '"ব্যাংকক এবং পাতায়ায় আমাদের ৫ দিনের ট্যুরটি অত্যন্ত নিখুঁতভাবে পরিচালনা করেছে এমিসা। হোটেল ট্রান্সফার থেকে ডিনার ক্রুজ টিকেট—সবকিছুই ছিল সময়মত ও পরিপাটি।"' : '"Our 5-day Bangkok and Pattaya tour was flawlessly organized by Emisha Tours. From hotel transfers to dinner cruise tickets, everything was on time and stress-free. Highly recommended!"' }}
                     </p>
                 </div>
-
-                <!-- Client Info with Real AI Portrait -->
                 <div class="flex items-center gap-3.5 pt-5 border-t border-slate-100">
                     <img 
                         src="{{ asset('images/clients/tanvir-ahmed.jpg') }}" 
@@ -786,23 +739,20 @@
                         loading="lazy"
                     >
                     <div>
-                        <div class="font-bold text-sm sm:text-base text-[#0B1F3A]">Tanvir Ahmed</div>
+                        <div class="font-bold text-sm sm:text-base text-[#0B1F3A]">{{ app()->getLocale() === 'bn' ? 'তানভীর আহমেদ' : 'Tanvir Ahmed' }}</div>
                         <div class="flex items-center gap-2 text-[11px] text-slate-400 mt-0.5">
                             <span class="text-emerald-700 font-semibold flex items-center gap-1">
                                 <svg class="w-3 h-3 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
-                                <span>Verified Traveler</span>
+                                <span>{{ app()->getLocale() === 'bn' ? 'যাচাইকৃত ভ্রমণকারী' : 'Verified Traveler' }}</span>
                             </span>
-                            <span>•</span>
-                            <span>Google Review</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Card 2: Nusrat Jahan & Farhan (Maldives Honeymoon) -->
+            <!-- 2 -->
             <div class="bg-white rounded-[28px] p-7 sm:p-8 text-[#0B1F3A] shadow-xl flex flex-col justify-between h-full relative group border border-slate-100 hover:border-[#D4AF37]/50 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5">
                 <div>
-                    <!-- Top Rating & Destination Tag -->
                     <div class="flex items-center justify-between mb-5">
                         <div class="flex items-center gap-1 text-[#D4AF37]">
                             @for($i = 0; $i < 5; $i++)
@@ -811,17 +761,13 @@
                             <span class="text-xs font-bold text-[#0B1F3A] ml-1 font-mono">5.0</span>
                         </div>
                         <span class="px-3 py-1 rounded-full bg-blue-50 border border-blue-200/80 text-blue-700 text-[11px] font-bold">
-                            Maldives Honeymoon
+                            {{ app()->getLocale() === 'bn' ? 'মালদ্বীপ হানিমুন' : 'Maldives Honeymoon' }}
                         </span>
                     </div>
-
-                    <!-- Review Text -->
                     <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-6 font-normal">
-                        "The overwater villa experience in the Maldives arranged by Emisha was pure magic! They took care of our speedboat transfers, candlelight dinner, and green taxes without any hidden costs."
+                        {{ app()->getLocale() === 'bn' ? '"মালদ্বীপে ওয়াটার ভিলা এবং স্পিডবোট ট্রান্সফারের অপূর্ব ব্যবস্থাপনা ছিল। ক্যান্ডেললাইট ডিনার ও সব খরচ আগে থেকেই স্পষ্ট ছিল।"' : '"The overwater villa experience in the Maldives arranged by Emisha was pure magic! They took care of our speedboat transfers, candlelight dinner, and green taxes without any hidden costs."' }}
                     </p>
                 </div>
-
-                <!-- Client Info with Real AI Portrait -->
                 <div class="flex items-center gap-3.5 pt-5 border-t border-slate-100">
                     <img 
                         src="{{ asset('images/clients/nusrat-farhan.jpg') }}" 
@@ -830,23 +776,20 @@
                         loading="lazy"
                     >
                     <div>
-                        <div class="font-bold text-sm sm:text-base text-[#0B1F3A]">Nusrat Jahan & Farhan</div>
+                        <div class="font-bold text-sm sm:text-base text-[#0B1F3A]">{{ app()->getLocale() === 'bn' ? 'নুসরাত জাহান ও ফারহান' : 'Nusrat Jahan & Farhan' }}</div>
                         <div class="flex items-center gap-2 text-[11px] text-slate-400 mt-0.5">
                             <span class="text-emerald-700 font-semibold flex items-center gap-1">
                                 <svg class="w-3 h-3 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
-                                <span>Verified Traveler</span>
+                                <span>{{ app()->getLocale() === 'bn' ? 'যাচাইকৃত ভ্রমণকারী' : 'Verified Traveler' }}</span>
                             </span>
-                            <span>•</span>
-                            <span>Google Review</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Card 3: Dr. Kamrul Hasan (Dubai, UAE) -->
+            <!-- 3 -->
             <div class="bg-white rounded-[28px] p-7 sm:p-8 text-[#0B1F3A] shadow-xl flex flex-col justify-between h-full relative group border border-slate-100 hover:border-[#D4AF37]/50 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5">
                 <div>
-                    <!-- Top Rating & Destination Tag -->
                     <div class="flex items-center justify-between mb-5">
                         <div class="flex items-center gap-1 text-[#D4AF37]">
                             @for($i = 0; $i < 5; $i++)
@@ -855,17 +798,13 @@
                             <span class="text-xs font-bold text-[#0B1F3A] ml-1 font-mono">5.0</span>
                         </div>
                         <span class="px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200/80 text-emerald-700 text-[11px] font-bold">
-                            Dubai, UAE
+                            {{ app()->getLocale() === 'bn' ? 'দুবাই, ইউএই' : 'Dubai, UAE' }}
                         </span>
                     </div>
-
-                    <!-- Review Text -->
                     <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-6 font-normal">
-                        "Got my Dubai e-Visa in just 48 hours and roundtrip Emirates tickets at an unbeatable corporate rate. Emisha’s visa consultancy team is professional, prompt, and trustworthy."
+                        {{ app()->getLocale() === 'bn' ? '"মাত্র ৪৮ ঘণ্টায় দুবাই ই-ভিসা এবং এমিরেটসের রাউন্ডট্রিপ টিকেট সেরা রেটে পেয়েছি। তাদের ভিসা কনসালটেন্সি অত্যন্ত দক্ষ ও নির্ভরযোগ্য।"' : '"Got my Dubai e-Visa in just 48 hours and roundtrip Emirates tickets at an unbeatable corporate rate. Emisha’s visa consultancy team is professional, prompt, and trustworthy."' }}
                     </p>
                 </div>
-
-                <!-- Client Info with Real AI Portrait -->
                 <div class="flex items-center gap-3.5 pt-5 border-t border-slate-100">
                     <img 
                         src="{{ asset('images/clients/dr-kamrul-hasan.jpg') }}" 
@@ -874,56 +813,53 @@
                         loading="lazy"
                     >
                     <div>
-                        <div class="font-bold text-sm sm:text-base text-[#0B1F3A]">Dr. Kamrul Hasan</div>
+                        <div class="font-bold text-sm sm:text-base text-[#0B1F3A]">{{ app()->getLocale() === 'bn' ? 'ডা. কামরুল হাসান' : 'Dr. Kamrul Hasan' }}</div>
                         <div class="flex items-center gap-2 text-[11px] text-slate-400 mt-0.5">
                             <span class="text-emerald-700 font-semibold flex items-center gap-1">
                                 <svg class="w-3 h-3 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
-                                <span>Verified Traveler</span>
+                                <span>{{ app()->getLocale() === 'bn' ? 'যাচাইকৃত ভ্রমণকারী' : 'Verified Traveler' }}</span>
                             </span>
-                            <span>•</span>
-                            <span>Google Review</span>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
 
         <!-- 4 Stat Counters Strip -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 pt-10 border-t border-white/15 text-center">
-            <div class="p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xs">
-                <div class="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-serif text-[#D4AF37] mb-1">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 pt-8 sm:pt-10 border-t border-white/15 text-center">
+            <div class="p-3 sm:p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xs">
+                <div class="text-xl sm:text-3xl lg:text-4xl font-extrabold font-serif text-[#D4AF37] mb-1">
                     10,000+
                 </div>
-                <div class="text-xs sm:text-sm text-slate-300 font-medium">
-                    Happy Travelers
+                <div class="text-[11px] sm:text-sm text-slate-300 font-medium">
+                    {{ app()->getLocale() === 'bn' ? 'সন্তুষ্ট ভ্রমণকারী' : 'Happy Travelers' }}
                 </div>
             </div>
 
-            <div class="p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xs">
-                <div class="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-serif text-[#D4AF37] mb-1">
+            <div class="p-3 sm:p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xs">
+                <div class="text-xl sm:text-3xl lg:text-4xl font-extrabold font-serif text-[#D4AF37] mb-1">
                     98.5%
                 </div>
-                <div class="text-xs sm:text-sm text-slate-300 font-medium">
-                    Visa Approval Rate
+                <div class="text-[11px] sm:text-sm text-slate-300 font-medium">
+                    {{ app()->getLocale() === 'bn' ? 'ভিসা সাফল্যের হার' : 'Visa Approval Rate' }}
                 </div>
             </div>
 
-            <div class="p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xs">
-                <div class="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-serif text-[#D4AF37] mb-1">
+            <div class="p-3 sm:p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xs">
+                <div class="text-xl sm:text-3xl lg:text-4xl font-extrabold font-serif text-[#D4AF37] mb-1">
                     4.9 / 5.0
                 </div>
-                <div class="text-xs sm:text-sm text-slate-300 font-medium">
-                    Client Satisfaction
+                <div class="text-[11px] sm:text-sm text-slate-300 font-medium">
+                    {{ app()->getLocale() === 'bn' ? 'গ্রাহক সন্তুষ্টি' : 'Client Satisfaction' }}
                 </div>
             </div>
 
-            <div class="p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xs">
-                <div class="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-serif text-[#D4AF37] mb-1">
+            <div class="p-3 sm:p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xs">
+                <div class="text-xl sm:text-3xl lg:text-4xl font-extrabold font-serif text-[#D4AF37] mb-1">
                     24/7
                 </div>
-                <div class="text-xs sm:text-sm text-slate-300 font-medium">
-                    Emergency Assistance
+                <div class="text-[11px] sm:text-sm text-slate-300 font-medium">
+                    {{ app()->getLocale() === 'bn' ? 'সাপোর্ট ডেস্ক' : 'Support Desk' }}
                 </div>
             </div>
         </div>
@@ -931,33 +867,26 @@
 </section>
 
 <!-- =========================================================================
-     09. MAKE MEMORIES WITH US (Visual Travel Moments Showcase)
+     09. MAKE MEMORIES WITH US
      ========================================================================= -->
 <section class="section-padding bg-gradient-to-b from-white via-slate-50/70 to-white relative overflow-hidden">
-    <!-- Ambient Ambient Glow -->
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-[#D4AF37]/5 rounded-full blur-3xl pointer-events-none"></div>
-
     <div class="container-custom relative z-10">
-        <!-- Section Header -->
         <div class="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
             <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-xs font-bold uppercase tracking-wider mb-3 shadow-xs">
                 <svg class="w-3.5 h-3.5 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                <span>Visual Journey</span>
+                <span>{{ app()->getLocale() === 'bn' ? 'ভ্রমণ মুহূর্ত' : 'Visual Journey' }}</span>
             </div>
             <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold font-serif text-[#0B1F3A] mb-3 tracking-tight">
-                Make memories with us
+                {{ app()->getLocale() === 'bn' ? 'আমাদের সাথে তৈরি হোক মধুর স্মৃতি' : 'Make memories with us' }}
             </h2>
             <p class="text-xs sm:text-sm md:text-base text-slate-500 leading-relaxed max-w-xl mx-auto font-normal">
-                Moments of joy, serenity, and discovery captured during our international group and family tours.
+                {{ app()->getLocale() === 'bn' ? 'আমাদের আন্তর্জাতিক গ্রুপ ও ফ্যামিলি ট্যুর চলাকালীন ধারণকৃত আনন্দের কিছু মুহূর্ত।' : 'Moments of joy, serenity, and discovery captured during our international group and family tours.' }}
             </p>
         </div>
 
-        <!-- 3 Symmetrical Luxury Travel Moment Cards (4:5 Aspect Ratio & Real Authentic Photos) -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto items-stretch">
-            
-            <!-- Showcase Card 1: Thailand (Phuket & Phi Phi Islands) -->
+            <!-- 1 -->
             <a href="{{ route('tours.index') }}" class="group relative rounded-[28px] overflow-hidden bg-[#0B1F3A] border border-slate-200/80 hover:border-[#D4AF37]/60 shadow-[0_12px_36px_rgba(11,31,58,0.08)] hover:shadow-[0_24px_50px_rgba(11,31,58,0.18)] transition-all duration-500 hover:-translate-y-1.5 flex flex-col justify-between aspect-[4/5] w-full block">
-                <!-- Authentic Background Image (Thailand Phi Phi Islands / Maya Bay) -->
                 <img 
                     src="https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=1200&h=1500&q=85" 
                     alt="Thailand Island Cruise - Phi Phi Islands" 
@@ -966,51 +895,46 @@
                 >
                 <div class="absolute inset-0 bg-gradient-to-t from-[#071527] via-[#0B1F3A]/65 to-[#071527]/25"></div>
                 
-                <!-- Floating Top Badges -->
                 <div class="relative z-10 p-5 sm:p-6 flex items-center justify-between">
                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white text-[11px] font-semibold">
                         <svg class="w-3.5 h-3.5 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        <span>Thailand Highlights</span>
+                        <span>{{ app()->getLocale() === 'bn' ? 'থাইল্যান্ড হাইলাইটস' : 'Thailand Highlights' }}</span>
                     </span>
                     <span class="px-3 py-1 rounded-full bg-[#D4AF37] text-[#0B1F3A] text-[11px] font-extrabold shadow-sm font-mono">
-                        5D / 4N
+                        {{ app()->getLocale() === 'bn' ? '৫দিন / ৪রাত' : '5D / 4N' }}
                     </span>
                 </div>
 
-                <!-- Bottom Details Box -->
                 <div class="relative z-10 p-5 sm:p-6 text-white space-y-3">
                     <div>
                         <div class="text-[11px] text-[#D4AF37] font-semibold uppercase tracking-wider mb-1 flex items-center gap-1.5">
                             <svg class="w-3.5 h-3.5 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                            <span>Phuket & Phi Phi Islands</span>
+                            <span>{{ app()->getLocale() === 'bn' ? 'ফুকেট ও ফি ফি দ্বীপপুঞ্জ' : 'Phuket & Phi Phi Islands' }}</span>
                         </div>
                         <h3 class="text-lg sm:text-xl font-bold font-serif leading-snug text-white group-hover:text-[#D4AF37] transition-colors">
-                            Phi Phi Island Speedboat Cruise
+                            {{ app()->getLocale() === 'bn' ? 'ফি ফি আইল্যান্ড স্পিডবোট ক্রুজ' : 'Phi Phi Island Speedboat Cruise' }}
                         </h3>
                     </div>
 
                     <p class="text-xs text-slate-200 line-clamp-2 leading-relaxed font-light">
-                        Crystal turquoise lagoon, Maya Bay sightseeing, Pileh Lagoon swimming & luxury speedboat transfer.
+                        {{ app()->getLocale() === 'bn' ? 'মায়া বে সাইটসিয়িং, পিলেহ লাগুন সাঁতার ও লাক্সারি স্পিডবোট ট্রান্সফার।' : 'Crystal turquoise lagoon, Maya Bay sightseeing, Pileh Lagoon swimming & luxury speedboat transfer.' }}
                     </p>
 
-                    <!-- Key Inclusions Tags -->
                     <div class="flex flex-wrap gap-1.5 pt-1">
-                        <span class="px-2.5 py-0.5 rounded-lg bg-white/10 backdrop-blur-md border border-white/15 text-[10px] text-white/90">Speedboat</span>
-                        <span class="px-2.5 py-0.5 rounded-lg bg-white/10 backdrop-blur-md border border-white/15 text-[10px] text-white/90">Maya Bay</span>
-                        <span class="px-2.5 py-0.5 rounded-lg bg-white/10 backdrop-blur-md border border-white/15 text-[10px] text-white/90">Buffet Lunch</span>
+                        <span class="px-2.5 py-0.5 rounded-lg bg-white/10 backdrop-blur-md border border-white/15 text-[10px] text-white/90">{{ app()->getLocale() === 'bn' ? 'স্পিডবোট' : 'Speedboat' }}</span>
+                        <span class="px-2.5 py-0.5 rounded-lg bg-white/10 backdrop-blur-md border border-white/15 text-[10px] text-white/90">{{ app()->getLocale() === 'bn' ? 'মায়া বে' : 'Maya Bay' }}</span>
+                        <span class="px-2.5 py-0.5 rounded-lg bg-white/10 backdrop-blur-md border border-white/15 text-[10px] text-white/90">{{ app()->getLocale() === 'bn' ? 'বুফে লাঞ্চ' : 'Buffet Lunch' }}</span>
                     </div>
 
-                    <!-- Action Link -->
                     <div class="pt-2 border-t border-white/15 flex items-center justify-between text-xs font-bold text-[#D4AF37]">
-                        <span>Explore Tour Itinerary</span>
+                        <span>{{ app()->getLocale() === 'bn' ? 'ট্যুর বিবরণ দেখুন' : 'Explore Tour Itinerary' }}</span>
                         <svg class="w-4 h-4 group-hover:translate-x-1.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                     </div>
                 </div>
             </a>
 
-            <!-- Showcase Card 2: Maldives (South Ari Atoll) -->
+            <!-- 2 -->
             <a href="{{ route('tours.index') }}" class="group relative rounded-[28px] overflow-hidden bg-[#0B1F3A] border border-slate-200/80 hover:border-[#D4AF37]/60 shadow-[0_12px_36px_rgba(11,31,58,0.08)] hover:shadow-[0_24px_50px_rgba(11,31,58,0.18)] transition-all duration-500 hover:-translate-y-1.5 flex flex-col justify-between aspect-[4/5] w-full block">
-                <!-- Authentic Background Image (Maldives Luxury Overwater Villas) -->
                 <img 
                     src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=1200&h=1500&q=85" 
                     alt="Maldives Luxury Overwater Resort" 
@@ -1019,51 +943,46 @@
                 >
                 <div class="absolute inset-0 bg-gradient-to-t from-[#071527] via-[#0B1F3A]/65 to-[#071527]/25"></div>
                 
-                <!-- Floating Top Badges -->
                 <div class="relative z-10 p-5 sm:p-6 flex items-center justify-between">
                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white text-[11px] font-semibold">
                         <svg class="w-3.5 h-3.5 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        <span>Maldives Luxury</span>
+                        <span>{{ app()->getLocale() === 'bn' ? 'মালদ্বীপ লাক্সারি' : 'Maldives Luxury' }}</span>
                     </span>
                     <span class="px-3 py-1 rounded-full bg-[#D4AF37] text-[#0B1F3A] text-[11px] font-extrabold shadow-sm font-mono">
-                        4D / 3N
+                        {{ app()->getLocale() === 'bn' ? '৪দিন / ৩রাত' : '4D / 3N' }}
                     </span>
                 </div>
 
-                <!-- Bottom Details Box -->
                 <div class="relative z-10 p-5 sm:p-6 text-white space-y-3">
                     <div>
                         <div class="text-[11px] text-[#D4AF37] font-semibold uppercase tracking-wider mb-1 flex items-center gap-1.5">
                             <svg class="w-3.5 h-3.5 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                            <span>South Ari Atoll Island</span>
+                            <span>{{ app()->getLocale() === 'bn' ? 'সাউথ আরি অ্যাটল' : 'South Ari Atoll Island' }}</span>
                         </div>
                         <h3 class="text-lg sm:text-xl font-bold font-serif leading-snug text-white group-hover:text-[#D4AF37] transition-colors">
-                            Overwater Villa Private Getaway
+                            {{ app()->getLocale() === 'bn' ? 'ওয়াটার ভিলা প্রাইভেট ভ্যাকেশন' : 'Overwater Villa Private Getaway' }}
                         </h3>
                     </div>
 
                     <p class="text-xs text-slate-200 line-clamp-2 leading-relaxed font-light">
-                        Pure serenity with private infinity sundeck, house reef snorkeling with sea turtles & sunset dolphin cruise.
+                        {{ app()->getLocale() === 'bn' ? 'ইনফিনিটি সানডেক, কচ্ছপের সাথে স্নরকেলিং এবং সানসেট ডলফিন ক্রুজ।' : 'Pure serenity with private infinity sundeck, house reef snorkeling with sea turtles & sunset dolphin cruise.' }}
                     </p>
 
-                    <!-- Key Inclusions Tags -->
                     <div class="flex flex-wrap gap-1.5 pt-1">
-                        <span class="px-2.5 py-0.5 rounded-lg bg-white/10 backdrop-blur-md border border-white/15 text-[10px] text-white/90">Water Villa</span>
-                        <span class="px-2.5 py-0.5 rounded-lg bg-white/10 backdrop-blur-md border border-white/15 text-[10px] text-white/90">Reef Snorkeling</span>
-                        <span class="px-2.5 py-0.5 rounded-lg bg-white/10 backdrop-blur-md border border-white/15 text-[10px] text-white/90">All Inclusive</span>
+                        <span class="px-2.5 py-0.5 rounded-lg bg-white/10 backdrop-blur-md border border-white/15 text-[10px] text-white/90">{{ app()->getLocale() === 'bn' ? 'ওয়াটার ভিলা' : 'Water Villa' }}</span>
+                        <span class="px-2.5 py-0.5 rounded-lg bg-white/10 backdrop-blur-md border border-white/15 text-[10px] text-white/90">{{ app()->getLocale() === 'bn' ? 'রিফ স্নরকেলিং' : 'Reef Snorkeling' }}</span>
+                        <span class="px-2.5 py-0.5 rounded-lg bg-white/10 backdrop-blur-md border border-white/15 text-[10px] text-white/90">{{ app()->getLocale() === 'bn' ? 'অল ইনক্লুসিভ' : 'All Inclusive' }}</span>
                     </div>
 
-                    <!-- Action Link -->
                     <div class="pt-2 border-t border-white/15 flex items-center justify-between text-xs font-bold text-[#D4AF37]">
-                        <span>Explore Tour Itinerary</span>
+                        <span>{{ app()->getLocale() === 'bn' ? 'ট্যুর বিবরণ দেখুন' : 'Explore Tour Itinerary' }}</span>
                         <svg class="w-4 h-4 group-hover:translate-x-1.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                     </div>
                 </div>
             </a>
 
-            <!-- Showcase Card 3: Dubai (Lahbab Red Desert) -->
+            <!-- 3 -->
             <a href="{{ route('tours.index') }}" class="group relative rounded-[28px] overflow-hidden bg-[#0B1F3A] border border-slate-200/80 hover:border-[#D4AF37]/60 shadow-[0_12px_36px_rgba(11,31,58,0.08)] hover:shadow-[0_24px_50px_rgba(11,31,58,0.18)] transition-all duration-500 hover:-translate-y-1.5 flex flex-col justify-between aspect-[4/5] w-full block">
-                <!-- Authentic Background Image (Dubai Red Desert Safari) -->
                 <img 
                     src="https://images.unsplash.com/photo-1451337516015-6b6e9a44a8a3?auto=format&fit=crop&w=1200&h=1500&q=85" 
                     alt="Dubai Red Desert Safari" 
@@ -1072,59 +991,53 @@
                 >
                 <div class="absolute inset-0 bg-gradient-to-t from-[#071527] via-[#0B1F3A]/65 to-[#071527]/25"></div>
                 
-                <!-- Floating Top Badges -->
                 <div class="relative z-10 p-5 sm:p-6 flex items-center justify-between">
                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white text-[11px] font-semibold">
                         <svg class="w-3.5 h-3.5 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        <span>Dubai Desert Safari</span>
+                        <span>{{ app()->getLocale() === 'bn' ? 'দুবাই ডেজার্ট সাফারি' : 'Dubai Desert Safari' }}</span>
                     </span>
                     <span class="px-3 py-1 rounded-full bg-[#D4AF37] text-[#0B1F3A] text-[11px] font-extrabold shadow-sm font-mono">
-                        5D / 4N
+                        {{ app()->getLocale() === 'bn' ? '৫দিন / ৪রাত' : '5D / 4N' }}
                     </span>
                 </div>
 
-                <!-- Bottom Details Box -->
                 <div class="relative z-10 p-5 sm:p-6 text-white space-y-3">
                     <div>
                         <div class="text-[11px] text-[#D4AF37] font-semibold uppercase tracking-wider mb-1 flex items-center gap-1.5">
                             <svg class="w-3.5 h-3.5 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                            <span>Lahbab Red Desert</span>
+                            <span>{{ app()->getLocale() === 'bn' ? 'লাহবাব রেড ডেজার্ট' : 'Lahbab Red Desert' }}</span>
                         </div>
                         <h3 class="text-lg sm:text-xl font-bold font-serif leading-snug text-white group-hover:text-[#D4AF37] transition-colors">
-                            Red Dunes & VIP Camp BBQ
+                            {{ app()->getLocale() === 'bn' ? 'রেড ডিউনস ও ভিআইপি ক্যাম্প বারবিকিউ' : 'Red Dunes & VIP Camp BBQ' }}
                         </h3>
                     </div>
 
                     <p class="text-xs text-slate-200 line-clamp-2 leading-relaxed font-light">
-                        4x4 Dune bashing, sandboarding, falcon photography, camel riding & 5-star Arabian BBQ dinner under the stars.
+                        {{ app()->getLocale() === 'bn' ? '৪x৪ ডিউন ব্যাশিং, স্যান্ডবোর্ডিং, ফ্যালকন ছবি ও ফাইভ স্টার অ্যারাবিয়ান বারবিকিউ।' : '4x4 Dune bashing, sandboarding, falcon photography, camel riding & 5-star Arabian BBQ dinner under the stars.' }}
                     </p>
 
-                    <!-- Key Inclusions Tags -->
                     <div class="flex flex-wrap gap-1.5 pt-1">
-                        <span class="px-2.5 py-0.5 rounded-lg bg-white/10 backdrop-blur-md border border-white/15 text-[10px] text-white/90">4x4 Dune Bashing</span>
-                        <span class="px-2.5 py-0.5 rounded-lg bg-white/10 backdrop-blur-md border border-white/15 text-[10px] text-white/90">Falcon Photo</span>
-                        <span class="px-2.5 py-0.5 rounded-lg bg-white/10 backdrop-blur-md border border-white/15 text-[10px] text-white/90">VIP Camp BBQ</span>
+                        <span class="px-2.5 py-0.5 rounded-lg bg-white/10 backdrop-blur-md border border-white/15 text-[10px] text-white/90">{{ app()->getLocale() === 'bn' ? '৪x৪ ডিউন ব্যাশিং' : '4x4 Dune Bashing' }}</span>
+                        <span class="px-2.5 py-0.5 rounded-lg bg-white/10 backdrop-blur-md border border-white/15 text-[10px] text-white/90">{{ app()->getLocale() === 'bn' ? 'ফ্যালকন ফটো' : 'Falcon Photo' }}</span>
+                        <span class="px-2.5 py-0.5 rounded-lg bg-white/10 backdrop-blur-md border border-white/15 text-[10px] text-white/90">{{ app()->getLocale() === 'bn' ? 'ভিআইপি বারবিকিউ' : 'VIP Camp BBQ' }}</span>
                     </div>
 
-                    <!-- Action Link -->
                     <div class="pt-2 border-t border-white/15 flex items-center justify-between text-xs font-bold text-[#D4AF37]">
-                        <span>Explore Tour Itinerary</span>
+                        <span>{{ app()->getLocale() === 'bn' ? 'ট্যুর বিবরণ দেখুন' : 'Explore Tour Itinerary' }}</span>
                         <svg class="w-4 h-4 group-hover:translate-x-1.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                     </div>
                 </div>
             </a>
-
         </div>
 
-        <!-- Action CTA Link -->
         <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 mt-10 sm:mt-12 text-center">
             <a href="{{ route('gallery') }}" class="btn btn-primary btn-md rounded-xl font-bold shadow-md flex items-center justify-center gap-2 text-xs sm:text-sm px-6 py-3">
-                <span>View Full Photo Gallery</span>
+                <span>{{ app()->getLocale() === 'bn' ? 'সম্পূর্ণ ফটো গ্যালারি দেখুন' : 'View Full Photo Gallery' }}</span>
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
             </a>
             <div class="text-xs text-slate-500 flex items-center gap-1.5">
                 <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>500+ Group & Family Memories Captured</span>
+                <span>{{ app()->getLocale() === 'bn' ? '৫০০+ স্মরণীয় গ্রুপ ও ফ্যামিলি মেমোরিজ' : '500+ Group & Family Memories Captured' }}</span>
             </div>
         </div>
     </div>
@@ -1139,17 +1052,17 @@
             <div>
                 <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#D4AF37] mb-2">
                     <span class="w-2 h-2 rounded-full bg-[#D4AF37]"></span>
-                    <span>Travel Guides</span>
+                    <span>{{ app()->getLocale() === 'bn' ? 'ভ্রমণ গাইড' : 'Travel Guides' }}</span>
                 </div>
                 <h2 class="text-2xl sm:text-3xl font-extrabold font-serif text-[#0B1F3A] mb-1">
-                    Latest Insights & Visa Guides
+                    {{ app()->getLocale() === 'bn' ? 'সাম্প্রতিক টিপস ও ভিসা গাইড' : 'Latest Insights & Visa Guides' }}
                 </h2>
                 <p class="text-xs sm:text-sm text-slate-500">
-                    Comprehensive travel requirements, tips, and budget itineraries written by specialists.
+                    {{ app()->getLocale() === 'bn' ? 'বিশেষজ্ঞদের লেখা প্রয়োজনীয় ভ্রমণ নির্দেশনা, বাজেট পরিকল্পনা ও পরামর্শ।' : 'Comprehensive travel requirements, tips, and budget itineraries written by specialists.' }}
                 </p>
             </div>
             <a href="{{ route('blog.index') }}" class="mt-4 md:mt-0 inline-flex items-center gap-1.5 text-xs font-bold text-[#0B1F3A] hover:text-[#D4AF37] bg-white border border-slate-200 px-4 py-2 rounded-full shadow-xs hover:border-[#D4AF37] transition">
-                <span>View All Articles</span>
+                <span>{{ app()->getLocale() === 'bn' ? 'সকল আর্টিকেল দেখুন' : 'View All Articles' }}</span>
                 <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             </a>
         </div>
@@ -1160,25 +1073,25 @@
                 <a href="{{ route('blog.show', $blog->slug) }}" class="aspect-[16/10] overflow-hidden block">
                     <img 
                         src="{{ $blog->featured_image ?: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600' }}" 
-                        alt="{{ $blog->title }}" 
+                        alt="{{ $blog->localized_title }}" 
                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
                         loading="lazy"
                     >
                 </a>
                 <div class="p-6 flex flex-col flex-grow">
                     <div class="flex items-center gap-2 text-[11px] text-slate-400 mb-2.5">
-                        <span class="text-[#D4AF37] font-bold uppercase tracking-wider">{{ $blog->category->name ?? 'Guide' }}</span>
+                        <span class="text-[#D4AF37] font-bold uppercase tracking-wider">{{ $blog->category ? $blog->category->localized_name : (app()->getLocale() === 'bn' ? 'গাইড' : 'Guide') }}</span>
                         <span>•</span>
-                        <span>{{ $blog->reading_time }} min read</span>
+                        <span>{{ $blog->reading_time }} {{ app()->getLocale() === 'bn' ? 'মিনিট পাঠ' : 'min read' }}</span>
                     </div>
                     <h3 class="text-base font-bold text-[#0B1F3A] group-hover:text-[#D4AF37] transition-colors leading-snug mb-2 font-serif line-clamp-2">
-                        <a href="{{ route('blog.show', $blog->slug) }}">{{ $blog->title }}</a>
+                        <a href="{{ route('blog.show', $blog->slug) }}">{{ $blog->localized_title }}</a>
                     </h3>
                     <p class="text-xs text-slate-500 line-clamp-2 leading-relaxed mb-4">
-                        {{ $blog->excerpt }}
+                        {{ $blog->localized_excerpt }}
                     </p>
                     <a href="{{ route('blog.show', $blog->slug) }}" class="mt-auto text-xs font-bold text-[#0B1F3A] group-hover:text-[#D4AF37] inline-flex items-center gap-1 transition-colors">
-                        <span>Read Full Guide</span>
+                        <span>{{ app()->getLocale() === 'bn' ? 'সম্পূর্ণ পড়ুন' : 'Read Full Guide' }}</span>
                         <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                     </a>
                 </div>
@@ -1189,7 +1102,7 @@
 </section>
 
 <!-- =========================================================================
-     11. FREQUENTLY ASKED QUESTIONS (Minimal Luxury Accordion)
+     11. FREQUENTLY ASKED QUESTIONS
      ========================================================================= -->
 <section class="section-padding bg-white">
     <div class="container-custom max-w-3xl">
@@ -1199,10 +1112,10 @@
                 <span>FAQ</span>
             </div>
             <h2 class="text-2xl sm:text-3xl font-extrabold font-serif text-[#0B1F3A] mb-2">
-                Frequently Asked Questions
+                {{ app()->getLocale() === 'bn' ? 'সাধারণ প্রশ্নোত্তর' : 'Frequently Asked Questions' }}
             </h2>
             <p class="text-xs sm:text-sm text-slate-500">
-                Quick answers regarding tour customization, visa processing timelines, and payment options.
+                {{ app()->getLocale() === 'bn' ? 'ট্যুর প্যাকেজ কাস্টমাইজেশন, ভিসা প্রসেসিং সময় ও পেমেন্ট সংক্রান্ত জরুরি উত্তর।' : 'Quick answers regarding tour customization, visa processing timelines, and payment options.' }}
             </p>
         </div>
 
@@ -1214,13 +1127,13 @@
                     @click="activeAccordion = (activeAccordion === {{ $idx }} ? null : {{ $idx }})" 
                     class="w-full text-left p-5 font-bold text-sm text-[#0B1F3A] flex justify-between items-center hover:bg-white transition-colors"
                 >
-                    <span>{{ $faq->question }}</span>
+                    <span>{{ $faq->localized_question }}</span>
                     <svg :class="activeAccordion === {{ $idx }} ? 'rotate-180 text-[#D4AF37]' : 'text-slate-400'" class="w-4 h-4 transform transition-transform flex-shrink-0 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                     </svg>
                 </button>
                 <div x-show="activeAccordion === {{ $idx }}" x-collapse class="px-5 pb-5 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-200/60 pt-3 bg-white">
-                    {{ $faq->answer }}
+                    {{ $faq->localized_answer }}
                 </div>
             </div>
             @endforeach
@@ -1229,7 +1142,7 @@
 </section>
 
 <!-- =========================================================================
-     12. QUICK CONTACT & LOCATION BAR (Bottom Section from Reference)
+     12. QUICK CONTACT & LOCATION BAR
      ========================================================================= -->
 <section class="py-12 bg-slate-50 border-t border-slate-200/80">
     <div class="container-custom">
@@ -1240,7 +1153,7 @@
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
                 </div>
                 <div class="min-w-0">
-                    <span class="text-[10px] text-slate-400 uppercase font-bold block">Hotline Support</span>
+                    <span class="text-[10px] text-slate-400 uppercase font-bold block">{{ app()->getLocale() === 'bn' ? 'হটলাইন সাপোর্ট' : 'Hotline Support' }}</span>
                     <a href="tel:{{ App\Models\Setting::get('contact_phone', '+8801805464291') }}" class="font-bold text-xs text-[#0B1F3A] hover:text-[#D4AF37] truncate block">
                         {{ App\Models\Setting::get('contact_phone', '+880 1805-464291') }}
                     </a>
@@ -1253,7 +1166,7 @@
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                 </div>
                 <div class="min-w-0">
-                    <span class="text-[10px] text-slate-400 uppercase font-bold block">Direct Email</span>
+                    <span class="text-[10px] text-slate-400 uppercase font-bold block">{{ app()->getLocale() === 'bn' ? 'অফিসিয়াল ইমেইল' : 'Direct Email' }}</span>
                     <a href="mailto:{{ App\Models\Setting::get('contact_email', 'info@emishatours.com') }}" class="font-bold text-xs text-[#0B1F3A] hover:text-[#D4AF37] truncate block">
                         {{ App\Models\Setting::get('contact_email', 'info@emishatours.com') }}
                     </a>
@@ -1266,9 +1179,9 @@
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 </div>
                 <div class="min-w-0">
-                    <span class="text-[10px] text-slate-400 uppercase font-bold block">Office Schedule</span>
+                    <span class="text-[10px] text-slate-400 uppercase font-bold block">{{ app()->getLocale() === 'bn' ? 'অফিস সময়সূচী' : 'Office Schedule' }}</span>
                     <span class="font-bold text-xs text-[#0B1F3A] block truncate">
-                        {{ App\Models\Setting::get('office_hours', 'Saturday – Thursday: 10:00 AM – 6:30 PM') }}
+                        {{ app()->getLocale() === 'bn' ? App\Models\Setting::get('office_hours_bn', 'শনিবার – বৃহস্পতিবার: সকাল ১০:০০ – সন্ধ্যা ৬:৩০') : App\Models\Setting::get('office_hours', 'Saturday – Thursday: 10:00 AM – 6:30 PM') }}
                     </span>
                 </div>
             </div>
@@ -1278,9 +1191,10 @@
                 <div class="w-10 h-10 rounded-xl bg-[#0B1F3A] text-[#D4AF37] flex items-center justify-center flex-shrink-0">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                 </div>
-                    <span class="text-[10px] text-slate-400 uppercase font-bold block">Head Office</span>
-                    <a href="{{ route('contact') }}" class="font-bold text-xs text-[#0B1F3A] hover:text-[#D4AF37] truncate block" title="{{ App\Models\Setting::get('office_address', 'Union Bank Building (6th Floor), 1281, East Monipur, Begum Rokeya Sarani, Mirpur, Dhaka') }}">
-                        {{ App\Models\Setting::get('office_address', 'Union Bank Building (6th Floor), 1281, East Monipur, Begum Rokeya Sarani, Mirpur, Dhaka') }}
+                <div class="min-w-0">
+                    <span class="text-[10px] text-slate-400 uppercase font-bold block">{{ app()->getLocale() === 'bn' ? 'প্রধান কার্যালয়' : 'Head Office' }}</span>
+                    <a href="{{ route('contact') }}" class="font-bold text-xs text-[#0B1F3A] hover:text-[#D4AF37] truncate block">
+                        {{ app()->getLocale() === 'bn' ? App\Models\Setting::get('office_address_bn', 'ইউনিয়ন ব্যাংক ভবন (৬ষ্ঠ তলা), ১২৮১, পূর্ব মনিপুর, বেগম রোকেয়া সরণি, মিরপুর, ঢাকা') : App\Models\Setting::get('office_address', 'Union Bank Building (6th Floor), 1281, East Monipur, Begum Rokeya Sarani, Mirpur, Dhaka') }}
                     </a>
                 </div>
             </div>
@@ -1289,28 +1203,30 @@
 </section>
 
 <!-- =========================================================================
-     13. FINAL CONVERSION CTA (Minimal Luxury)
+     13. FINAL CONVERSION CTA
      ========================================================================= -->
 <section class="py-16 bg-gradient-to-r from-[#071527] via-[#0B1F3A] to-[#071527] text-white text-center relative overflow-hidden">
     <div class="container-custom relative z-10 max-w-3xl">
         <h2 class="text-2xl sm:text-4xl font-extrabold font-serif text-white tracking-tight mb-3">
-            Ready For Your Next Journey?
+            {{ app()->getLocale() === 'bn' ? 'আপনার পরবর্তী ভ্রমণের জন্য প্রস্তুত?' : 'Ready For Your Next Journey?' }}
         </h2>
         <p class="text-xs sm:text-base text-white/80 leading-relaxed mb-6 max-w-xl mx-auto">
-            Tell us where you want to go. Our expert team will help you plan every detail with complete peace of mind.
+            {{ app()->getLocale() === 'bn' ? 'আমাদের জানান আপনি কোথায় যেতে চান। আমাদের অভিজ্ঞ টিম আপনার প্রতিটি পরিকল্পনা সুন্দরভাবে সাজিয়ে দেবে।' : 'Tell us where you want to go. Our expert team will help you plan every detail with complete peace of mind.' }}
         </p>
         <div class="flex flex-wrap items-center justify-center gap-3.5">
             <a href="{{ route('contact') }}" class="btn btn-gold btn-md shadow-lg rounded-xl">
-                <span>Start Your Inquiry</span>
+                <span>{{ app()->getLocale() === 'bn' ? 'পরামর্শ শুরু করুন' : 'Start Your Inquiry' }}</span>
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
             </a>
-            <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', App\Models\Setting::get('contact_whatsapp', '+8801805464291')) }}?text=Hello%20Emisha%20Tours,%20I%20would%20like%20to%20plan%20a%20trip." target="_blank" class="btn btn-outline-white btn-md rounded-xl inline-flex items-center gap-2">
+            <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', App\Models\Setting::get('contact_whatsapp', '+8801805464291')) }}?text={{ urlencode(app()->getLocale() === 'bn' ? 'হ্যালো এমিসা ট্যুরস, আমি একটি ভ্রমণ পরিকল্পনা করতে চাই।' : 'Hello Emisha Tours, I would like to plan a trip.') }}" target="_blank" class="btn btn-outline-white btn-md rounded-xl inline-flex items-center gap-2">
                 <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
                     <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>
                 </svg>
-                <span>WhatsApp Helpline</span>
+                <span>{{ app()->getLocale() === 'bn' ? 'হোয়াটসঅ্যাপ হেল্পলাইন' : 'WhatsApp Helpline' }}</span>
             </a>
         </div>
     </div>
 </section>
+
+
 @endsection

@@ -2,6 +2,11 @@
 
 @section('title', 'Photo Gallery & Tour Memories | Emisha Tours & Travels')
 @section('meta_description', 'Explore mesmerizing travel photographs, tourist memories, scenic destinations, and cultural experiences captured across our global tours.')
+@section('canonical_url', route('gallery.index'))
+
+@section('schema')
+    {!! $schema ?? '' !!}
+@endsection
 
 @section('content')
 <!-- =========================================================================
@@ -16,42 +21,48 @@
     <div class="container-custom relative z-10 text-center">
         <!-- Breadcrumbs -->
         <nav class="flex items-center justify-center gap-2 text-xs text-slate-400 mb-6 font-medium" aria-label="Breadcrumb">
-            <a href="{{ route('home') }}" class="hover:text-[#D4AF37] transition-colors">Home</a>
+            <a href="{{ route('home') }}" class="hover:text-[#D4AF37] transition-colors">{{ __('nav.home') }}</a>
             <span>/</span>
-            <span class="text-[#D4AF37] font-semibold">Photo Gallery</span>
+            <span class="text-[#D4AF37] font-semibold">{{ app()->getLocale() === 'bn' ? 'ফটোগ্যালারি' : 'Photo Gallery' }}</span>
         </nav>
 
         <!-- Pill Badge -->
         <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-[#D4AF37]/30 text-[#D4AF37] text-xs font-bold uppercase tracking-widest mb-4 backdrop-blur-md shadow-xs">
             <span class="w-1.5 h-1.5 rounded-full bg-[#D4AF37] animate-pulse"></span>
-            <span>Visual Journeys & Memories</span>
+            <span>{{ app()->getLocale() === 'bn' ? 'ভ্রমণের দৃশ্যপট ও সোনালী স্মৃতি' : 'Visual Journeys & Memories' }}</span>
         </div>
 
         <!-- Heading & Intro -->
         <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-serif tracking-tight text-white mb-4">
-            Travel Gallery & <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-amber-200 to-[#D4AF37]">Global Memories</span>
+            @if(app()->getLocale() === 'bn')
+                ট্যুর গ্যালারি ও <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-amber-200 to-[#D4AF37]">স্মরণীয় ভ্রমণ মুহূর্ত</span>
+            @else
+                Travel Gallery & <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-amber-200 to-[#D4AF37]">Global Memories</span>
+            @endif
         </h1>
         <p class="text-slate-300 max-w-2xl mx-auto text-sm sm:text-base lg:text-lg font-light leading-relaxed mb-10">
-            Real snapshots of serenity, joy, and breathtaking adventures from our international group tours, tropical island retreats, and VIP private itineraries.
+            {{ app()->getLocale() === 'bn' 
+                ? 'আমাদের আন্তর্জাতিক গ্রুপ ট্যুর, বিলাসবহুল আইল্যান্ড রিসোর্ট এবং ভিআইপি পারিবারিক সফরের মনোরম চিত্র ও মধুর স্মৃতি।' 
+                : 'Real snapshots of serenity, joy, and breathtaking adventures from our international group tours, tropical island retreats, and VIP private itineraries.' }}
         </p>
 
         <!-- Stats Bar -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto pt-6 border-t border-white/10">
             <div class="p-3">
                 <div class="text-xl sm:text-2xl font-extrabold font-serif text-[#D4AF37]">500+</div>
-                <div class="text-[11px] sm:text-xs text-slate-400 uppercase tracking-wider font-medium mt-0.5">Tour Memories</div>
+                <div class="text-[11px] sm:text-xs text-slate-400 uppercase tracking-wider font-medium mt-0.5">{{ app()->getLocale() === 'bn' ? 'ট্যুর স্মৃতি' : 'Tour Memories' }}</div>
             </div>
             <div class="p-3">
                 <div class="text-xl sm:text-2xl font-extrabold font-serif text-[#D4AF37]">24+</div>
-                <div class="text-[11px] sm:text-xs text-slate-400 uppercase tracking-wider font-medium mt-0.5">Destinations</div>
+                <div class="text-[11px] sm:text-xs text-slate-400 uppercase tracking-wider font-medium mt-0.5">{{ app()->getLocale() === 'bn' ? 'গন্তব্য' : 'Destinations' }}</div>
             </div>
             <div class="p-3">
                 <div class="text-xl sm:text-2xl font-extrabold font-serif text-[#D4AF37]">100%</div>
-                <div class="text-[11px] sm:text-xs text-slate-400 uppercase tracking-wider font-medium mt-0.5">Authentic Stays</div>
+                <div class="text-[11px] sm:text-xs text-slate-400 uppercase tracking-wider font-medium mt-0.5">{{ app()->getLocale() === 'bn' ? 'আরামদায়ক হোটেল' : 'Authentic Stays' }}</div>
             </div>
             <div class="p-3">
                 <div class="text-xl sm:text-2xl font-extrabold font-serif text-[#D4AF37]">4.9★</div>
-                <div class="text-[11px] sm:text-xs text-slate-400 uppercase tracking-wider font-medium mt-0.5">Traveler Rating</div>
+                <div class="text-[11px] sm:text-xs text-slate-400 uppercase tracking-wider font-medium mt-0.5">{{ app()->getLocale() === 'bn' ? 'গ্রাহক সন্তুষ্টি' : 'Traveler Rating' }}</div>
             </div>
         </div>
     </div>
@@ -70,25 +81,25 @@
             <div class="flex flex-wrap items-center justify-center lg:justify-start gap-2" id="filter-tabs">
                 <button onclick="filterGallery('all', event)" 
                         class="gallery-filter-btn active px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 bg-[#0B1F3A] text-[#D4AF37] border border-[#0B1F3A] shadow-md shadow-[#0B1F3A]/20 cursor-pointer">
-                    All Photos (<span id="total-count">{{ $images->total() > 0 ? $images->total() : ($images->count() > 0 ? $images->count() : 12) }}</span>)
+                    {{ app()->getLocale() === 'bn' ? 'সব ছবি' : 'All Photos' }} (<span id="total-count">{{ $images->total() > 0 ? $images->total() : ($images->count() > 0 ? $images->count() : 12) }}</span>)
                 </button>
 
                 @if(isset($categories) && $categories->count() > 0)
                     @foreach($categories as $category)
                         <button onclick="filterGallery('cat-{{ $category->id }}', event)" 
                                 class="gallery-filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 bg-white text-slate-600 hover:text-[#0B1F3A] hover:bg-slate-100/80 border border-slate-200/80 shadow-xs cursor-pointer">
-                            {{ $category->name }}
+                            {{ $category->localized_name ?? $category->name }}
                         </button>
                     @endforeach
                 @else
                     <button onclick="filterGallery('cat-island', event)" class="gallery-filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-white text-slate-600 border border-slate-200 shadow-xs">
-                        Island & Beach
+                        {{ app()->getLocale() === 'bn' ? 'আইল্যান্ড ও সৈকত' : 'Island & Beach' }}
                     </button>
                     <button onclick="filterGallery('cat-cultural', event)" class="gallery-filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-white text-slate-600 border border-slate-200 shadow-xs">
-                        Cultural & City
+                        {{ app()->getLocale() === 'bn' ? 'ঐতিহ্য ও নগর' : 'Cultural & City' }}
                     </button>
                     <button onclick="filterGallery('cat-memories', event)" class="gallery-filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-white text-slate-600 border border-slate-200 shadow-xs">
-                        Client Memories
+                        {{ app()->getLocale() === 'bn' ? 'গ্রাহকদের স্মৃতি' : 'Client Memories' }}
                     </button>
                 @endif
             </div>
@@ -102,7 +113,7 @@
                 </div>
                 <input type="text" 
                        id="gallery-search" 
-                       placeholder="Search destination, city, tour..." 
+                       placeholder="{{ app()->getLocale() === 'bn' ? 'গন্তব্য, শহর বা ট্যুর খুঁজুন...' : 'Search destination, city, tour...' }}" 
                        onkeyup="searchGallery(this.value)"
                        class="w-full pl-9 pr-4 py-2 bg-white border border-slate-200/90 rounded-xl text-xs text-[#0B1F3A] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/50 focus:border-[#D4AF37] shadow-xs transition-all">
             </div>
@@ -330,21 +341,21 @@
     </div>
 
     <!-- Center Stage: Image + Navigation Arrows -->
-    <div class="relative flex-1 flex items-center justify-center my-4 overflow-hidden">
+    <div class="relative flex-1 flex items-center justify-center my-2 sm:my-4 overflow-hidden">
         
         <!-- Prev Arrow -->
-        <button onclick="prevPhoto()" class="absolute left-2 sm:left-6 z-30 w-12 h-12 rounded-full bg-black/50 hover:bg-[#D4AF37] text-white hover:text-[#0B1F3A] border border-white/20 hover:border-[#D4AF37] flex items-center justify-center transition-all duration-200 cursor-pointer shadow-lg" aria-label="Previous Photo">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        <button onclick="prevPhoto()" class="absolute left-1 sm:left-6 z-30 w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-black/60 hover:bg-[#D4AF37] text-white hover:text-[#0B1F3A] border border-white/20 hover:border-[#D4AF37] flex items-center justify-center transition-all duration-200 cursor-pointer shadow-lg" aria-label="Previous Photo">
+            <svg class="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
         </button>
 
         <!-- Main Photo -->
         <div class="relative max-h-[75vh] max-w-[90vw] sm:max-w-4xl flex items-center justify-center">
-            <img id="modal-img" src="" alt="" class="max-h-[72vh] max-w-full rounded-2xl object-contain shadow-2xl transition-all duration-300 border border-white/10">
+            <img id="modal-img" src="" alt="" class="max-h-[70vh] sm:max-h-[72vh] max-w-full rounded-xl sm:rounded-2xl object-contain shadow-2xl transition-all duration-300 border border-white/10">
         </div>
 
         <!-- Next Arrow -->
-        <button onclick="nextPhoto()" class="absolute right-2 sm:right-6 z-30 w-12 h-12 rounded-full bg-black/50 hover:bg-[#D4AF37] text-white hover:text-[#0B1F3A] border border-white/20 hover:border-[#D4AF37] flex items-center justify-center transition-all duration-200 cursor-pointer shadow-lg" aria-label="Next Photo">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        <button onclick="nextPhoto()" class="absolute right-1 sm:right-6 z-30 w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-black/60 hover:bg-[#D4AF37] text-white hover:text-[#0B1F3A] border border-white/20 hover:border-[#D4AF37] flex items-center justify-center transition-all duration-200 cursor-pointer shadow-lg" aria-label="Next Photo">
+            <svg class="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
         </button>
     </div>
 

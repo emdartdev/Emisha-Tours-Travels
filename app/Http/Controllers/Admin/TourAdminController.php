@@ -54,6 +54,7 @@ class TourAdminController extends Controller
     {
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
+            'title_bn' => ['nullable', 'string', 'max:255'],
             'destination_id' => ['required', 'exists:destinations,id'],
             'tour_category_id' => ['required', 'exists:tour_categories,id'],
             'regular_price' => ['required', 'numeric', 'min:0'],
@@ -62,7 +63,9 @@ class TourAdminController extends Controller
             'duration_nights' => ['required', 'integer', 'min:0'],
             'featured_image' => ['nullable', 'string', 'max:500'],
             'short_description' => ['nullable', 'string', 'max:500'],
+            'short_description_bn' => ['nullable', 'string', 'max:500'],
             'description' => ['required', 'string'],
+            'description_bn' => ['nullable', 'string'],
             'status' => ['required', 'in:published,draft,archived'],
             'featured' => ['boolean'],
             'sort_order' => ['nullable', 'integer'],
@@ -99,6 +102,7 @@ class TourAdminController extends Controller
 
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
+            'title_bn' => ['nullable', 'string', 'max:255'],
             'destination_id' => ['required', 'exists:destinations,id'],
             'tour_category_id' => ['required', 'exists:tour_categories,id'],
             'regular_price' => ['required', 'numeric', 'min:0'],
@@ -107,7 +111,9 @@ class TourAdminController extends Controller
             'duration_nights' => ['required', 'integer', 'min:0'],
             'featured_image' => ['nullable', 'string', 'max:500'],
             'short_description' => ['nullable', 'string', 'max:500'],
+            'short_description_bn' => ['nullable', 'string', 'max:500'],
             'description' => ['required', 'string'],
+            'description_bn' => ['nullable', 'string'],
             'status' => ['required', 'in:published,draft,archived'],
             'featured' => ['boolean'],
             'sort_order' => ['nullable', 'integer'],

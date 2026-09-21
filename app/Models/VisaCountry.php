@@ -8,18 +8,22 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Builder;
+use App\Traits\HasTranslations;
 
 class VisaCountry extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTranslations;
 
     protected $fillable = [
         'country_name',
+        'country_name_bn',
         'slug',
         'flag',
         'hero_image',
         'short_description',
+        'short_description_bn',
         'description',
+        'description_bn',
         'status',
         'featured',
         'sort_order',
@@ -60,6 +64,16 @@ class VisaCountry extends Model
     public function media(): MorphMany
     {
         return $this->morphMany(Media::class, 'mediable');
+    }
+
+    public function getLocalizedNameAttribute(): ?string
+    {
+        return $this->getTranslation('country_name') ?: $this->country_name;
+    }
+
+    public function getLocalizedCountryNameAttribute(): ?string
+    {
+        return $this->getTranslation('country_name') ?: $this->country_name;
     }
 
     public function getIsoCodeAttribute(): string

@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'home' => 'Home',
+    'tours' => 'Tour Packages',
+    'destinations' => 'Destinations',
+    'visa' => 'Visa Services',
+    'visa_apply' => 'Apply For Visa',
+    'visa_track' => 'Track Visa Status',
+    'ticketing' => 'Air Ticketing',
+    'blog' => 'Travel Guide',
+    'gallery' => 'Visual Gallery',
+    'about' => 'About Us',
+    'contact' => 'Contact',
+    'faq' => 'FAQs',
+    'privacy_policy' => 'Privacy Policy',
+    'terms_conditions' => 'Terms of Service',
+    'refund_policy' => 'Refund Policy',
+    'disclaimer' => 'Disclaimer',
+    'admin_portal' => 'Admin Portal',
+    'portal_login' => 'Executive Portal',
+    'management_suite' => 'Management Suite',
+    'all_rights_reserved' => 'All Rights Reserved',
+    'developed_by' => 'Crafted with precision & luxury aviation standards.',
+];

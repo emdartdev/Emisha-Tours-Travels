@@ -11,17 +11,41 @@ use Illuminate\View\View;
 class TicketingController extends Controller
 {
     public function __construct(
-        protected TicketRequestService $ticketService
+        protected TicketRequestService $ticketService,
+        protected \App\Services\SeoService $seoService,
+        protected \App\Services\TrackingService $trackingService
     ) {}
 
     public function index(): View
     {
-        return view('public.ticketing.index');
+        $breadcrumbs = [
+            'Home' => route('home'),
+            'Domestic & International Air Ticketing' => route('ticketing.index'),
+        ];
+        $breadcrumbSchema = $this->seoService->generateBreadcrumbSchema($breadcrumbs);
+        $ticketingSchema = $this->seoService->generateAirTicketingServiceSchema();
+        $schema = $ticketingSchema . "\n" . $breadcrumbSchema;
+
+        return view('public.ticketing.index', compact('schema'));
     }
 
     public function store(StoreTicketRequest $request): RedirectResponse
     {
         $ticket = $this->ticketService->createTicketRequest($request->validated());
+
+        // Record telemetry conversion event
+        $this->trackingService->recordEvent('ticket_request', [
+            'category' => 'conversion',
+            'value' => 35000,
+            'currency' => 'BDT',
+            'page_title' => "Flight Quote: {$ticket->origin} to {$ticket->destination}",
+            'metadata' => [
+                'route' => "{$ticket->origin} → {$ticket->destination}",
+                'reference' => $ticket->reference_number,
+                'passenger' => $ticket->full_name,
+                'trip_type' => $ticket->trip_type,
+            ]
+        ], $request);
 
         return redirect()
             ->back()

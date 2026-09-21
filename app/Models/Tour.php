@@ -10,18 +10,22 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Builder;
+use App\Traits\HasTranslations;
 
 class Tour extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, HasTranslations;
 
     protected $fillable = [
         'destination_id',
         'tour_category_id',
         'title',
+        'title_bn',
         'slug',
         'short_description',
+        'short_description_bn',
         'description',
+        'description_bn',
         'duration_days',
         'duration_nights',
         'price',
@@ -139,6 +143,9 @@ class Tour extends Model
 
     public function getDurationStringAttribute(): string
     {
+        if (app()->getLocale() === 'bn') {
+            return "{$this->duration_days} দিন / {$this->duration_nights} রাত";
+        }
         return "{$this->duration_days} Days / {$this->duration_nights} Nights";
     }
 }
