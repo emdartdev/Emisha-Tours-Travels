@@ -1,8 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'Online Tourist Visa Application Onboarding — Emisha Tours & Travels')
-@section('meta_description', 'Apply for your tourist visa online with expert document checking, transparent service pricing, and private secure document handling.')
-@section('canonical_url', route('visa.apply', $selectedSlug ?? null))
+@php
+    $portalCountryName = !empty($activeDestination['name']) ? $activeDestination['name'] : (!empty($selectedSlug) ? ucfirst($selectedSlug) : null);
+@endphp
+@section('title', $portalCountryName ? "Apply Online for {$portalCountryName} Tourist Visa — Emisha Tours & Travels" : 'Online Tourist Visa Application Portal — Emisha Tours & Travels')
+@section('meta_description', $portalCountryName ? "Apply online for {$portalCountryName} tourist visa from Bangladesh with certified document screening, transparent service fees, and embassy assistance." : 'Apply for your tourist visa online with expert document checking, transparent service pricing, and private secure document handling.')
+@section('canonical_url', !empty($selectedSlug) ? route('visa.apply.slug', ['slug' => $selectedSlug]) : route('visa.apply'))
 
 @section('schema')
     {!! $schema ?? '' !!}

@@ -51,23 +51,23 @@ Route::get('/visa/{slug}', [VisaController::class, 'show'])->name('visa.show');
 
 // Air Ticketing
 Route::get('/air-ticketing', [TicketingController::class, 'index'])->name('ticketing.index');
-Route::get('/air-ticketing/request', [TicketingController::class, 'index'])->name('ticketing');
+Route::get('/air-ticketing/request', fn() => redirect()->route('ticketing.index', [], 301))->name('ticketing');
 Route::post('/air-ticketing', [TicketingController::class, 'store'])->middleware('throttle:15,1')->name('ticketing.store');
 
 // Content & Auxiliaries
 Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.index');
-Route::get('/gallery/photos', [GalleryController::class, 'index'])->name('gallery');
+Route::get('/gallery/photos', fn() => redirect()->route('gallery.index', [], 301))->name('gallery');
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 Route::get('/faq', [FaqController::class, 'index'])->name('faq.index');
-Route::get('/faqs', [FaqController::class, 'index'])->name('faq');
+Route::get('/faqs', fn() => redirect()->route('faq.index', [], 301))->name('faq');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
-Route::get('/contact-us', [ContactController::class, 'index'])->name('contact');
+Route::get('/contact-us', fn() => redirect()->route('contact.index', [], 301))->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->middleware('throttle:15,1')->name('contact.store');
 
 // CMS Pages (Privacy, Terms, Refund, Disclaimer)
-Route::get('/page/{slug}', [PageController::class, 'show'])->name('page.show');
 Route::get('/pages/{slug}', [PageController::class, 'show'])->name('pages.show');
+Route::get('/page/{slug}', fn($slug) => redirect()->route('pages.show', ['slug' => $slug], 301))->name('page.show');
 
 // Admin Controller Imports
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;

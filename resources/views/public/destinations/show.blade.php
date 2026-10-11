@@ -89,7 +89,7 @@
                     <p class="text-xs text-white/75 mb-6 leading-relaxed">
                         {{ __('destinations.custom_plan_desc') }}
                     </p>
-                    <a href="{{ route('contact') }}#custom-trip" class="btn btn-gold btn-sm w-full text-center shadow-lg">
+                    <a href="{{ route('contact.index') }}#custom-trip" class="btn btn-gold btn-sm w-full text-center shadow-lg">
                         <span>{{ __('destinations.plan_custom_btn') }}</span>
                     </a>
                 </div>

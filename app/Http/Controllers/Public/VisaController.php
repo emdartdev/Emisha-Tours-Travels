@@ -119,7 +119,7 @@ class VisaController extends Controller
             'Home' => route('home'),
             'Visa Processing' => route('visa.index'),
             ($matchedVisaCountry?->name ?? ucfirst($selectedSlug)) . ' Visa' => route('visa.show', $selectedSlug),
-            'Apply Online' => route('visa.apply', $selectedSlug),
+            'Apply Online' => route('visa.apply.slug', ['slug' => $selectedSlug]),
         ];
         $breadcrumbSchema = $this->seoService->generateBreadcrumbSchema($breadcrumbs);
         $visaSchema = $matchedVisaCountry ? $this->seoService->generateVisaServiceSchema($matchedVisaCountry) : '';

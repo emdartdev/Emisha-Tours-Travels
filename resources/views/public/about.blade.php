@@ -566,7 +566,7 @@
             <a href="{{ route('tours.index') }}" class="btn btn-gold px-8 py-3.5 shadow-lg text-xs uppercase tracking-wider font-bold rounded-xl">
                 <span>{{ __('about.btn_explore_packages') }}</span>
             </a>
-            <a href="{{ route('contact') }}" class="btn btn-outline-white px-8 py-3.5 text-xs uppercase tracking-wider font-bold rounded-xl">
+            <a href="{{ route('contact.index') }}" class="btn btn-outline-white px-8 py-3.5 text-xs uppercase tracking-wider font-bold rounded-xl">
                 <span>{{ __('about.btn_contact_office') }}</span>
             </a>
         </div>

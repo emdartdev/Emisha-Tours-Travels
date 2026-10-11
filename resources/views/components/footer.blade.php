@@ -216,11 +216,11 @@
                 <ul class="space-y-2 text-xs sm:text-sm">
                     <li><a href="{{ route('about') }}" class="text-slate-400 hover:text-[#D4AF37] hover:translate-x-1 inline-block transition-all">{{ app()->getLocale() === 'bn' ? 'এমিসা সম্পর্কে' : 'About Emisha' }}</a></li>
                     <li><a href="{{ route('blog.index') }}" class="text-slate-400 hover:text-[#D4AF37] hover:translate-x-1 inline-block transition-all">{{ app()->getLocale() === 'bn' ? 'ভ্রমণ গাইড ও ব্লগ' : 'Travel Guides & Blog' }}</a></li>
-                    <li><a href="{{ route('gallery') }}" class="text-slate-400 hover:text-[#D4AF37] hover:translate-x-1 inline-block transition-all">{{ app()->getLocale() === 'bn' ? 'ফটো গ্যালারি' : 'Tour Gallery' }}</a></li>
-                    <li><a href="{{ route('faq') }}" class="text-slate-400 hover:text-[#D4AF37] hover:translate-x-1 inline-block transition-all">{{ app()->getLocale() === 'bn' ? 'সাধারণ জিজ্ঞাসা (FAQ)' : 'FAQ & Support' }}</a></li>
-                    <li><a href="{{ route('ticketing') }}" class="text-slate-400 hover:text-[#D4AF37] hover:translate-x-1 inline-block transition-all">{{ app()->getLocale() === 'bn' ? 'এয়ার টিকিট বুকিং' : 'Air Ticketing' }}</a></li>
-                    <li><a href="{{ route('contact') }}" class="text-slate-400 hover:text-[#D4AF37] hover:translate-x-1 inline-block transition-all">{{ app()->getLocale() === 'bn' ? 'যোগাযোগ ও অফিস' : 'Contact Us' }}</a></li>
-                    <li><a href="{{ route('page.show', 'privacy-policy') }}" class="text-slate-400 hover:text-[#D4AF37] hover:translate-x-1 inline-block transition-all">{{ app()->getLocale() === 'bn' ? 'গোপনীয়তা নীতি' : 'Privacy Policy' }}</a></li>
+                    <li><a href="{{ route('gallery.index') }}" class="text-slate-400 hover:text-[#D4AF37] hover:translate-x-1 inline-block transition-all">{{ app()->getLocale() === 'bn' ? 'ফটো গ্যালারি' : 'Tour Gallery' }}</a></li>
+                    <li><a href="{{ route('faq.index') }}" class="text-slate-400 hover:text-[#D4AF37] hover:translate-x-1 inline-block transition-all">{{ app()->getLocale() === 'bn' ? 'সাধারণ জিজ্ঞাসা (FAQ)' : 'FAQ & Support' }}</a></li>
+                    <li><a href="{{ route('ticketing.index') }}" class="text-slate-400 hover:text-[#D4AF37] hover:translate-x-1 inline-block transition-all">{{ app()->getLocale() === 'bn' ? 'এয়ার টিকিট বুকিং' : 'Air Ticketing' }}</a></li>
+                    <li><a href="{{ route('contact.index') }}" class="text-slate-400 hover:text-[#D4AF37] hover:translate-x-1 inline-block transition-all">{{ app()->getLocale() === 'bn' ? 'যোগাযোগ ও অফিস' : 'Contact Us' }}</a></li>
+                    <li><a href="{{ route('pages.show', 'privacy-policy') }}" class="text-slate-400 hover:text-[#D4AF37] hover:translate-x-1 inline-block transition-all">{{ app()->getLocale() === 'bn' ? 'গোপনীয়তা নীতি' : 'Privacy Policy' }}</a></li>
                 </ul>
             </div>
 
@@ -336,13 +336,13 @@
             </div>
             
             <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs">
-                <a href="{{ route('page.show', 'privacy-policy') }}" class="hover:text-[#D4AF37] transition-colors">{{ app()->getLocale() === 'bn' ? 'গোপনীয়তা নীতি' : 'Privacy Policy' }}</a>
+                <a href="{{ route('pages.show', 'privacy-policy') }}" class="hover:text-[#D4AF37] transition-colors">{{ app()->getLocale() === 'bn' ? 'গোপনীয়তা নীতি' : 'Privacy Policy' }}</a>
                 <span class="text-white/20">•</span>
-                <a href="{{ route('page.show', 'terms-and-conditions') }}" class="hover:text-[#D4AF37] transition-colors">{{ app()->getLocale() === 'bn' ? 'শর্তাবলী' : 'Terms' }}</a>
+                <a href="{{ route('pages.show', 'terms-and-conditions') }}" class="hover:text-[#D4AF37] transition-colors">{{ app()->getLocale() === 'bn' ? 'শর্তাবলী' : 'Terms' }}</a>
                 <span class="text-white/20">•</span>
-                <a href="{{ route('page.show', 'refund-cancellation-policy') }}" class="hover:text-[#D4AF37] transition-colors">{{ app()->getLocale() === 'bn' ? 'রিফান্ড নীতি' : 'Refund Policy' }}</a>
+                <a href="{{ route('pages.show', 'refund-cancellation-policy') }}" class="hover:text-[#D4AF37] transition-colors">{{ app()->getLocale() === 'bn' ? 'রিফান্ড নীতি' : 'Refund Policy' }}</a>
                 <span class="text-white/20">•</span>
-                <a href="{{ route('page.show', 'visa-disclaimer') }}" class="hover:text-[#D4AF37] transition-colors">{{ app()->getLocale() === 'bn' ? 'ভিসা ডিসক্লেইমার' : 'Disclaimer' }}</a>
+                <a href="{{ route('pages.show', 'visa-disclaimer') }}" class="hover:text-[#D4AF37] transition-colors">{{ app()->getLocale() === 'bn' ? 'ভিসা ডিসক্লেইমার' : 'Disclaimer' }}</a>
                 <span class="text-white/20">•</span>
                 
                 <!-- Footer Language Switcher Component -->

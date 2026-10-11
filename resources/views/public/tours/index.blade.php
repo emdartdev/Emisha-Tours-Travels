@@ -190,7 +190,7 @@
                     <div class="mt-6 pt-5 border-t border-slate-100 text-center bg-slate-50/70 p-4 rounded-2xl border border-slate-200/60">
                         <span class="text-[10.5px] uppercase tracking-wider font-extrabold text-[#D4AF37] block mb-1">{{ __('tours.custom_inquiry_title') }}</span>
                         <p class="text-xs text-slate-600 mb-3 leading-relaxed">{{ __('tours.custom_inquiry_desc') }}</p>
-                        <a href="{{ route('contact') }}" class="text-xs font-bold text-[#0B1F3A] hover:text-[#D4AF37] inline-flex items-center gap-1 transition-colors">
+                        <a href="{{ route('contact.index') }}" class="text-xs font-bold text-[#0B1F3A] hover:text-[#D4AF37] inline-flex items-center gap-1 transition-colors">
                             <span>{{ __('tours.talk_specialist') }}</span>
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                         </a>

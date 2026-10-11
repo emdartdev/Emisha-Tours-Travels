@@ -72,7 +72,7 @@
             <a href="{{ route('visa.index') }}" class="px-2.5 xl:px-3 py-1.5 rounded-lg text-[13px] xl:text-[13.5px] font-medium whitespace-nowrap transition-all duration-200 {{ request()->routeIs('visa*') ? 'text-[#D4AF37] bg-white/10 font-semibold' : 'text-white/85 hover:text-white hover:bg-white/5' }}">
                 {{ __('nav.visa') }}
             </a>
-            <a href="{{ route('ticketing') }}" class="px-2.5 xl:px-3 py-1.5 rounded-lg text-[13px] xl:text-[13.5px] font-medium whitespace-nowrap transition-all duration-200 {{ request()->routeIs('ticketing') ? 'text-[#D4AF37] bg-white/10 font-semibold' : 'text-white/85 hover:text-white hover:bg-white/5' }}">
+            <a href="{{ route('ticketing.index') }}" class="px-2.5 xl:px-3 py-1.5 rounded-lg text-[13px] xl:text-[13.5px] font-medium whitespace-nowrap transition-all duration-200 {{ request()->routeIs('ticketing*') ? 'text-[#D4AF37] bg-white/10 font-semibold' : 'text-white/85 hover:text-white hover:bg-white/5' }}">
                 {{ __('nav.ticketing') }}
             </a>
             <a href="{{ route('blog.index') }}" class="px-2.5 xl:px-3 py-1.5 rounded-lg text-[13px] xl:text-[13.5px] font-medium whitespace-nowrap transition-all duration-200 {{ request()->routeIs('blog*') ? 'text-[#D4AF37] bg-white/10 font-semibold' : 'text-white/85 hover:text-white hover:bg-white/5' }}">
@@ -81,7 +81,7 @@
             <a href="{{ route('about') }}" class="px-2.5 xl:px-3 py-1.5 rounded-lg text-[13px] xl:text-[13.5px] font-medium whitespace-nowrap transition-all duration-200 {{ request()->routeIs('about') ? 'text-[#D4AF37] bg-white/10 font-semibold' : 'text-white/85 hover:text-white hover:bg-white/5' }}">
                 {{ __('nav.about') }}
             </a>
-            <a href="{{ route('contact') }}" class="px-2.5 xl:px-3 py-1.5 rounded-lg text-[13px] xl:text-[13.5px] font-medium whitespace-nowrap transition-all duration-200 {{ request()->routeIs('contact') ? 'text-[#D4AF37] bg-white/10 font-semibold' : 'text-white/85 hover:text-white hover:bg-white/5' }}">
+            <a href="{{ route('contact.index') }}" class="px-2.5 xl:px-3 py-1.5 rounded-lg text-[13px] xl:text-[13.5px] font-medium whitespace-nowrap transition-all duration-200 {{ request()->routeIs('contact*') ? 'text-[#D4AF37] bg-white/10 font-semibold' : 'text-white/85 hover:text-white hover:bg-white/5' }}">
                 {{ __('nav.contact') }}
             </a>
         </nav>
@@ -223,29 +223,29 @@
                 </a>
 
                 <a 
-                    href="{{ route('ticketing') }}" 
-                    class="flex items-center justify-between px-3.5 py-3 rounded-xl text-sm font-semibold transition {{ request()->routeIs('ticketing') ? 'bg-white/10 text-[#D4AF37] border-l-4 border-[#D4AF37]' : 'text-white/90 hover:bg-white/5 hover:text-white' }}"
+                    href="{{ route('ticketing.index') }}" 
+                    class="flex items-center justify-between px-3.5 py-3 rounded-xl text-sm font-semibold transition {{ request()->routeIs('ticketing*') ? 'bg-white/10 text-[#D4AF37] border-l-4 border-[#D4AF37]' : 'text-white/90 hover:bg-white/5 hover:text-white' }}"
                     @click="mobileMenuOpen = false"
                 >
                     <div class="flex items-center gap-3">
                         <svg class="w-4 h-4 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
                         <span>{{ __('nav.ticketing') }}</span>
                     </div>
-                    @if(request()->routeIs('ticketing'))
+                    @if(request()->routeIs('ticketing*'))
                         <span class="w-1.5 h-1.5 rounded-full bg-[#D4AF37]"></span>
                     @endif
                 </a>
 
                 <a 
-                    href="{{ route('gallery') }}" 
-                    class="flex items-center justify-between px-3.5 py-3 rounded-xl text-sm font-semibold transition {{ request()->routeIs('gallery') ? 'bg-white/10 text-[#D4AF37] border-l-4 border-[#D4AF37]' : 'text-white/90 hover:bg-white/5 hover:text-white' }}"
+                    href="{{ route('gallery.index') }}" 
+                    class="flex items-center justify-between px-3.5 py-3 rounded-xl text-sm font-semibold transition {{ request()->routeIs('gallery*') ? 'bg-white/10 text-[#D4AF37] border-l-4 border-[#D4AF37]' : 'text-white/90 hover:bg-white/5 hover:text-white' }}"
                     @click="mobileMenuOpen = false"
                 >
                     <div class="flex items-center gap-3">
                         <svg class="w-4 h-4 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                         <span>{{ __('nav.gallery') }}</span>
                     </div>
-                    @if(request()->routeIs('gallery'))
+                    @if(request()->routeIs('gallery*'))
                         <span class="w-1.5 h-1.5 rounded-full bg-[#D4AF37]"></span>
                     @endif
                 </a>
@@ -279,15 +279,15 @@
                 </a>
 
                 <a 
-                    href="{{ route('contact') }}" 
-                    class="flex items-center justify-between px-3.5 py-3 rounded-xl text-sm font-semibold transition {{ request()->routeIs('contact') ? 'bg-white/10 text-[#D4AF37] border-l-4 border-[#D4AF37]' : 'text-white/90 hover:bg-white/5 hover:text-white' }}"
+                    href="{{ route('contact.index') }}" 
+                    class="flex items-center justify-between px-3.5 py-3 rounded-xl text-sm font-semibold transition {{ request()->routeIs('contact*') ? 'bg-white/10 text-[#D4AF37] border-l-4 border-[#D4AF37]' : 'text-white/90 hover:bg-white/5 hover:text-white' }}"
                     @click="mobileMenuOpen = false"
                 >
                     <div class="flex items-center gap-3">
                         <svg class="w-4 h-4 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                         <span>{{ __('nav.contact') }}</span>
                     </div>
-                    @if(request()->routeIs('contact'))
+                    @if(request()->routeIs('contact*'))
                         <span class="w-1.5 h-1.5 rounded-full bg-[#D4AF37]"></span>
                     @endif
                 </a>

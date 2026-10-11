@@ -218,7 +218,7 @@
                 </div>
                 <div class="flex items-center justify-between pt-2">
                     <span class="text-xs font-bold text-[#D4AF37]">{{ app()->getLocale() === 'bn' ? 'তাৎক্ষণিক কোটেশন' : 'Instant Quotes' }}</span>
-                    <a href="{{ route('ticketing') }}" class="btn btn-outline-white btn-xs rounded-full">
+                    <a href="{{ route('ticketing.index') }}" class="btn btn-outline-white btn-xs rounded-full">
                         <span>{{ app()->getLocale() === 'bn' ? 'কোটেশন চান' : 'Request Quote' }}</span>
                         <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                     </a>
@@ -1031,7 +1031,7 @@
         </div>
 
         <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 mt-10 sm:mt-12 text-center">
-            <a href="{{ route('gallery') }}" class="btn btn-primary btn-md rounded-xl font-bold shadow-md flex items-center justify-center gap-2 text-xs sm:text-sm px-6 py-3">
+            <a href="{{ route('gallery.index') }}" class="btn btn-primary btn-md rounded-xl font-bold shadow-md flex items-center justify-center gap-2 text-xs sm:text-sm px-6 py-3">
                 <span>{{ app()->getLocale() === 'bn' ? 'সম্পূর্ণ ফটো গ্যালারি দেখুন' : 'View Full Photo Gallery' }}</span>
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
             </a>
@@ -1193,7 +1193,7 @@
                 </div>
                 <div class="min-w-0">
                     <span class="text-[10px] text-slate-400 uppercase font-bold block">{{ app()->getLocale() === 'bn' ? 'প্রধান কার্যালয়' : 'Head Office' }}</span>
-                    <a href="{{ route('contact') }}" class="font-bold text-xs text-[#0B1F3A] hover:text-[#D4AF37] truncate block">
+                    <a href="{{ route('contact.index') }}" class="font-bold text-xs text-[#0B1F3A] hover:text-[#D4AF37] truncate block">
                         {{ app()->getLocale() === 'bn' ? App\Models\Setting::get('office_address_bn', 'ইউনিয়ন ব্যাংক ভবন (৬ষ্ঠ তলা), ১২৮১, পূর্ব মনিপুর, বেগম রোকেয়া সরণি, মিরপুর, ঢাকা') : App\Models\Setting::get('office_address', 'Union Bank Building (6th Floor), 1281, East Monipur, Begum Rokeya Sarani, Mirpur, Dhaka') }}
                     </a>
                 </div>
@@ -1214,7 +1214,7 @@
             {{ app()->getLocale() === 'bn' ? 'আমাদের জানান আপনি কোথায় যেতে চান। আমাদের অভিজ্ঞ টিম আপনার প্রতিটি পরিকল্পনা সুন্দরভাবে সাজিয়ে দেবে।' : 'Tell us where you want to go. Our expert team will help you plan every detail with complete peace of mind.' }}
         </p>
         <div class="flex flex-wrap items-center justify-center gap-3.5">
-            <a href="{{ route('contact') }}" class="btn btn-gold btn-md shadow-lg rounded-xl">
+            <a href="{{ route('contact.index') }}" class="btn btn-gold btn-md shadow-lg rounded-xl">
                 <span>{{ app()->getLocale() === 'bn' ? 'পরামর্শ শুরু করুন' : 'Start Your Inquiry' }}</span>
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
             </a>
