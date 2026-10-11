@@ -24,7 +24,44 @@ class AnalyticsTrackingAdminController extends Controller
      */
     public function index(): View
     {
-        $settings = Setting::all()->pluck('value', 'key')->toArray();
+        $settingsRaw = Setting::all()->pluck('value', 'key')->toArray();
+
+        // Bi-directional alias sync between form keys and TrackingService provider keys
+        $aliases = [
+            'google_analytics_id' => 'ga4_measurement_id',
+            'google_analytics_enabled' => 'tracking_ga4_enabled',
+            'google_tag_manager_id' => 'gtm_container_id',
+            'google_tag_manager_enabled' => 'tracking_gtm_enabled',
+            'facebook_pixel_id' => 'meta_pixel_id',
+            'facebook_pixel_enabled' => 'tracking_meta_enabled',
+            'clarity_enabled' => 'tracking_clarity_enabled',
+            'hotjar_enabled' => 'tracking_hotjar_enabled',
+            'plausible_enabled' => 'tracking_plausible_enabled',
+            'posthog_enabled' => 'tracking_posthog_enabled',
+            'tiktok_pixel_enabled' => 'tracking_tiktok_enabled',
+            'linkedin_enabled' => 'tracking_linkedin_enabled',
+            'snapchat_pixel_enabled' => 'tracking_snapchat_enabled',
+            'pinterest_enabled' => 'tracking_pinterest_enabled',
+            'twitter_pixel_enabled' => 'tracking_twitter_enabled',
+            'reddit_pixel_enabled' => 'tracking_reddit_enabled',
+            'quora_pixel_enabled' => 'tracking_quora_enabled',
+            'google_ads_enabled' => 'tracking_google_ads_enabled',
+            'bing_ads_enabled' => 'tracking_microsoft_ads_enabled',
+            'bing_ads_tag_id' => 'bing_uet_tag_id',
+            'taboola_pixel_enabled' => 'tracking_taboola_enabled',
+            'outbrain_pixel_enabled' => 'tracking_outbrain_enabled',
+        ];
+
+        foreach ($aliases as $formKey => $serviceKey) {
+            if (!isset($settingsRaw[$formKey]) && isset($settingsRaw[$serviceKey])) {
+                $settingsRaw[$formKey] = $settingsRaw[$serviceKey];
+            }
+            if (!isset($settingsRaw[$serviceKey]) && isset($settingsRaw[$formKey])) {
+                $settingsRaw[$serviceKey] = $settingsRaw[$formKey];
+            }
+        }
+
+        $settings = new \Illuminate\Support\Fluent($settingsRaw);
         $health = $this->trackingService->getTrackingHealthSummary();
         
         // Metrics Summary
@@ -49,9 +86,20 @@ class AnalyticsTrackingAdminController extends Controller
         // Provider Definitions
         $providers = TrackingService::PROVIDERS;
 
+        // Analytics Health & Metrics Summary
+        $summary = [
+            'health_score' => $health['health_score'] ?? 0,
+            'active_count' => $health['enabled_count'] ?? 0,
+            'total_providers' => $health['total_supported'] ?? count($providers),
+            'events_today' => $eventsToday,
+            'events_total' => $totalEvents,
+            'conversions_today' => $conversionsToday,
+        ];
+
         return view('admin.settings.analytics', compact(
             'settings',
             'health',
+            'summary',
             'eventsToday',
             'conversionsToday',
             'totalEvents',
@@ -82,15 +130,35 @@ class AnalyticsTrackingAdminController extends Controller
             }
         }
 
-        // Handle unchecked toggle switches for providers
-        foreach (TrackingService::PROVIDERS as $providerKey => $conf) {
-            $toggleKey = "tracking_{$providerKey}_enabled";
-            if (!isset($data[$toggleKey])) {
-                $oldToggle = Setting::get($toggleKey, '1');
-                if ($oldToggle !== '0') {
-                    Setting::set($toggleKey, '0', 'tracking', 'boolean');
-                    $changedKeys[$toggleKey] = ['old' => '1', 'new' => '0'];
-                }
+        // Sync form aliases to TrackingService canonical provider keys
+        $aliases = [
+            'google_analytics_id' => 'ga4_measurement_id',
+            'google_analytics_enabled' => 'tracking_ga4_enabled',
+            'google_tag_manager_id' => 'gtm_container_id',
+            'google_tag_manager_enabled' => 'tracking_gtm_enabled',
+            'facebook_pixel_id' => 'meta_pixel_id',
+            'facebook_pixel_enabled' => 'tracking_meta_enabled',
+            'clarity_enabled' => 'tracking_clarity_enabled',
+            'hotjar_enabled' => 'tracking_hotjar_enabled',
+            'plausible_enabled' => 'tracking_plausible_enabled',
+            'posthog_enabled' => 'tracking_posthog_enabled',
+            'tiktok_pixel_enabled' => 'tracking_tiktok_enabled',
+            'linkedin_enabled' => 'tracking_linkedin_enabled',
+            'snapchat_pixel_enabled' => 'tracking_snapchat_enabled',
+            'pinterest_enabled' => 'tracking_pinterest_enabled',
+            'twitter_pixel_enabled' => 'tracking_twitter_enabled',
+            'reddit_pixel_enabled' => 'tracking_reddit_enabled',
+            'quora_pixel_enabled' => 'tracking_quora_enabled',
+            'google_ads_enabled' => 'tracking_google_ads_enabled',
+            'bing_ads_enabled' => 'tracking_microsoft_ads_enabled',
+            'bing_ads_tag_id' => 'bing_uet_tag_id',
+            'taboola_pixel_enabled' => 'tracking_taboola_enabled',
+            'outbrain_pixel_enabled' => 'tracking_outbrain_enabled',
+        ];
+
+        foreach ($aliases as $formKey => $serviceKey) {
+            if (isset($data[$formKey])) {
+                Setting::set($serviceKey, $data[$formKey]);
             }
         }
 

@@ -54,13 +54,9 @@
 <body class="h-full bg-[#030712] text-slate-100 antialiased relative overflow-x-hidden selection:bg-[#D4AF37] selection:text-[#030712]"
       x-data="{ 
           showPass: false, 
-          email: 'admin@emishatours.com', 
+          email: '{{ old('email', '') }}', 
           pass: '', 
-          submitting: false,
-          fillCredentials(roleEmail, rolePass) {
-              this.email = roleEmail;
-              this.pass = rolePass;
-          }
+          submitting: false
       }">
 
     <!-- Ambient Glowing Orbs -->
@@ -259,36 +255,7 @@
                     </button>
                 </form>
 
-                <!-- Quick Role Switcher (Developer & Testing Helper) -->
-                <div class="mt-8 pt-6 border-t border-slate-800/80">
-                    <div class="flex items-center justify-between text-xs text-slate-400 mb-2.5">
-                        <span class="text-[11px] uppercase tracking-wider font-semibold text-slate-500">Quick Credentials:</span>
-                        <span class="text-[10px] text-slate-500">Click to autofill</span>
-                    </div>
-                    <div class="grid grid-cols-3 gap-2">
-                        <button 
-                            type="button" 
-                            @click="fillCredentials('admin@emishatours.com', 'Emisha@01805464291#Naznin#@')" 
-                            class="px-2.5 py-1.5 rounded-lg bg-slate-900/80 hover:bg-[#D4AF37]/10 hover:border-[#D4AF37]/40 text-slate-300 hover:text-[#D4AF37] border border-slate-800 text-[11px] font-semibold transition text-center"
-                        >
-                            👑 Admin
-                        </button>
-                        <button 
-                            type="button" 
-                            @click="fillCredentials('manager@emishatours.com', 'Emisha@01805464291#@Treker#@')" 
-                            class="px-2.5 py-1.5 rounded-lg bg-slate-900/80 hover:bg-[#D4AF37]/10 hover:border-[#D4AF37]/40 text-slate-300 hover:text-[#D4AF37] border border-slate-800 text-[11px] font-semibold transition text-center"
-                        >
-                            💼 Manager
-                        </button>
-                        <button 
-                            type="button" 
-                            @click="fillCredentials('m1@emishatours.com', 'Emisha@583214#@Treker#@')" 
-                            class="px-2.5 py-1.5 rounded-lg bg-slate-900/80 hover:bg-[#D4AF37]/10 hover:border-[#D4AF37]/40 text-slate-300 hover:text-[#D4AF37] border border-slate-800 text-[11px] font-semibold transition text-center"
-                        >
-                            🛡️ Mod 1
-                        </button>
-                    </div>
-                </div>
+
 
                 <!-- Back to Main Website -->
                 <div class="mt-8 text-center">

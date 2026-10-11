@@ -3,6 +3,19 @@
 @section('title', 'Analytics & Marketing Tracking Command Center')
 
 @section('content')
+@php
+    if (is_array($settings)) {
+        $settings = new \Illuminate\Support\Fluent($settings);
+    }
+    $summary = $summary ?? [
+        'health_score' => $health['health_score'] ?? 0,
+        'active_count' => $health['enabled_count'] ?? 0,
+        'total_providers' => $health['total_supported'] ?? (isset($providers) ? count($providers) : 15),
+        'events_today' => $eventsToday ?? 0,
+        'events_total' => $totalEvents ?? 0,
+        'conversions_today' => $conversionsToday ?? 0,
+    ];
+@endphp
 <div class="space-y-8" x-data="{
     activeTab: 'overview',
     searchQuery: '',

@@ -3,7 +3,7 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "build": "node node_modules/vite/bin/vite.js build && node -e \"const fs=require('fs'); if(!fs.existsSync('dist')) fs.mkdirSync('dist'); fs.writeFileSync('dist/index.html', '<!-- Emisha -->');\"",
+        "build": "node node_modules/vite/bin/vite.js build && node -e \"const fs=require('fs'); if(!fs.existsSync('dist')) fs.mkdirSync('dist'); if(!fs.existsSync('dist/index.html')) fs.writeFileSync('dist/index.html', '<!DOCTYPE html><html><head><meta http-equiv=\\\"refresh\\\" content=\\\"0;url=http://127.0.0.1:8000/\\\"></head><body><script>window.location.href=\\\"http://127.0.0.1:8000/\\\";</script></body></html>');\"",
         "dev": "node node_modules/vite/bin/vite.js"
     },
     "devDependencies": {

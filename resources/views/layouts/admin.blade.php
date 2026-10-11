@@ -70,7 +70,7 @@
 
     @stack('styles')
 </head>
-<body class="h-full font-sans antialiased admin-main-wrapper" 
+<body class="min-h-screen lg:h-screen lg:overflow-hidden font-sans antialiased admin-main-wrapper" 
       x-data="{ 
           theme: localStorage.getItem('admin-theme') === 'dark' ? 'dark' : 'light',
           toggleTheme() {
@@ -95,7 +95,7 @@
       @keydown.window.prevent.ctrl.k="commandPaletteOpen = true"
       @keydown.escape.window="commandPaletteOpen = false; quickActionsOpen = false; profileMenuOpen = false">
 
-    <div class="min-h-full flex">
+    <div class="min-h-screen lg:h-screen flex lg:overflow-hidden">
         <!-- Backdrop for mobile drawer -->
         <div x-show="sidebarOpen" 
              x-transition:enter="transition-opacity ease-linear duration-300"
@@ -108,9 +108,9 @@
              class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-40 lg:hidden" 
              x-cloak></div>
 
-        <!-- Sidebar Navigation (Deep Navy Executive Bar) -->
+        <!-- Sidebar Navigation (Deep Navy Executive Bar - Fixed & Independent Scroll) -->
         <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'" 
-               class="fixed inset-y-0 left-0 z-50 w-72 bg-[#071527] border-r border-slate-800 text-white transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 flex flex-col shadow-2xl flex-shrink-0">
+               class="fixed inset-y-0 left-0 z-50 w-72 bg-[#071527] border-r border-slate-800 text-white transition-transform duration-300 ease-in-out lg:sticky lg:top-0 lg:h-screen lg:translate-x-0 flex flex-col shadow-2xl flex-shrink-0">
             
             <!-- Standard Admin Sidebar Header (Clean Vector & Typography) -->
             <div class="h-16 flex items-center justify-between px-5 bg-[#040E1B] border-b border-slate-800/80 relative flex-shrink-0">
@@ -337,9 +337,9 @@
         </aside>
 
         <!-- Main Content Area -->
-        <div class="flex-1 flex flex-col min-w-0 overflow-hidden admin-main-wrapper">
+        <div class="flex-1 flex flex-col min-w-0 lg:h-screen lg:overflow-hidden admin-main-wrapper">
             <!-- Top Command Bar -->
-            <header class="h-20 admin-header-bar border-b flex items-center justify-between px-4 lg:px-8 sticky top-0 z-30 shadow-sm backdrop-blur-md">
+            <header class="h-20 admin-header-bar border-b flex items-center justify-between px-4 lg:px-8 flex-shrink-0 z-30 shadow-sm backdrop-blur-md">
                 <div class="flex items-center gap-4">
                     <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden p-2 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
